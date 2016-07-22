@@ -16,12 +16,11 @@ namespace V4F.Puppets
         #region Fields
         private static readonly GUIContent  __buttonEdit = null;
         private static readonly GUIContent  __buttonRemove = null;
-        private static readonly GUIContent  __infoDropSkill = null;
+        private static readonly GUIContent  __labelInfoDrop = null;
         private static readonly float       __heightNormal;
         private static readonly Color       __colourActive;
         private static readonly Color       __colourNormal;
-
-        private static GUIStyle __infoDropSkillStyle = null;
+        
         private static GUIStyle __titleActiveSkillStyle = null;
 
         private PuppetSkillSet _self;
@@ -33,20 +32,6 @@ namespace V4F.Puppets
         #endregion
 
         #region Properties
-        private static GUIStyle infoDropSkillStyle
-        {
-            get
-            {
-                if (__infoDropSkillStyle == null)
-                {
-                    __infoDropSkillStyle = new GUIStyle(EditorStyles.label);
-                    __infoDropSkillStyle.alignment = TextAnchor.MiddleCenter;
-                    __infoDropSkillStyle.normal.textColor = Color.white;
-                }
-                return __infoDropSkillStyle;
-            }
-        }
-
         private static GUIStyle titleActiveSkillStyle
         {
             get
@@ -66,7 +51,7 @@ namespace V4F.Puppets
         {
             __buttonEdit = new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/Icons/common_button_edit.png"));
             __buttonRemove = new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/Icons/common_button_close.png"));
-            __infoDropSkill = new GUIContent("Add skill to set...");
+            __labelInfoDrop = new GUIContent("Add skill to set...");
             __heightNormal = EditorGUIUtility.singleLineHeight * 4f;
             __colourActive = new Color(0.33f, 0.66f, 1f, 0.82f);
             __colourNormal = new Color(0.43f, 0.43f, 0.43f, 1f);
@@ -106,11 +91,11 @@ namespace V4F.Puppets
                 _queueOnRemove.RemoveAt(0);
             }
 
-            var dropArea = GUILayoutUtility.GetRect(0f, 0f, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));            
+            var dropArea = GUILayoutUtility.GetRect(0f, 56f, GUILayout.ExpandWidth(true));
             if (EventsHandler(dropArea))
             {
                 EditorGUI.DrawRect(dropArea, new Color(0f, 0.75f, 0f, 0.25f));
-                EditorGUI.LabelField(dropArea, __infoDropSkill, infoDropSkillStyle);
+                EditorGUI.LabelField(dropArea, __labelInfoDrop, CustomStyles.infoDrop);
             }            
 
             if (GUI.changed)
@@ -154,7 +139,7 @@ namespace V4F.Puppets
                 {
                     _lastActiveIndex = index;
                 }
-            };            
+            };
 
             return reorderList;
         }
