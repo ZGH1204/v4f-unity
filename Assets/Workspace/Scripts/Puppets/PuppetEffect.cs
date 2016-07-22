@@ -29,7 +29,7 @@ namespace V4F.Puppets
         private bool _applyDamage = true;
 
         [SerializeField, HideInInspector]
-        private bool _stun = false;        
+        private bool _stun = false;
         #endregion
 
         #region Properties
@@ -86,27 +86,7 @@ namespace V4F.Puppets
         #endregion
 
         #region Methods
-        public static PuppetEffect Create()
-        {            
-            var instance = CreateInstance<PuppetEffect>();
-
-            instance._title = "New effect";
-            instance._timer = 0;
-            instance._minDamage = 1;
-            instance._maxDamage = 2;
-            instance._invertDamage = false;
-            instance._applyDamage = true;
-            instance._stun = false;
-
-            return instance;
-        }                
-
-        public bool Execute(/*Puppet puppet*/)
-        {
-            --_timer;
-
-            return !_stun;
-        }
+        
         #endregion
     }
 

@@ -11,6 +11,10 @@ namespace V4F.Puppets
     [System.Serializable]
     public class PuppetSkill : ScriptableObject
     {
+        #region Constants
+        public const int MaxEffects = 32;
+        #endregion
+
         #region Fields
         [SerializeField, HideInInspector]
         private Sprite _icon = null;
@@ -40,10 +44,10 @@ namespace V4F.Puppets
         private float _critDamageModifier = 0f;
 
         [SerializeField, HideInInspector]
-        private List<PuppetEffect> _effects = new List<PuppetEffect>(32);
+        private List<PuppetEffect> _effects = new List<PuppetEffect>(MaxEffects);
 
         [SerializeField, HideInInspector]
-        private int _effectNumber = 0;
+        private List<bool> _effectsPassed = new List<bool>(MaxEffects);
         #endregion
 
         #region Properties
@@ -102,7 +106,7 @@ namespace V4F.Puppets
 
         public PuppetEffect this[int index]
         {
-            get { return _effects[index]; }
+            get { return (_effectsPassed[index] ? _effects[index] : null); }
         }
         #endregion
 
@@ -162,17 +166,7 @@ namespace V4F.Puppets
                     _targetPosition &= ~flag;
                 }
             }
-        }
-
-        #if UNITY_EDITOR
-        public PuppetEffect AddEffect()
-        {
-            var effect = PuppetEffect.Create();
-            effect.title = string.Format("New effect {0}", _effectNumber++);
-            _effects.Add(effect);
-            return effect;
-        }
-        #endif
+        }        
         #endregion
     }
 
