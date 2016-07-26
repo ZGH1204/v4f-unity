@@ -11,10 +11,7 @@ namespace V4F.Puppets
     public class PuppetSpecInspector : Editor
     {
         #region Fields
-        private static readonly GUIContent __labelСharacteristics = null;
-        private static readonly GUIContent __labelHealthPoints = null;
-        private static readonly GUIContent __labelAccuracy = null;
-        private static readonly GUIContent __labelInitiative = null;
+        private static readonly GUIContent[] __content = null;        
 
         private PuppetSpec _self;
         #endregion
@@ -22,18 +19,26 @@ namespace V4F.Puppets
         #region Constructors
         static PuppetSpecInspector()
         {
-            __labelСharacteristics = new GUIContent("Сharacteristics");
-            __labelHealthPoints = new GUIContent("Health Points:");
-            __labelAccuracy = new GUIContent("Accuracy:");
-            __labelInitiative = new GUIContent("Initiative:");
+            __content = new GUIContent[]
+            {
+                new GUIContent("Сharacteristics"),
+                new GUIContent("Health Points:"),
+                new GUIContent("Accuracy:"),
+                new GUIContent("Initiative:"),
+                new GUIContent("Stamina:"),
+                new GUIContent("Damage:"),
+                new GUIContent("min"),
+                new GUIContent("max"),
+            };            
         }
         #endregion
 
         #region Methods
-        [MenuItem("Assets/Create/V4F/Puppets/Specification", false, 800)]
+        [MenuItem("Assets/Create/V4F/Personage/Specification", false, 800)]
         private static void CreateAsset()
         {
-            ScriptableHelper.CreateAsset<PuppetSpec>();
+            var asset = ScriptableHelper.CreateAsset<PuppetSpec>();
+            asset.Initialize();
         }
 
         public override void OnInspectorGUI()
@@ -42,18 +47,39 @@ namespace V4F.Puppets
 
             EditorGUILayout.BeginVertical();
 
-            EditorGUILayout.LabelField(__labelСharacteristics, EditorStyles.boldLabel);
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField(__content[0], EditorStyles.boldLabel);
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
 
-            EditorGUILayout.LabelField(__labelHealthPoints);
-            _self.healthPoints = EditorGUILayout.IntSlider(_self.healthPoints, 1, 100);
+            EditorGUILayout.Separator();
+            EditorGUILayout.LabelField(__content[1], CustomStyles.italicLabel);
+            _self.SetStat(PuppetStats.HealthPoints, EditorGUILayout.IntSlider(_self.GetStat(PuppetStats.HealthPoints), 1, 100));
 
-            EditorGUILayout.LabelField(__labelAccuracy);
-            _self.accuracy = EditorGUILayout.IntSlider(_self.accuracy, 1, 100);
+            EditorGUILayout.Separator();
+            EditorGUILayout.LabelField(__content[2], CustomStyles.italicLabel);
+            _self.SetStat(PuppetStats.Accuracy, EditorGUILayout.IntSlider(_self.GetStat(PuppetStats.Accuracy), 1, 100));
 
-            EditorGUILayout.LabelField(__labelInitiative);
-            _self.initiative = EditorGUILayout.IntSlider(_self.initiative, 1, 100);
+            EditorGUILayout.Separator();
+            EditorGUILayout.LabelField(__content[3], CustomStyles.italicLabel);
+            _self.SetStat(PuppetStats.Initiative, EditorGUILayout.IntSlider(_self.GetStat(PuppetStats.Initiative), 1, 100));
 
+            EditorGUILayout.Separator();
+            EditorGUILayout.LabelField(__content[4], CustomStyles.italicLabel);
+            _self.SetStat(PuppetStats.Stamina, EditorGUILayout.IntSlider(_self.GetStat(PuppetStats.Stamina), 1, 100));
+
+            var op1 = GUILayout.Width(32f);
+            EditorGUILayout.Separator();
+            EditorGUILayout.LabelField(__content[5], CustomStyles.italicLabel);
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(__content[6], op1);
+            _self.SetStat(PuppetStats.MinDamage, EditorGUILayout.IntSlider(_self.GetStat(PuppetStats.MinDamage), 1, _self.GetStat(PuppetStats.MaxDamage)));
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(__content[7], op1);
+            _self.SetStat(PuppetStats.MaxDamage, EditorGUILayout.IntSlider(_self.GetStat(PuppetStats.MaxDamage), _self.GetStat(PuppetStats.MinDamage), 100));
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.Space();
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.EndVertical();

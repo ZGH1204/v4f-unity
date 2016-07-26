@@ -7,7 +7,7 @@ namespace V4F.Puppets
 {
 
     [System.Serializable]
-    public class PuppetEffect : ScriptableObject
+    public class PuppetEffect : UniqueObject
     {
         #region Fields
         [SerializeField, HideInInspector]
@@ -35,49 +35,37 @@ namespace V4F.Puppets
         #region Properties
         public string title
         {
-            get { return _title; }
-            set { _title = value; }
+            get { return _title; }            
         }
 
         public int timer
         {
-            get { return _timer; }
-            set { _timer = Mathf.Max(0, value); }
+            get { return _timer; }            
         }
 
         public int minDamage
         {
-            get { return _minDamage; }
-            set { _minDamage = Mathf.Min(_maxDamage, value); }
+            get { return _minDamage; }            
         }
 
         public int maxDamage
         {
-            get { return _maxDamage; }
-            set { _maxDamage = Mathf.Max(_minDamage, value); }
+            get { return _maxDamage; }            
         }
 
         public bool invertDamage
         {
-            get { return _invertDamage; }
-            set { _invertDamage = value; }
+            get { return _invertDamage; }            
         }
 
         public bool applyDamage
         {
-            get { return _applyDamage; }
-            set { _applyDamage = value; }
+            get { return _applyDamage; }            
         }
 
         public bool stun
         {
             get { return _stun; }
-            set { _stun = value; }
-        }
-
-        public bool finished
-        {
-            get { return (_timer < 0); }
         }
         #endregion
 

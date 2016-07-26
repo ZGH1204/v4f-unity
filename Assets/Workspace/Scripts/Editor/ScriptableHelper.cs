@@ -11,7 +11,7 @@ namespace V4F
 
     public static class ScriptableHelper
     {
-        public static void CreateAsset<T>() where T : ScriptableObject
+        public static T CreateAsset<T>() where T : ScriptableObject
         {
             var path = AssetDatabase.GetAssetPath(Selection.activeObject);
             if (string.IsNullOrEmpty(path))
@@ -34,6 +34,8 @@ namespace V4F
 
             EditorUtility.FocusProjectWindow();
             Selection.activeObject = asset;
+
+            return asset;
         }
 
 

@@ -23,13 +23,16 @@ namespace V4F.Puppets
         private string _title = "New skill";
 
         [SerializeField, HideInInspector]
-        private PuppetSkillTarget _useOnTarget = PuppetSkillTarget.Enemies;
+        private PuppetSkillTarget _useTo = PuppetSkillTarget.Enemies;
 
         [SerializeField, HideInInspector]
-        private int _targetsQuantity = 1;
+        private bool _combine = false;
         
         [SerializeField, HideInInspector]
-        private int _targetPosition = 0x000000F1;
+        private int _position = 0x000000F1;
+
+        [SerializeField, HideInInspector]
+        private int _move = 0;
 
         [SerializeField, HideInInspector]
         private float _damageModifier = 0f;
@@ -53,50 +56,52 @@ namespace V4F.Puppets
         #region Properties
         public Sprite icon
         {
-            get { return _icon; }
-            set { _icon = value; }
+            get { return _icon; }            
         }
 
         public string title
         {
-            get { return _title; }
-            set { _title = value; }
+            get { return _title; }            
         }
 
-        public PuppetSkillTarget useOnTarget
+        public PuppetSkillTarget useTo
         {
-            get { return _useOnTarget; }
-            set { _useOnTarget = value; }
+            get { return _useTo; }            
         }
 
-        public int targetsQuantity
+        public bool combine
         {
-            get { return _targetsQuantity; }
-            set { _targetsQuantity = value; }
+            get { return _combine; }            
+        }
+
+        public bool isMoved
+        {
+            get { return (_move != 0); }
+        }
+
+        public int move
+        {
+            get { return _move; }
         }
 
         public float damageModifier
         {
-            get { return _damageModifier; }
-            set { _damageModifier = Mathf.Clamp01(value); }
+            get { return _damageModifier; }            
         }
 
         public float accuracyModifier
         {
-            get { return _accuracyModifier; }
-            set { _accuracyModifier = Mathf.Clamp01(value); }
+            get { return _accuracyModifier; }            
         }
 
         public float critChanceModifier
         {
-            get { return _critChanceModifier; }
-            set { _critChanceModifier = Mathf.Clamp01(value); }
+            get { return _critChanceModifier; }            
         }
 
         public float critDamageModifier
         {
-            get { return _critDamageModifier; }
-            set { _critDamageModifier = Mathf.Max(0f, value); }
+            get { return _critDamageModifier; }            
         }
 
         public int countEffects
@@ -111,62 +116,27 @@ namespace V4F.Puppets
         #endregion
 
         #region Methods
-        public bool CanUseInPosition(int positionNumber)
+        public bool IsPositionForLaunch(int positionNumber)
         {
             var number = positionNumber - 1;
             if (number == Mathf.Clamp(number, 0, 3))
             {
-                return ((_targetPosition & (1 << number)) != 0);
+                return ((_position & (1 << number)) != 0);
             }
 
             return false;
-        }
-
-        public void UseInPosition(int positionNumber, bool yesNo)
-        {
-            var number = positionNumber - 1;
-            if (number == Mathf.Clamp(number, 0, 3))
-            {
-                var flag = (1 << number);
-                if (yesNo)
-                {
-                    _targetPosition |= flag;
-                }
-                else
-                {
-                    _targetPosition &= ~flag;
-                }
-            }
-        }
-
-
-        public bool CanUseToTargetPosition(int positionNumber)
-        {
-            var number = positionNumber - 1;
-            if (number == Mathf.Clamp(number, 0, 3))
-            {
-                return ((_targetPosition & ((1 << number) << 4)) != 0);
-            }
-
-            return false;
-        }
-
-        public void UseToTargetPosition(int positionNumber, bool yesNo)
-        {
-            var number = positionNumber - 1;
-            if (number == Mathf.Clamp(number, 0, 3))
-            {
-                var flag = ((1 << number) << 4);
-                if (yesNo)
-                {
-                    _targetPosition |= flag;
-                }
-                else
-                {
-                    _targetPosition &= ~flag;
-                }
-            }
         }        
+
+        public bool IsPositionForTarget(int positionNumber)
+        {
+            var number = positionNumber - 1;
+            if (number == Mathf.Clamp(number, 0, 3))
+            {
+                return ((_position & ((1 << number) << 4)) != 0);
+            }
+
+            return false;
+        }
         #endregion
     }
 

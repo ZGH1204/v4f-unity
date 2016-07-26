@@ -9,34 +9,39 @@ namespace V4F.Puppets
     [System.Serializable]
     public class PuppetSpec : ScriptableObject
     {
+        #region Constants
+        public const int StatsCapacity = 32;
+        #endregion
+
         #region Fields
         [SerializeField, HideInInspector]
-        private int _healthPoints = 1;
-
-        [SerializeField, HideInInspector]
-        private int _accuracy = 1;
-
-        [SerializeField, HideInInspector]
-        private int _initiative = 1;
+        private int[] _stats;
         #endregion
 
         #region Properties
-        public int healthPoints
+
+        #endregion
+
+        #region Methods
+        public void Initialize()
         {
-            get { return _healthPoints; }
-            set { _healthPoints = value; }
+            _stats = new int[StatsCapacity];
+            _stats[(int)PuppetStats.HealthPoints] = 1;
+            _stats[(int)PuppetStats.Accuracy] = 1;
+            _stats[(int)PuppetStats.Initiative] = 1;
+            _stats[(int)PuppetStats.Stamina] = 1;
+            _stats[(int)PuppetStats.MinDamage] = 1;
+            _stats[(int)PuppetStats.MaxDamage] = 1;
         }
 
-        public int accuracy
+        public int GetStat(PuppetStats stat)
         {
-            get { return _accuracy; }
-            set { _accuracy = value; }
+            return _stats[stat.GetIndex()];
         }
 
-        public int initiative
+        public void SetStat(PuppetStats stat, int value)
         {
-            get { return _initiative; }
-            set { _initiative = value; }
+            _stats[stat.GetIndex()] = value;
         }
         #endregion
     }

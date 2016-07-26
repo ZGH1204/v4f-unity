@@ -14,12 +14,10 @@ namespace V4F.Puppets
     public class PuppetSkillSetInspector : Editor
     {
         #region Fields
-        private static readonly GUIContent  __buttonEdit = null;
-        private static readonly GUIContent  __buttonRemove = null;
-        private static readonly GUIContent  __labelInfoDrop = null;
-        private static readonly float       __heightNormal;
-        private static readonly Color       __colourActive;
-        private static readonly Color       __colourNormal;
+        private static readonly GUIContent[] __content = null;
+        private static readonly float __heightNormal;
+        private static readonly Color __colourActive;
+        private static readonly Color __colourNormal;
         
         private static GUIStyle __titleActiveSkillStyle = null;
 
@@ -49,9 +47,13 @@ namespace V4F.Puppets
         #region Constructors
         static PuppetSkillSetInspector()
         {
-            __buttonEdit = new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/Icons/common_button_edit.png"));
-            __buttonRemove = new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/Icons/common_button_close.png"));
-            __labelInfoDrop = new GUIContent("Add skill to set...");
+            __content = new GUIContent[]
+            {
+                new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/Icons/common_button_edit.png")),
+                new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/Icons/common_button_close.png")),
+                new GUIContent("Add skill to set..."),
+            };
+
             __heightNormal = EditorGUIUtility.singleLineHeight * 4f;
             __colourActive = new Color(0.33f, 0.66f, 1f, 0.82f);
             __colourNormal = new Color(0.43f, 0.43f, 0.43f, 1f);
@@ -59,7 +61,7 @@ namespace V4F.Puppets
         #endregion
 
         #region Methods
-        [MenuItem("Assets/Create/V4F/Puppets/Skill Set", false, 800)]
+        [MenuItem("Assets/Create/V4F/Personage/SkillSet", false, 804)]
         private static void CreateAsset()
         {
             ScriptableHelper.CreateAsset<PuppetSkillSet>();
@@ -95,7 +97,7 @@ namespace V4F.Puppets
             if (EventsHandler(dropArea))
             {
                 EditorGUI.DrawRect(dropArea, new Color(0f, 0.75f, 0f, 0.25f));
-                EditorGUI.LabelField(dropArea, __labelInfoDrop, CustomStyles.infoDrop);
+                EditorGUI.LabelField(dropArea, __content[2], CustomStyles.infoDrop);
             }            
 
             if (GUI.changed)
@@ -180,40 +182,46 @@ namespace V4F.Puppets
 
             var property = _skills.serializedProperty.GetArrayElementAtIndex(index);
             var skill = property.objectReferenceValue as PuppetSkill;
-
-            rect.height = __heightNormal;
-
-            var rcIcon = new Rect(rect.x + 2f, rect.y + 4f, rect.height - 8f, rect.height - 8f);
-            var rcTitle = new Rect(
-                rcIcon.x + rcIcon.width + 8f,
-                rect.y + (rect.height - EditorGUIUtility.singleLineHeight) * 0.5f,
-                rect.width - (rcIcon.x + rcIcon.width + 24f),
-                EditorGUIUtility.singleLineHeight * (isActive ? 1.25f : 1f));
-            var rcEdit = new Rect(rcTitle.x + rcTitle.width + 2f, rect.y + 4f, 24f, 24f);
-            var rcCross = new Rect(rcEdit.x + rcEdit.width + 2f, rect.y + 4f, 24f, 24f);
-
-            Sprite icon = skill.icon;
-            if (icon != null)
+            if (skill != null)
             {
-                EditorGUI.DrawTextureTransparent(rcIcon, icon.texture, ScaleMode.StretchToFill);
+                rect.height = __heightNormal;
+
+                var rcIcon = new Rect(rect.x + 2f, rect.y + 4f, rect.height - 8f, rect.height - 8f);
+                var rcTitle = new Rect(
+                    rcIcon.x + rcIcon.width + 8f,
+                    rect.y + (rect.height - EditorGUIUtility.singleLineHeight) * 0.5f,
+                    rect.width - (rcIcon.x + rcIcon.width + 24f),
+                    EditorGUIUtility.singleLineHeight * (isActive ? 1.25f : 1f));
+                var rcEdit = new Rect(rcTitle.x + rcTitle.width + 2f, rect.y + 4f, 24f, 24f);
+                var rcCross = new Rect(rcEdit.x + rcEdit.width + 2f, rect.y + 4f, 24f, 24f);
+
+                Sprite icon = skill.icon;
+                if (icon != null)
+                {
+                    EditorGUI.DrawTextureTransparent(rcIcon, icon.texture, ScaleMode.StretchToFill);
+                }
+                else
+                {
+                    EditorGUI.DrawRect(rcIcon, Color.black);
+                }
+
+                GUIStyle titleStyle = (isActive ? titleActiveSkillStyle : EditorStyles.label);
+                EditorGUI.LabelField(rcTitle, skill.title, titleStyle);
+
+                if (GUI.Button(rcEdit, __content[0]))
+                {
+                    _skillForEdit = skill;
+                }
+
+                if (GUI.Button(rcCross, __content[1]))
+                {
+                    _queueOnRemove.Insert(0, index);
+                }                
             }
             else
             {
-                EditorGUI.DrawRect(rcIcon, Color.black);
-            }
-
-            GUIStyle titleStyle = (isActive ? titleActiveSkillStyle : EditorStyles.label);
-            EditorGUI.LabelField(rcTitle, skill.title, titleStyle);                        
-
-            if (GUI.Button(rcEdit, __buttonEdit))
-            {
-                _skillForEdit = skill;                
-            }
-
-            if (GUI.Button(rcCross, __buttonRemove))
-            {
-                _queueOnRemove.Add(index);
-            }
+                _queueOnRemove.Insert(0, index);
+            }            
         }
 
         private bool EventsHandler(Rect dropArea)
