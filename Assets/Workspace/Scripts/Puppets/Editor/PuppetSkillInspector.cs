@@ -2,6 +2,7 @@
 // <author>Maxim Mikulski</author>
 
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEditor;
@@ -12,40 +13,20 @@ namespace V4F.Puppets
 
     [CustomEditor(typeof(PuppetSkill)), InitializeOnLoad]
     public class PuppetSkillInspector : Editor
-    {        
+    {
         #region Fields
-        private static readonly GUIContent  __labelUIX = null;
-        private static readonly GUIContent  __labelTitle = null;
-        private static readonly GUIContent  __paramIcon = null;
-        private static readonly GUIContent  __labelProperties = null;
-        private static readonly GUIContent  __paramUseOnTarget = null;
-        private static readonly GUIContent  __labelTargetsQuantity = null;
-        private static readonly GUIContent  __labelСanUseInPositions = null;
-        private static readonly GUIContent  __labelСanUseToTargetPositions = null;
-        private static readonly GUIContent  __paramPosition1 = null;
-        private static readonly GUIContent  __paramPosition2 = null;
-        private static readonly GUIContent  __paramPosition3 = null;
-        private static readonly GUIContent  __paramPosition4 = null;
-        private static readonly GUIContent  __labelDamageModifier = null;
-        private static readonly GUIContent  __labelAccuracyModifier = null;
-        private static readonly GUIContent  __labelCritChanceModifier = null;
-        private static readonly GUIContent  __labelCritDamageModifier = null;
-        private static readonly GUIContent  __labelEffects = null;
-        private static readonly GUIContent  __buttonEditing = null;        
-        private static readonly GUIContent  __buttonDelEffect = null;
-        private static readonly GUIContent  __labelInfoDrop = null;
-        private static readonly GUIContent  __togglePassedOn = null;
-        private static readonly GUIContent  __togglePassedOff = null;
-        private static readonly float       __heightActive;
-        private static readonly float       __heightNormal;
-        private static readonly Color       __colourActive;
-        private static readonly Color       __colourNormal;
+        private static readonly GUIContent[] __content = null;        
+        private static readonly float __heightActive;
+        private static readonly float __heightNormal;
+        private static readonly Color __colourActive;
+        private static readonly Color __colourNormal;
 
         private static GUIStyle __togglePassedStyle = null;
 
         private PuppetSkill _self;
         private bool[] _foldouts;
         private ReorderableList _effects;
+        private List<int> _queueOnRemove;
         private int _lastActiveIndex;
         private bool _drawDropArea;
         #endregion
@@ -57,8 +38,8 @@ namespace V4F.Puppets
             {
                 if (__togglePassedStyle == null)
                 {
-                    var tex_on = __togglePassedOn.image as Texture2D;
-                    var tex_off = __togglePassedOff.image as Texture2D;
+                    var tex_on = __content[19].image as Texture2D;
+                    var tex_off = __content[20].image as Texture2D;
 
                     __togglePassedStyle = new GUIStyle(GUI.skin.button);
                     __togglePassedStyle.normal.background = tex_off;
@@ -78,28 +59,33 @@ namespace V4F.Puppets
         #region Constructors
         static PuppetSkillInspector()
         {
-            __labelUIX = new GUIContent("UIX");
-            __labelTitle = new GUIContent("Title:");
-            __paramIcon = new GUIContent(GUIContent.none);
-            __labelProperties = new GUIContent("Properties");
-            __paramUseOnTarget = new GUIContent("Use on:");
-            __labelTargetsQuantity = new GUIContent("Targets quantity:");
-            __labelСanUseInPositions = new GUIContent("Сan use in positions:");
-            __labelСanUseToTargetPositions = new GUIContent("Сan use to target positions:");
-            __paramPosition1 = new GUIContent("1");
-            __paramPosition2 = new GUIContent("2");
-            __paramPosition3 = new GUIContent("3");
-            __paramPosition4 = new GUIContent("4");
-            __labelDamageModifier = new GUIContent("Damage modifier (%):");
-            __labelAccuracyModifier = new GUIContent("Accuracy modifier (%):");
-            __labelCritChanceModifier = new GUIContent("Critical chance modifier (%):");
-            __labelCritDamageModifier = new GUIContent("Critical damage modifier:");
-            __labelEffects = new GUIContent("Effects");
-            __buttonEditing = new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/Icons/toolbar_button_edit.png"));            
-            __buttonDelEffect = new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/Icons/toolbar_button_trash.png"));
-            __labelInfoDrop = new GUIContent("Add effect to list...");
-            __togglePassedOn = new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/Icons/item_passed_on.png"));
-            __togglePassedOff = new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/Icons/item_passed_off.png"));
+            __content = new GUIContent[]
+            {
+                new GUIContent("UIX"),
+                new GUIContent("Properties"),
+                new GUIContent("Effects"),
+                new GUIContent("Title:"),
+                new GUIContent(GUIContent.none),
+                new GUIContent("Use to:"),
+                new GUIContent("Launch position:"),
+                new GUIContent("Target position:"),
+                new GUIContent("1"),
+                new GUIContent("2"),
+                new GUIContent("3"),
+                new GUIContent("4"),
+                new GUIContent("Damage modifier (%):"),
+                new GUIContent("Accuracy modifier (%):"),
+                new GUIContent("Critical chance modifier (%):"),
+                new GUIContent("Critical damage modifier:"),
+                new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/Icons/toolbar_button_edit.png")),
+                new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/Icons/toolbar_button_trash.png")),
+                new GUIContent("Add effect to list..."),            
+                new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/Icons/item_passed_on.png")),
+                new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/Icons/item_passed_off.png")),
+                new GUIContent("Combine target positions"),
+                new GUIContent("Move"),
+            };            
+
             __heightNormal = EditorGUIUtility.singleLineHeight * 1.5f;
             __colourActive = new Color(0.33f, 0.66f, 1f, 0.82f);
             __colourNormal = new Color(0.43f, 0.43f, 0.43f, 1f);
@@ -107,7 +93,7 @@ namespace V4F.Puppets
         #endregion
 
         #region Methods
-        [MenuItem("Assets/Create/V4F/Puppets/Skill", false, 800)]
+        [MenuItem("Assets/Create/V4F/Personage/Skill", false, 803)]
         private static void CreateAsset()
         {
             ScriptableHelper.CreateAsset<PuppetSkill>();
@@ -120,7 +106,7 @@ namespace V4F.Puppets
             EditorGUILayout.BeginVertical();
 
             // --------------------------------------------------------------
-            _foldouts[0] = EditorGUILayout.Foldout(_foldouts[0], __labelUIX, CustomStyles.boldFoldout);
+            _foldouts[0] = EditorGUILayout.Foldout(_foldouts[0], __content[0], CustomStyles.boldFoldout);
             if (_foldouts[0])
             {
                 EditorGUILayout.BeginVertical(EditorStyles.helpBox);
@@ -130,7 +116,7 @@ namespace V4F.Puppets
 
             // --------------------------------------------------------------
             EditorGUILayout.Space();
-            _foldouts[1] = EditorGUILayout.Foldout(_foldouts[1], __labelProperties, CustomStyles.boldFoldout);
+            _foldouts[1] = EditorGUILayout.Foldout(_foldouts[1], __content[1], CustomStyles.boldFoldout);
             if (_foldouts[1])
             {
                 EditorGUILayout.BeginVertical(EditorStyles.helpBox);
@@ -140,10 +126,10 @@ namespace V4F.Puppets
 
             // --------------------------------------------------------------
             EditorGUILayout.Space();
-            _foldouts[2] = EditorGUILayout.Foldout(_foldouts[2], __labelEffects, CustomStyles.boldFoldout);
+            _foldouts[2] = EditorGUILayout.Foldout(_foldouts[2], __content[2], CustomStyles.boldFoldout);
             if (_foldouts[2])
             {
-                EditorGUILayout.BeginVertical(/*EditorStyles.helpBox*/);
+                EditorGUILayout.BeginVertical();
                 EffectsListHandler();
                 EditorGUILayout.EndVertical();
             }            
@@ -242,38 +228,44 @@ namespace V4F.Puppets
 
             var property = _effects.serializedProperty.GetArrayElementAtIndex(index);
             var effect = property.objectReferenceValue as PuppetEffect;
-
-            property = serializedObject.FindProperty("_effectsPassed");
-            property = property.GetArrayElementAtIndex(index);
-
-            var size = Mathf.Min(16f, EditorGUIUtility.singleLineHeight);
-            var offset = 2f;
-            rect.y += 3f;
-            
-            var rcTitle = new Rect(rect.x + offset, rect.y, rect.width - 32f, rect.height);
-            offset += rcTitle.width + 2f;
-            var rcPassed = new Rect(rect.x + offset, rect.y, size, size);
-            offset += rcPassed.width + 2f;
-
-            GUIStyle titleStyle = new GUIStyle(EditorStyles.miniBoldLabel);
-            if (isActive)
+            if (effect != null)
             {
-                titleStyle.fontStyle = FontStyle.Bold;
-                titleStyle.normal.textColor = Color.white;
-            }
-            else if (!property.boolValue)
-            {
-                titleStyle.normal.textColor = Color.gray;
-            }
+                property = serializedObject.FindProperty("_effectsPassed");
+                property = property.GetArrayElementAtIndex(index);
 
-            EditorGUI.LabelField(rcTitle, effect.title, titleStyle);
+                var size = Mathf.Min(16f, EditorGUIUtility.singleLineHeight);
+                var offset = 2f;
+                rect.y += 3f;
 
-            EditorGUI.BeginChangeCheck();
-            property.boolValue = EditorGUI.Toggle(rcPassed, GUIContent.none, property.boolValue, togglePassedStyle);
-            if (EditorGUI.EndChangeCheck())
-            {
-                serializedObject.ApplyModifiedProperties();
+                var rcTitle = new Rect(rect.x + offset, rect.y, rect.width - 32f, rect.height);
+                offset += rcTitle.width + 2f;
+                var rcPassed = new Rect(rect.x + offset, rect.y, size, size);
+                offset += rcPassed.width + 2f;
+
+                GUIStyle titleStyle = new GUIStyle(EditorStyles.miniBoldLabel);
+                if (isActive)
+                {
+                    titleStyle.fontStyle = FontStyle.Bold;
+                    titleStyle.normal.textColor = Color.white;
+                }
+                else if (!property.boolValue)
+                {
+                    titleStyle.normal.textColor = Color.gray;
+                }
+
+                EditorGUI.LabelField(rcTitle, effect.title, titleStyle);
+
+                EditorGUI.BeginChangeCheck();
+                property.boolValue = EditorGUI.Toggle(rcPassed, GUIContent.none, property.boolValue, togglePassedStyle);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    serializedObject.ApplyModifiedProperties();
+                }
             }
+            else
+            {
+                _queueOnRemove.Insert(0, index);
+            }                       
         }
 
         private void EditEffectHandler()
@@ -294,7 +286,7 @@ namespace V4F.Puppets
             _effects.serializedProperty.DeleteArrayElementAtIndex(index);            
 
             var prop = serializedObject.FindProperty("_effectsPassed");
-            prop.DeleteArrayElementAtIndex(index);            
+            prop.DeleteArrayElementAtIndex(index);
 
             serializedObject.ApplyModifiedProperties();
 
@@ -302,74 +294,157 @@ namespace V4F.Puppets
             _effects.index = Mathf.Min(index, (upper - 1));
         }
 
-        private void UIXHandler()
+        public int LaunchPositionEdit(int position, int positionNumber, bool yesNo)
         {
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField(__labelTitle, CustomStyles.italicLabel);
-            var title = Regex.Replace(EditorGUILayout.DelayedTextField(_self.title), @"[^a-zA-Z0-9_ ]", "").Trim();
-            if (!string.IsNullOrEmpty(title) && (title.Length > 3))
+            var number = positionNumber - 1;
+            if (number == Mathf.Clamp(number, 0, 3))
             {
-                _self.title = title;
+                var flag = (1 << number);
+                if (yesNo)
+                {
+                    position |= flag;
+                }
+                else
+                {
+                    position &= ~flag;
+                }
             }
 
-            EditorGUILayout.Space();
-            _self.icon = EditorGUILayout.ObjectField(__paramIcon, _self.icon, typeof(Sprite), false) as Sprite;
+            return position;
+        }
+
+        public bool IsPositionForLaunch(int position, int positionNumber)
+        {
+            var number = positionNumber - 1;
+            if (number == Mathf.Clamp(number, 0, 3))
+            {
+                return ((position & (1 << number)) != 0);
+            }
+
+            return false;
+        }
+
+        public int TargetPositionEdit(int position, int positionNumber, bool yesNo)
+        {
+            var number = positionNumber - 1;
+            if (number == Mathf.Clamp(number, 0, 3))
+            {
+                var flag = ((1 << number) << 4);
+                if (yesNo)
+                {
+                    position |= flag;
+                }
+                else
+                {
+                    position &= ~flag;
+                }
+            }
+
+            return position;
+        }
+
+        public bool IsPositionForTarget(int position, int positionNumber)
+        {
+            var number = positionNumber - 1;
+            if (number == Mathf.Clamp(number, 0, 3))
+            {
+                return ((position & ((1 << number) << 4)) != 0);
+            }
+
+            return false;
+        }
+
+        private void UIXHandler()
+        {
+            EditorGUILayout.Separator();
+            EditorGUILayout.LabelField(__content[3], CustomStyles.italicLabel);
+            var titleProp = serializedObject.FindProperty("_title");
+            var title = Regex.Replace(EditorGUILayout.DelayedTextField(titleProp.stringValue), @"[^a-zA-Z0-9_ ]", "").Trim();
+            if (!string.IsNullOrEmpty(title) && (title.Length > 3))
+            {
+                titleProp.stringValue = title;
+            }
+
+            EditorGUILayout.Separator();
+            var iconProp = serializedObject.FindProperty("_icon");
+            iconProp.objectReferenceValue = EditorGUILayout.ObjectField(__content[4], iconProp.objectReferenceValue, typeof(Sprite), false) as Sprite;
 
             EditorGUILayout.Space();
         }
 
         private void PropertiesHandler()
         {
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField(__paramUseOnTarget, CustomStyles.italicLabel);
-            _self.useOnTarget = (PuppetSkillTarget)EditorGUILayout.EnumPopup(_self.useOnTarget);
+            var op1 = GUILayout.Width(32f);
+            var op2 = GUILayout.Width(16f);
 
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField(__labelTargetsQuantity, CustomStyles.italicLabel);
-            _self.targetsQuantity = EditorGUILayout.IntSlider(_self.targetsQuantity, 1, 4);
+            EditorGUILayout.Separator();
+            EditorGUILayout.LabelField(__content[5], CustomStyles.italicLabel);
+            var useToProp = serializedObject.FindProperty("_useTo");
+            EditorGUILayout.PropertyField(useToProp, GUIContent.none);
 
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField(__labelСanUseInPositions, CustomStyles.italicLabel);
+            var positionProp = serializedObject.FindProperty("_position");
+            var positionData = positionProp.intValue;
+
+            EditorGUILayout.Separator();
+            EditorGUILayout.LabelField(__content[6], CustomStyles.italicLabel);            
             EditorGUILayout.BeginHorizontal();
-            _self.UseInPosition(1, EditorGUILayout.ToggleLeft(__paramPosition1, _self.CanUseInPosition(1), GUILayout.Width(32f)));
-            _self.UseInPosition(2, EditorGUILayout.ToggleLeft(__paramPosition2, _self.CanUseInPosition(2), GUILayout.Width(32f)));
-            _self.UseInPosition(3, EditorGUILayout.ToggleLeft(__paramPosition3, _self.CanUseInPosition(3), GUILayout.Width(32f)));
-            _self.UseInPosition(4, EditorGUILayout.ToggleLeft(__paramPosition4, _self.CanUseInPosition(4), GUILayout.Width(32f)));
+            positionData = LaunchPositionEdit(positionData, 1, EditorGUILayout.ToggleLeft(__content[8],  IsPositionForLaunch(positionData, 1), op1));
+            positionData = LaunchPositionEdit(positionData, 2, EditorGUILayout.ToggleLeft(__content[9],  IsPositionForLaunch(positionData, 2), op1));
+            positionData = LaunchPositionEdit(positionData, 3, EditorGUILayout.ToggleLeft(__content[10], IsPositionForLaunch(positionData, 3), op1));
+            positionData = LaunchPositionEdit(positionData, 4, EditorGUILayout.ToggleLeft(__content[11], IsPositionForLaunch(positionData, 4), op1));
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
 
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField(__labelСanUseToTargetPositions, CustomStyles.italicLabel);
+            EditorGUILayout.Separator();
+            EditorGUILayout.LabelField(__content[7], CustomStyles.italicLabel);
             EditorGUILayout.BeginHorizontal();
-            _self.UseToTargetPosition(1, EditorGUILayout.ToggleLeft(__paramPosition1, _self.CanUseToTargetPosition(1), GUILayout.Width(32f)));
-            _self.UseToTargetPosition(2, EditorGUILayout.ToggleLeft(__paramPosition2, _self.CanUseToTargetPosition(2), GUILayout.Width(32f)));
-            _self.UseToTargetPosition(3, EditorGUILayout.ToggleLeft(__paramPosition3, _self.CanUseToTargetPosition(3), GUILayout.Width(32f)));
-            _self.UseToTargetPosition(4, EditorGUILayout.ToggleLeft(__paramPosition4, _self.CanUseToTargetPosition(4), GUILayout.Width(32f)));
+            positionData = TargetPositionEdit(positionData, 1, EditorGUILayout.ToggleLeft(__content[8],  IsPositionForTarget(positionData, 1), op1));
+            positionData = TargetPositionEdit(positionData, 2, EditorGUILayout.ToggleLeft(__content[9],  IsPositionForTarget(positionData, 2), op1));
+            positionData = TargetPositionEdit(positionData, 3, EditorGUILayout.ToggleLeft(__content[10], IsPositionForTarget(positionData, 3), op1));
+            positionData = TargetPositionEdit(positionData, 4, EditorGUILayout.ToggleLeft(__content[11], IsPositionForTarget(positionData, 4), op1));
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
 
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField(__labelDamageModifier, CustomStyles.italicLabel);
-            _self.damageModifier = EditorGUILayout.Slider(_self.damageModifier * 100f, 0f, 100f) * 0.01f;
+            positionProp.intValue = positionData;
 
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField(__labelAccuracyModifier, CustomStyles.italicLabel);
-            _self.accuracyModifier = EditorGUILayout.Slider(_self.accuracyModifier * 100f, 0f, 100f) * 0.01f;
+            EditorGUILayout.Separator();
+            EditorGUILayout.BeginHorizontal();
+            var combineProp = serializedObject.FindProperty("_combine");
+            combineProp.boolValue = EditorGUILayout.ToggleLeft(GUIContent.none, combineProp.boolValue, op2);
+            EditorGUILayout.LabelField(__content[21], CustomStyles.italicLabel);
+            EditorGUILayout.EndHorizontal();
 
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField(__labelCritChanceModifier, CustomStyles.italicLabel);
-            _self.critChanceModifier = EditorGUILayout.Slider(_self.critChanceModifier * 100f, 0f, 100f) * 0.01f;
+            EditorGUILayout.Separator();
+            EditorGUILayout.LabelField(__content[22], CustomStyles.italicLabel);
+            var moveProp = serializedObject.FindProperty("_move");
+            moveProp.intValue = EditorGUILayout.IntSlider(moveProp.intValue, -3, 3);
 
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField(__labelCritDamageModifier, CustomStyles.italicLabel);
-            _self.critDamageModifier = EditorGUILayout.Slider(_self.critDamageModifier, 0f, 100f);
+            EditorGUILayout.Separator();
+            EditorGUILayout.LabelField(__content[12], CustomStyles.italicLabel);
+            var damageModProp = serializedObject.FindProperty("_damageModifier");
+            damageModProp.floatValue = Mathf.Clamp01(EditorGUILayout.Slider(damageModProp.floatValue * 100f, 0f, 100f) * 0.01f);
+
+            EditorGUILayout.Separator();
+            EditorGUILayout.LabelField(__content[13], CustomStyles.italicLabel);
+            var accuracyModProp = serializedObject.FindProperty("_accuracyModifier");
+            accuracyModProp.floatValue = Mathf.Clamp01(EditorGUILayout.Slider(accuracyModProp.floatValue * 100f, 0f, 100f) * 0.01f);
+
+            EditorGUILayout.Separator();
+            EditorGUILayout.LabelField(__content[14], CustomStyles.italicLabel);
+            var critChanceModProp = serializedObject.FindProperty("_critChanceModifier");
+            critChanceModProp.floatValue = Mathf.Clamp01(EditorGUILayout.Slider(critChanceModProp.floatValue * 100f, 0f, 100f) * 0.01f);
+
+            EditorGUILayout.Separator();
+            EditorGUILayout.LabelField(__content[15], CustomStyles.italicLabel);
+            var critDamageModProp = serializedObject.FindProperty("_critDamageModifier");
+            critDamageModProp.floatValue = EditorGUILayout.Slider(critDamageModProp.floatValue, 0f, 100f);
 
             EditorGUILayout.Space();
         }
 
         private void EffectsListHandler()
         {
-            var toolbarButtonOp = new GUILayoutOption[]
+            var op1 = new GUILayoutOption[]
             {
                 GUILayout.MinWidth(42f),
                 GUILayout.MaxWidth(42f),
@@ -385,7 +460,7 @@ namespace V4F.Puppets
 
             var editingDisabled = (_effects.index < 0);
             EditorGUI.BeginDisabledGroup(editingDisabled);
-            if (GUILayout.Button(__buttonEditing, EditorStyles.toolbarButton, toolbarButtonOp))
+            if (GUILayout.Button(__content[16], EditorStyles.toolbarButton, op1))
             {
                 EditEffectHandler();
             }
@@ -393,7 +468,7 @@ namespace V4F.Puppets
 
             var removeDisabled = (_effects.index < 0);
             EditorGUI.BeginDisabledGroup(removeDisabled);
-            if (GUILayout.Button(__buttonDelEffect, EditorStyles.toolbarButton, toolbarButtonOp))
+            if (GUILayout.Button(__content[17], EditorStyles.toolbarButton, op1))
             {
                 RemoveEffectHandler();
             }
@@ -402,12 +477,30 @@ namespace V4F.Puppets
             EditorGUILayout.EndHorizontal();
 
             _effects.DoLayoutList();
+            while (_queueOnRemove.Count > 0)
+            {
+                var removeIndex = _queueOnRemove[0];
+                var index = _effects.index;
+
+                _effects.serializedProperty.DeleteArrayElementAtIndex(removeIndex);
+                _effects.serializedProperty.DeleteArrayElementAtIndex(removeIndex);
+
+                var prop = serializedObject.FindProperty("_effectsPassed");
+                prop.DeleteArrayElementAtIndex(removeIndex);
+
+                serializedObject.ApplyModifiedProperties();
+
+                var upper = _effects.serializedProperty.arraySize;
+                _effects.index = Mathf.Min(index, (upper - 1));
+
+                _queueOnRemove.RemoveAt(0);
+            }
 
             var dropArea = GUILayoutUtility.GetRect(0f, 48f, GUILayout.ExpandWidth(true));
             if (EffectsEventHandler(dropArea))
             {
                 EditorGUI.DrawRect(dropArea, new Color(0f, 0.75f, 0f, 0.25f));
-                EditorGUI.LabelField(dropArea, __labelInfoDrop, CustomStyles.infoDrop);
+                EditorGUI.LabelField(dropArea, __content[18], CustomStyles.infoDrop);
             }
 
             EditorGUILayout.Space();
@@ -479,6 +572,7 @@ namespace V4F.Puppets
             _self = target as PuppetSkill;
             _foldouts = new bool[] { true, true, true };
             _effects = MakeEffectsList();
+            _queueOnRemove = new List<int>(PuppetSkill.MaxEffects);
             _lastActiveIndex = _effects.index;
             _drawDropArea = false;
         }

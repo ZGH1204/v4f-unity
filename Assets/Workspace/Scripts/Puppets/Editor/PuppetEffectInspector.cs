@@ -13,15 +13,7 @@ namespace V4F.Puppets
     public class PuppetEffectInspector : Editor
     {
         #region Fields
-        private static readonly GUIContent __labelTitle = null;
-        private static readonly GUIContent __labelTimer = null;
-        private static readonly GUIContent __labelMinDamage = null;
-        private static readonly GUIContent __labelMaxDamage = null;
-        private static readonly GUIContent __labelApplyDamage = null;
-        private static readonly GUIContent __labelInvertDamage = null;
-        private static readonly GUIContent __labelStun = null;
-
-        private static readonly GUILayoutOption __toggleOp = null;
+        private static readonly GUIContent[] __content = null;                
 
         private PuppetEffect _self = null;
         #endregion
@@ -29,50 +21,61 @@ namespace V4F.Puppets
         #region Constructors
         static PuppetEffectInspector()
         {
-            __labelTitle = new GUIContent("Name:");
-            __labelTimer = new GUIContent("Timer:");
-            __labelMinDamage = new GUIContent("Мinimum damage:");
-            __labelMaxDamage = new GUIContent("Мaximum damage:");
-            __labelApplyDamage = new GUIContent("Apply damage");
-            __labelInvertDamage = new GUIContent("Invert");
-            __labelStun = new GUIContent("Stun");
-
-            __toggleOp = GUILayout.Width(16f);
+            __content = new GUIContent[]
+            {
+                new GUIContent("Name:"),
+                new GUIContent("Timer:"),
+                new GUIContent("Apply damage"),
+                new GUIContent("Invert"),
+                new GUIContent("Damage:"),
+                new GUIContent("min"),
+                new GUIContent("max"),
+                new GUIContent("Stun"),
+            };
         }
         #endregion
 
         #region Methods
-        [MenuItem("Assets/Create/V4F/Puppets/Effect", false, 800)]
+        [MenuItem("Assets/Create/V4F/Personage/Effect", false, 801)]
         private static void CreateAsset()
         {
-            ScriptableHelper.CreateAsset<PuppetEffect>();
+            var asset = ScriptableHelper.CreateAsset<PuppetEffect>();
+            Debug.LogFormat("Create \"{0}\" object (ID: {1})", typeof(PuppetEffect).Name, asset.uniqueID);
         }
 
         public override void OnInspectorGUI()
         {
+            var op1 = GUILayout.Width(16f);
+            var op2 = GUILayout.Width(32f);
+
             serializedObject.Update();
+
+            EditorGUILayout.HelpBox(_self.uniqueID, MessageType.None);
 
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
 
             EditorGUILayout.Space();
-            EditorGUILayout.LabelField(__labelTitle, CustomStyles.italicLabel);
-            var title = Regex.Replace(EditorGUILayout.DelayedTextField(_self.title), @"[^a-zA-Z0-9_ ]", "").Trim();
+            EditorGUILayout.LabelField(__content[0], CustomStyles.italicLabel);
+            var titleProp = serializedObject.FindProperty("_title");
+            var title = Regex.Replace(EditorGUILayout.DelayedTextField(titleProp.stringValue), @"[^a-zA-Z0-9_ ]", "").Trim();
             if (!string.IsNullOrEmpty(title) && (title.Length > 3))
             {
-                _self.title = title;
+                titleProp.stringValue = title;
             }
 
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField(__labelTimer, CustomStyles.italicLabel);
-            _self.timer = EditorGUILayout.IntSlider(_self.timer, 0, 10);
+            EditorGUILayout.Separator();
+            EditorGUILayout.LabelField(__content[1], CustomStyles.italicLabel);
+            var timerProp = serializedObject.FindProperty("_timer");
+            timerProp.intValue = EditorGUILayout.IntSlider(timerProp.intValue, 0, 10);
 
-            EditorGUILayout.Space();
+            EditorGUILayout.Separator();
             EditorGUILayout.BeginHorizontal();
-            _self.applyDamage = EditorGUILayout.ToggleLeft(GUIContent.none, _self.applyDamage, __toggleOp);
-            EditorGUILayout.LabelField(__labelApplyDamage, CustomStyles.italicLabel);
+            var applyProp = serializedObject.FindProperty("_applyDamage");
+            applyProp.boolValue = EditorGUILayout.ToggleLeft(GUIContent.none, applyProp.boolValue, op1);
+            EditorGUILayout.LabelField(__content[2], CustomStyles.italicLabel);
             EditorGUILayout.EndHorizontal();
 
-            EditorGUI.BeginDisabledGroup(!_self.applyDamage);
+            EditorGUI.BeginDisabledGroup(!applyProp.boolValue);
             EditorGUILayout.BeginVertical();
             EditorGUILayout.BeginHorizontal();
 
@@ -80,28 +83,39 @@ namespace V4F.Puppets
             EditorGUILayout.Space();
 
             EditorGUILayout.BeginVertical();
+
             EditorGUILayout.BeginHorizontal();
-            _self.invertDamage = EditorGUILayout.ToggleLeft(GUIContent.none, _self.invertDamage, __toggleOp);
-            EditorGUILayout.LabelField(__labelInvertDamage, CustomStyles.italicLabel);
+            var invertProp = serializedObject.FindProperty("_invertDamage");
+            invertProp.boolValue = EditorGUILayout.ToggleLeft(GUIContent.none, invertProp.boolValue, op1);
+            EditorGUILayout.LabelField(__content[3], CustomStyles.italicLabel);
+            EditorGUILayout.EndHorizontal();                       
+                        
+            EditorGUILayout.LabelField(__content[4], CustomStyles.italicLabel);
+            var minDamageProp = serializedObject.FindProperty("_minDamage");
+            var maxDamageProp = serializedObject.FindProperty("_maxDamage");
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(__content[5], op2);            
+            minDamageProp.intValue = EditorGUILayout.IntSlider(minDamageProp.intValue, 1, maxDamageProp.intValue);
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(__content[6], op2);
+            maxDamageProp.intValue = EditorGUILayout.IntSlider(maxDamageProp.intValue, minDamageProp.intValue, 100);
             EditorGUILayout.EndHorizontal();
 
-            EditorGUILayout.LabelField(__labelMinDamage, CustomStyles.italicLabel);
-            _self.minDamage = EditorGUILayout.IntSlider(_self.minDamage, 0, _self.maxDamage);
-
-            EditorGUILayout.LabelField(__labelMaxDamage, CustomStyles.italicLabel);
-            _self.maxDamage = EditorGUILayout.IntSlider(_self.maxDamage, _self.minDamage, 100);
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.EndVertical();
             EditorGUI.EndDisabledGroup();
 
-            EditorGUILayout.Space();
+            EditorGUILayout.Separator();
             EditorGUILayout.BeginHorizontal();
-            _self.stun = EditorGUILayout.ToggleLeft(GUIContent.none, _self.stun, __toggleOp);
-            EditorGUILayout.LabelField(__labelStun, CustomStyles.italicLabel);
+            var stunProp = serializedObject.FindProperty("_stun");
+            stunProp.boolValue = EditorGUILayout.ToggleLeft(GUIContent.none, stunProp.boolValue, op1);
+            EditorGUILayout.LabelField(__content[7], CustomStyles.italicLabel);
             EditorGUILayout.EndHorizontal();
 
+            EditorGUILayout.Space();
             EditorGUILayout.EndVertical();
 
             if (GUI.changed)

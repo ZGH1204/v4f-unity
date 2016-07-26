@@ -25,6 +25,11 @@ namespace V4F.Puppets
         {
             get { return _skills.Count; }
         }
+
+        public PuppetSkill this[int index]
+        {
+            get { return _skills[index]; }
+        }
         #endregion
     }
 
