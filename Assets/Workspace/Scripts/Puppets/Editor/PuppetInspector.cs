@@ -26,19 +26,13 @@ namespace V4F.Puppets
                 new GUIContent("Specification:"),
                 new GUIContent("Skill set:"),
                 new GUIContent("Name:"),
-                new GUIContent("Small icon:"),                
+                new GUIContent("Prefab:"),
+                new GUIContent("Icon:"),
             };            
         }
         #endregion
 
         #region Methods
-        [MenuItem("Assets/Create/V4F/Personage/Puppet", false, 805)]
-        private static void CreateAsset()
-        {
-            var asset = ScriptableHelper.CreateAsset<Puppet>();
-            Debug.LogFormat("Create \"{0}\" object (ID: {1})", typeof(Puppet).Name, asset.uniqueID);
-        }
-
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
@@ -69,8 +63,13 @@ namespace V4F.Puppets
 
             EditorGUILayout.Separator();
             EditorGUILayout.LabelField(__content[3], CustomStyles.italicLabel);
-            var smallIconProp = serializedObject.FindProperty("_smallIcon");
-            smallIconProp.objectReferenceValue = EditorGUILayout.ObjectField(GUIContent.none, smallIconProp.objectReferenceValue, typeof(Sprite), false) as Sprite;            
+            var prefabProp = serializedObject.FindProperty("_prefab");
+            prefabProp.objectReferenceValue = EditorGUILayout.ObjectField(GUIContent.none, prefabProp.objectReferenceValue, typeof(GameObject), false) as GameObject;
+
+            EditorGUILayout.Separator();
+            EditorGUILayout.LabelField(__content[4], CustomStyles.italicLabel);
+            var smallIconProp = serializedObject.FindProperty("_icon");
+            smallIconProp.objectReferenceValue = EditorGUILayout.ObjectField(GUIContent.none, smallIconProp.objectReferenceValue, typeof(Sprite), false) as Sprite;
 
             EditorGUILayout.Space();
             EditorGUILayout.EndVertical();

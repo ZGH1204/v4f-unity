@@ -20,7 +20,10 @@ namespace V4F.Puppets
         private string _name = "Puppet";
 
         [SerializeField, HideInInspector]
-        private Sprite _smallIcon = null;
+        private Sprite _icon = null;
+
+        [SerializeField, HideInInspector]
+        private GameObject _prefab = null;
         #endregion
 
         #region Properties
@@ -39,9 +42,14 @@ namespace V4F.Puppets
             get { return _name; }
         }
 
-        public Sprite smallIcon
+        public Sprite icon
         {
-            get { return _smallIcon; }
+            get { return _icon; }
+        }
+
+        public GameObject prefab
+        {
+            get { return _prefab; }
         }
         #endregion
     }
