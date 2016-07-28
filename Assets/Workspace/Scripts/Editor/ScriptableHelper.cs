@@ -38,6 +38,32 @@ namespace V4F
             return asset;
         }
 
+        public static T CreateAsset<T>(string path) where T : ScriptableObject
+        {            
+            if (string.IsNullOrEmpty(path))
+            {
+                path = "Assets";
+            }
+            else if (!string.IsNullOrEmpty(Path.GetExtension(path)))
+            {
+                path = path.Replace(Path.GetFileName(AssetDatabase.GetAssetPath(Selection.activeObject)), "");
+            }
+
+            var pathAndName = string.Format("{0}/New{1}.asset", path, typeof(T).Name);
+            var assetPathAndName = AssetDatabase.GenerateUniqueAssetPath(pathAndName);
+
+            T asset = ScriptableObject.CreateInstance<T>();
+
+            AssetDatabase.CreateAsset(asset, assetPathAndName);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            EditorUtility.FocusProjectWindow();
+            Selection.activeObject = asset;
+
+            return asset;
+        }
+
 
     }
 	
