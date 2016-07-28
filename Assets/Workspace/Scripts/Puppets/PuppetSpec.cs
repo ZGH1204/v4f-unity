@@ -32,6 +32,8 @@ namespace V4F.Puppets
             _stats[(int)PuppetStats.Stamina] = 1;
             _stats[(int)PuppetStats.MinDamage] = 1;
             _stats[(int)PuppetStats.MaxDamage] = 1;
+            _stats[(int)PuppetStats.CriticalChance] = 0;
+            _stats[(int)PuppetStats.CriticalDamage] = 0;
         }
 
         public int GetStat(PuppetStats stat)

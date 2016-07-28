@@ -14,6 +14,8 @@ namespace V4F.Puppets
         Stamina,
         MinDamage,
         MaxDamage,
+        CriticalChance,
+        CriticalDamage,
     }
 
 }
