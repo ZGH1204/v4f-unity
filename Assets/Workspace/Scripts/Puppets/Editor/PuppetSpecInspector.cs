@@ -29,6 +29,9 @@ namespace V4F.Puppets
                 new GUIContent("Damage:"),
                 new GUIContent("min"),
                 new GUIContent("max"),
+                new GUIContent("Critical (%):"),
+                new GUIContent("chance"),
+                new GUIContent("damage"),
             };            
         }
         #endregion
@@ -77,6 +80,18 @@ namespace V4F.Puppets
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField(__content[7], op1);
             _self.SetStat(PuppetStats.MaxDamage, EditorGUILayout.IntSlider(_self.GetStat(PuppetStats.MaxDamage), _self.GetStat(PuppetStats.MinDamage), 100));
+            EditorGUILayout.EndHorizontal();
+
+            var op2 = GUILayout.Width(52f);
+            EditorGUILayout.Separator();
+            EditorGUILayout.LabelField(__content[8], CustomStyles.italicLabel);
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(__content[9], op2);
+            _self.SetStat(PuppetStats.CriticalChance, EditorGUILayout.IntSlider(_self.GetStat(PuppetStats.CriticalChance), 0, 200));
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(__content[10], op2);
+            _self.SetStat(PuppetStats.CriticalDamage, EditorGUILayout.IntSlider(_self.GetStat(PuppetStats.CriticalDamage), 0, 200));
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.Space();
