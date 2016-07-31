@@ -13,7 +13,7 @@ namespace V4F.Puppets
     public class PuppetInspector : Editor
     {
         #region Fields        
-        private static readonly GUIContent[] __content = null;        
+        //private static readonly GUIContent[] __content = null;        
 
         private Puppet _self = null;
         #endregion
@@ -21,6 +21,7 @@ namespace V4F.Puppets
         #region Constructors
         static PuppetInspector()
         {
+            /*
             __content = new GUIContent[]
             {
                 new GUIContent("Specification:"),
@@ -28,7 +29,8 @@ namespace V4F.Puppets
                 new GUIContent("Name:"),
                 new GUIContent("Prefab:"),
                 new GUIContent("Icon:"),
-            };            
+            };
+            */            
         }
         #endregion
 
@@ -39,6 +41,7 @@ namespace V4F.Puppets
 
             EditorGUILayout.HelpBox(_self.uniqueID, MessageType.None);
 
+            /*
             EditorGUILayout.Space();
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
 
@@ -73,6 +76,7 @@ namespace V4F.Puppets
 
             EditorGUILayout.Space();
             EditorGUILayout.EndVertical();
+            */
 
             if (GUI.changed)
             {

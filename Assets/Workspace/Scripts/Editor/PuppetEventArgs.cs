@@ -8,10 +8,11 @@ using V4F.Puppets;
 namespace V4F
 {
 
-    public class CreatePuppetEventArgs : System.EventArgs
+    public class PuppetEventArgs : System.EventArgs
     {
-        #region Properties
+        #region Properties    
         public string path { get; set; }
+        public Puppet puppet { get; set; }
         public PuppetSpec spec { get; set; }
         public PuppetSkillSet skillSet { get; set; }
         public Sprite icon { get; set; }
@@ -20,12 +21,12 @@ namespace V4F
         #endregion
 
         #region Constructors
-        public CreatePuppetEventArgs()
+        public PuppetEventArgs()
         {
             spec = null;
             skillSet = null;
             icon = null;
-            properName = null;
+            properName = "NewPuppet";
             prefab = null;
         }
         #endregion
