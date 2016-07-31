@@ -46,17 +46,23 @@ namespace V4F
         [InitializeOnLoadMethod]
         private static void Initialize()
         {
-            CreatePuppetDialog.Result += OnCreatePuppetResultCallback;
+            PuppetDialog.OnCreate += OnCreatePuppetResultCallback;
+            PuppetDialog.OnEdit += OnEditPuppetResultCallback;
         }
 
-        private static void OnCreatePuppetResultCallback(CreatePuppetDialog sender, CreatePuppetEventArgs args)
+        private static void OnEditPuppetResultCallback(PuppetDialog sender, PuppetEventArgs args)
+        {
+            __instance.OnEditPuppetResult(sender, args);
+        }
+
+        private static void OnCreatePuppetResultCallback(PuppetDialog sender, PuppetEventArgs args)
         {
             __instance.OnCreatePuppetResult(sender, args);
-        }
+        }        
 
-        private void OnCreatePuppetResult(CreatePuppetDialog sender, CreatePuppetEventArgs args)
+        private void OnEditPuppetResult(PuppetDialog sender, PuppetEventArgs args)
         {
-            Puppet puppet = ScriptableHelper.CreateAsset<Puppet>(args.path);
+            var puppet = args.puppet;
             if (puppet != null)
             {
                 var serializedObject = new SerializedObject(puppet);
@@ -69,6 +75,33 @@ namespace V4F
                 skillSet.objectReferenceValue = args.skillSet;
                 
                 var properName = serializedObject.FindProperty("_name");                
+                properName.stringValue = args.properName;
+
+                var prefab = serializedObject.FindProperty("_prefab");
+                prefab.objectReferenceValue = args.prefab;
+
+                var icon = serializedObject.FindProperty("_icon");
+                icon.objectReferenceValue = args.icon;
+
+                serializedObject.ApplyModifiedProperties();
+            }
+        }
+
+        private void OnCreatePuppetResult(PuppetDialog sender, PuppetEventArgs args)
+        {
+            var puppet = ScriptableHelper.CreateAsset<Puppet>(args.path);
+            if (puppet != null)
+            {
+                var serializedObject = new SerializedObject(puppet);
+                serializedObject.Update();
+
+                var spec = serializedObject.FindProperty("_spec");
+                spec.objectReferenceValue = args.spec;
+
+                var skillSet = serializedObject.FindProperty("_skillSet");
+                skillSet.objectReferenceValue = args.skillSet;
+
+                var properName = serializedObject.FindProperty("_name");
                 properName.stringValue = args.properName;
 
                 var prefab = serializedObject.FindProperty("_prefab");
