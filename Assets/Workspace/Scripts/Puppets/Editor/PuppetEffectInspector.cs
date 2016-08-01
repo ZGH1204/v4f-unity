@@ -57,10 +57,11 @@ namespace V4F.Puppets
             EditorGUILayout.Space();
             EditorGUILayout.LabelField(__content[0], CustomStyles.italicLabel);
             var titleProp = serializedObject.FindProperty("_title");
-            var title = Regex.Replace(EditorGUILayout.DelayedTextField(titleProp.stringValue), @"[^a-zA-Z0-9_ ]", "").Trim();
-            if (!string.IsNullOrEmpty(title) && (title.Length > 3))
+            var selectedIndex = Localization.GetKeyIndex(titleProp.stringValue);
+            var select = EditorGUILayout.Popup(selectedIndex, Localization.keys);
+            if (select != selectedIndex)
             {
-                titleProp.stringValue = title;
+                titleProp.stringValue = Localization.GetKey(select);
             }
 
             EditorGUILayout.Separator();
