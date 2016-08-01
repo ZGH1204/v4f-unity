@@ -62,38 +62,10 @@ namespace V4F
         private static void OnCreatePuppetResultCallback(PuppetDialog sender, PuppetEventArgs args)
         {
             __instance.OnCreatePuppetResult(sender, args);
-        }        
-
-        private void OnEditPuppetResult(PuppetDialog sender, PuppetEventArgs args)
-        {
-            var puppet = args.puppet;
-            if (puppet != null)
-            {
-                var serializedObject = new SerializedObject(puppet);
-                serializedObject.Update();
-
-                var spec = serializedObject.FindProperty("_spec");
-                spec.objectReferenceValue = args.spec;
-                
-                var skillSet = serializedObject.FindProperty("_skillSet");
-                skillSet.objectReferenceValue = args.skillSet;
-                
-                var properName = serializedObject.FindProperty("_name");                
-                properName.stringValue = args.properName;
-
-                var prefab = serializedObject.FindProperty("_prefab");
-                prefab.objectReferenceValue = args.prefab;
-
-                var icon = serializedObject.FindProperty("_icon");
-                icon.objectReferenceValue = args.icon;
-
-                serializedObject.ApplyModifiedProperties();
-            }
         }
 
-        private void OnCreatePuppetResult(PuppetDialog sender, PuppetEventArgs args)
+        private void PuppetRefresh(Puppet puppet, PuppetEventArgs args)
         {
-            var puppet = ScriptableHelper.CreateAsset<Puppet>(args.path);
             if (puppet != null)
             {
                 var serializedObject = new SerializedObject(puppet);
@@ -109,13 +81,27 @@ namespace V4F
                 properName.stringValue = args.properName;
 
                 var prefab = serializedObject.FindProperty("_prefab");
-                prefab.objectReferenceValue = args.prefab;
+                prefab.objectReferenceValue = args.prefab;                
 
                 var icon = serializedObject.FindProperty("_icon");
                 icon.objectReferenceValue = args.icon;
 
+                var puppetClass = serializedObject.FindProperty("_class");
+                puppetClass.enumValueIndex = (int)args.puppetClass;
+
                 serializedObject.ApplyModifiedProperties();
             }
+        }
+
+        private void OnEditPuppetResult(PuppetDialog sender, PuppetEventArgs args)
+        {            
+            PuppetRefresh(args.puppet, args);
+        }
+
+        private void OnCreatePuppetResult(PuppetDialog sender, PuppetEventArgs args)
+        {
+            var puppet = ScriptableHelper.CreateAsset<Puppet>(args.path);
+            PuppetRefresh(puppet, args);
         }
         #endregion
     }

@@ -15,7 +15,7 @@ namespace V4F.Puppets
 
         #region Fields
         [SerializeField, HideInInspector]
-        private int[] _stats;
+        private int[] _stats;        
         #endregion
 
         #region Properties

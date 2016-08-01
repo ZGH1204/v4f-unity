@@ -11,10 +11,10 @@ namespace V4F.Puppets
     {
         #region Fields
         [SerializeField, HideInInspector]
-        private string _title = "New disease";
+        private string _title = "#BAD_TITLE";
 
         [SerializeField, HideInInspector]
-        private string _description = "#description";
+        private string _description = "#BAD_TITLE";
 
         [SerializeField, HideInInspector]
         private float[] _modifiers = new float[PuppetSpec.StatsCapacity];

@@ -17,13 +17,16 @@ namespace V4F.Puppets
         private PuppetSkillSet _skillSet = null;
 
         [SerializeField, HideInInspector]
-        private string _name = "Puppet";
+        private string _name = "#BAD_NAME";
 
         [SerializeField, HideInInspector]
         private Sprite _icon = null;
 
         [SerializeField, HideInInspector]
         private GameObject _prefab = null;
+
+        [SerializeField, HideInInspector]
+        private PuppetClass _class = PuppetClass.Warrior;
         #endregion
 
         #region Properties
@@ -50,6 +53,11 @@ namespace V4F.Puppets
         public GameObject prefab
         {
             get { return _prefab; }
+        }
+
+        public PuppetClass puppetClass
+        {
+            get { return _class; }
         }
         #endregion
     }
