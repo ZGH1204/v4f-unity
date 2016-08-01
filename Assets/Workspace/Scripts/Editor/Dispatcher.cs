@@ -28,26 +28,30 @@ namespace V4F
         static Dispatcher()
         {
             __instance = new Dispatcher();
+
+            Debug.Log("Dispatcher()");
         }
 
         private Dispatcher()
         {
-            Debug.Log("Default constructor for Dispatcher");
+                        
         }
         #endregion
 
-        #region Methods        
+        #region Methods
+        [InitializeOnLoadMethod]
+        private static void Initialize()
+        {            
+            PuppetDialog.OnCreate += OnCreatePuppetResultCallback;
+            PuppetDialog.OnEdit += OnEditPuppetResultCallback;
+
+            Debug.Log("Dispatcher.Initialize()");
+        }
+
         [DidReloadScripts]
         private static void OnReloadScript()
         {
-            Debug.Log("Reload method for Dispatcher");
-        }
-
-        [InitializeOnLoadMethod]
-        private static void Initialize()
-        {
-            PuppetDialog.OnCreate += OnCreatePuppetResultCallback;
-            PuppetDialog.OnEdit += OnEditPuppetResultCallback;
+            Debug.Log("Dispatcher.OnReloadScript()");
         }
 
         private static void OnEditPuppetResultCallback(PuppetDialog sender, PuppetEventArgs args)

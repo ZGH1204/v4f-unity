@@ -31,7 +31,8 @@ namespace V4F
 
         private PuppetEventArgs _args = null;        
         private bool _editMode = false;
-        private int[] _colourIndices = null;                
+        private int[] _colourIndices = null;
+        private int _keySelected = -1;
         private bool _saved = false;
         #endregion
 
@@ -476,12 +477,13 @@ namespace V4F
                 EditorGUILayout.BeginVertical();
                 {
                     EditorGUILayout.Separator();
-                    EditorGUILayout.LabelField(__content[11], CustomStyles.italicLabel);
+                    EditorGUILayout.LabelField(__content[11], CustomStyles.italicLabel);                    
 
-                    var properName = Regex.Replace(EditorGUILayout.DelayedTextField(_args.properName), @"[^a-zA-Z0-9_ ]", "").Trim();
-                    if (!string.IsNullOrEmpty(properName) && (properName.Length > 3))
+                    var selectedIndex = Localization.GetKeyIndex(_args.properName);
+                    var select = EditorGUILayout.Popup(selectedIndex, Localization.keys);
+                    if (select != selectedIndex)
                     {
-                        _args.properName = properName;
+                        _args.properName = Localization.GetKey(select);
                     }
 
                     EditorGUILayout.Separator();
@@ -512,6 +514,7 @@ namespace V4F
             _DragAndDrop += IconDropArea;
 
             _colourIndices = new int[] { 0, 1, 0, 1, 0, 0, 0, 1 };
+            _keySelected = -1;
             _saved = false;
         }
 
