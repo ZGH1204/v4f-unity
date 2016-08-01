@@ -64,7 +64,12 @@ namespace V4F.Puppets
             EditorGUILayout.Separator();
             EditorGUILayout.LabelField(__content[1], CustomStyles.italicLabel);
             var descProp = serializedObject.FindProperty("_description");
-            descProp.stringValue = EditorGUILayout.DelayedTextField(descProp.stringValue).Trim();
+            selectedIndex = Localization.GetKeyIndex(descProp.stringValue);
+            select = EditorGUILayout.Popup(selectedIndex, Localization.keys);
+            if (select != selectedIndex)
+            {
+                descProp.stringValue = Localization.GetKey(select);
+            }
 
             EditorGUILayout.Separator();
             EditorGUILayout.LabelField(__content[2], EditorStyles.boldLabel);

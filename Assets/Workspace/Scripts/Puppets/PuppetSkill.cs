@@ -20,7 +20,7 @@ namespace V4F.Puppets
         private Sprite _icon = null;
 
         [SerializeField, HideInInspector]
-        private string _title = "New skill";
+        private string _title = "#BAD_TITLE";
 
         [SerializeField, HideInInspector]
         private PuppetSkillTarget _useTo = PuppetSkillTarget.Enemies;

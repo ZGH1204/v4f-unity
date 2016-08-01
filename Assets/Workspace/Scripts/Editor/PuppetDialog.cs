@@ -31,8 +31,7 @@ namespace V4F
 
         private PuppetEventArgs _args = null;        
         private bool _editMode = false;
-        private int[] _colourIndices = null;
-        private int _keySelected = -1;
+        private int[] _colourIndices = null;        
         private bool _saved = false;
         #endregion
 
@@ -81,20 +80,22 @@ namespace V4F
                 new GUIContent("Editing Personage"),
                 new GUIContent("Icon"),
                 new GUIContent("Save"),
+                GUIContent.none,
+                new GUIContent("Class:"),
             };
 
             __rect = new Rect[]
             {
-                new Rect(0f, 0f, 597, 276f),
+                new Rect(0f, 0f, 597, 328f),
                 new Rect(8f, 8f, 200f, 160f),
                 new Rect(212f, 8f, 200f, 160f),
                 new Rect(8f, 172f, 404f, 96f),
-                new Rect(420f, 0f, 1f, 276f),
-                new Rect(461f, 216f, 96f, 24f),
-                new Rect(461f, 244f, 96f, 24f),                
+                new Rect(420f, 0f, 1f, 328f),
+                new Rect(461f, 268f, 96f, 24f),
+                new Rect(461f, 296f, 96f, 24f),
                 new Rect(461f, 8f, 96f, 96f),
                 new Rect(463f, 10f, 92f, 92f),
-                new Rect(429f, 108f, 160f, 104f),
+                new Rect(429f, 108f, 160f, 156f),
             };
 
             __colour = new Color[]
@@ -149,6 +150,7 @@ namespace V4F
             args.properName = puppet.properName;
             args.icon = puppet.icon;
             args.prefab = puppet.prefab;
+            args.puppetClass = puppet.puppetClass;
 
             dialog._args = args;
             dialog._editMode = true;
@@ -490,6 +492,11 @@ namespace V4F
                     EditorGUILayout.LabelField(__content[12], CustomStyles.italicLabel);
 
                     _args.prefab = EditorGUILayout.ObjectField(_args.prefab, typeof(GameObject), false) as GameObject;
+
+                    EditorGUILayout.Separator();
+                    EditorGUILayout.LabelField(__content[18], CustomStyles.italicLabel);
+
+                    _args.puppetClass = (PuppetClass) EditorGUILayout.EnumPopup(_args.puppetClass);
                 }                
                 EditorGUILayout.EndVertical();
             }            
@@ -514,7 +521,6 @@ namespace V4F
             _DragAndDrop += IconDropArea;
 
             _colourIndices = new int[] { 0, 1, 0, 1, 0, 0, 0, 1 };
-            _keySelected = -1;
             _saved = false;
         }
 

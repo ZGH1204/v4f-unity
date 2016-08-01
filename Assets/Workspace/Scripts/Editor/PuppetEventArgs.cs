@@ -18,6 +18,7 @@ namespace V4F
         public Sprite icon { get; set; }
         public string properName { get; set; }
         public GameObject prefab { get; set; }
+        public PuppetClass puppetClass { get; set; }
         #endregion
 
         #region Constructors
@@ -26,8 +27,9 @@ namespace V4F
             spec = null;
             skillSet = null;
             icon = null;
-            properName = "NewPuppet";
+            properName = "#BAD_NAME";
             prefab = null;
+            puppetClass = PuppetClass.Warrior;
         }
         #endregion
     }

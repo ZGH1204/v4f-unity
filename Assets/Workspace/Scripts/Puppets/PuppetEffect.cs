@@ -11,7 +11,7 @@ namespace V4F.Puppets
     {
         #region Fields
         [SerializeField, HideInInspector]
-        private string _title = "New effect";
+        private string _title = "#BAD_TITLE";
 
         [SerializeField, HideInInspector]
         private int _timer = 3;
