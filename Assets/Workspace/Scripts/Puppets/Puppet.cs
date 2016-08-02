@@ -14,19 +14,22 @@ namespace V4F.Puppets
         private PuppetSpec _spec = null;
 
         [SerializeField, HideInInspector]
-        private PuppetSkillSet _skillSet = null;
+        private PuppetResists _resists = null;
 
         [SerializeField, HideInInspector]
-        private string _name = "#BAD_NAME";
+        private PuppetSkillSet _skillSet = null;
 
         [SerializeField, HideInInspector]
         private Sprite _icon = null;
 
         [SerializeField, HideInInspector]
-        private GameObject _prefab = null;
+        private string _name = "#BAD_NAME";
 
         [SerializeField, HideInInspector]
         private PuppetClass _class = PuppetClass.Warrior;
+
+        [SerializeField, HideInInspector]
+        private GameObject _prefab = null;        
         #endregion
 
         #region Properties
@@ -35,9 +38,19 @@ namespace V4F.Puppets
             get { return _spec; }
         }
 
+        public PuppetResists resists
+        {
+            get { return _resists; }
+        }
+
         public PuppetSkillSet skillSet
         {
             get { return _skillSet; }
+        }        
+
+        public Sprite icon
+        {
+            get { return _icon; }
         }
 
         public string properName
@@ -45,19 +58,14 @@ namespace V4F.Puppets
             get { return _name; }
         }
 
-        public Sprite icon
+        public PuppetClass puppetClass
         {
-            get { return _icon; }
+            get { return _class; }
         }
 
         public GameObject prefab
         {
             get { return _prefab; }
-        }
-
-        public PuppetClass puppetClass
-        {
-            get { return _class; }
         }
         #endregion
     }

@@ -61,7 +61,7 @@ namespace V4F.Puppets
         #endregion
 
         #region Methods
-        [MenuItem("Assets/Create/V4F/Personage/SkillSet", false, 804)]
+        [MenuItem("Assets/Create/V4F/Personage/SkillSet", false, 805)]
         private static void CreateAsset()
         {
             ScriptableHelper.CreateAsset<PuppetSkillSet>();

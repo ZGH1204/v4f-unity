@@ -74,20 +74,23 @@ namespace V4F
                 var spec = serializedObject.FindProperty("_spec");
                 spec.objectReferenceValue = args.spec;
 
+                var resists = serializedObject.FindProperty("_resists");
+                resists.objectReferenceValue = args.resists;
+
                 var skillSet = serializedObject.FindProperty("_skillSet");
                 skillSet.objectReferenceValue = args.skillSet;
-
-                var properName = serializedObject.FindProperty("_name");
-                properName.stringValue = args.properName;
-
-                var prefab = serializedObject.FindProperty("_prefab");
-                prefab.objectReferenceValue = args.prefab;                
 
                 var icon = serializedObject.FindProperty("_icon");
                 icon.objectReferenceValue = args.icon;
 
+                var properName = serializedObject.FindProperty("_name");
+                properName.stringValue = args.properName;
+
                 var puppetClass = serializedObject.FindProperty("_class");
                 puppetClass.enumValueIndex = (int)args.puppetClass;
+
+                var prefab = serializedObject.FindProperty("_prefab");
+                prefab.objectReferenceValue = args.prefab;                                                
 
                 serializedObject.ApplyModifiedProperties();
             }

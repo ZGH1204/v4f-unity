@@ -14,6 +14,7 @@ namespace V4F
         public string path { get; set; }
         public Puppet puppet { get; set; }
         public PuppetSpec spec { get; set; }
+        public PuppetResists resists { get; set; }
         public PuppetSkillSet skillSet { get; set; }
         public Sprite icon { get; set; }
         public string properName { get; set; }
@@ -25,6 +26,7 @@ namespace V4F
         public PuppetEventArgs()
         {
             spec = null;
+            resists = null;
             skillSet = null;
             icon = null;
             properName = "#BAD_NAME";

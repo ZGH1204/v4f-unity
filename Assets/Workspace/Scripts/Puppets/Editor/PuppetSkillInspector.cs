@@ -84,6 +84,7 @@ namespace V4F.Puppets
                 new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/Icons/item_passed_off.png")),
                 new GUIContent("Combine target positions"),
                 new GUIContent("Move"),
+                new GUIContent("Resistance:"),
             };            
 
             __heightNormal = EditorGUIUtility.singleLineHeight * 1.5f;
@@ -93,7 +94,7 @@ namespace V4F.Puppets
         #endregion
 
         #region Methods
-        [MenuItem("Assets/Create/V4F/Personage/Skill", false, 803)]
+        [MenuItem("Assets/Create/V4F/Personage/Skill", false, 804)]
         private static void CreateAsset()
         {
             ScriptableHelper.CreateAsset<PuppetSkill>();
@@ -377,6 +378,11 @@ namespace V4F.Puppets
         {
             var op1 = GUILayout.Width(32f);
             var op2 = GUILayout.Width(16f);
+
+            EditorGUILayout.Separator();
+            EditorGUILayout.LabelField(__content[23], CustomStyles.italicLabel);
+            var resistProp = serializedObject.FindProperty("_resist");
+            resistProp.enumValueIndex = (int)((Resists)EditorGUILayout.EnumPopup((Resists)resistProp.enumValueIndex));
 
             EditorGUILayout.Separator();
             EditorGUILayout.LabelField(__content[5], CustomStyles.italicLabel);

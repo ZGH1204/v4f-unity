@@ -63,7 +63,7 @@ namespace V4F
         {
             __content = new GUIContent[]
             {
-                new GUIContent("Create New Personage"),
+                new GUIContent("Create personage"),
                 new GUIContent("Specification"),
                 new GUIContent("Resistances"),
                 new GUIContent("Skill Set"),
@@ -89,7 +89,7 @@ namespace V4F
                 new Rect(0f, 0f, 597, 328f),
                 new Rect(8f, 8f, 200f, 160f),
                 new Rect(212f, 8f, 200f, 160f),
-                new Rect(8f, 172f, 404f, 96f),
+                new Rect(8f, 172f, 404f, 108f),
                 new Rect(420f, 0f, 1f, 328f),
                 new Rect(461f, 268f, 96f, 24f),
                 new Rect(461f, 296f, 96f, 24f),
@@ -110,15 +110,13 @@ namespace V4F
         #endregion
 
         #region Methods
-        [MenuItem("Assets/Create/V4F/Personage/Puppet", false, 805)]
+        [MenuItem("Assets/Create/V4F/Personage/Puppet", false, 806)]
         private static void ShowCreateDialog()
         {            
             var dialog = CreateInstance<PuppetDialog>();            
             dialog.titleContent = __content[0];
-
-            var dialogRect = __rect[0];
-            dialog.minSize = dialogRect.size;
-            dialog.maxSize = dialogRect.size;
+            dialog.minSize = __rect[0].size;
+            dialog.maxSize = __rect[0].size;
 
             var args = new PuppetEventArgs();
             args.puppet = null;
@@ -135,22 +133,20 @@ namespace V4F
         {
             var dialog = CreateInstance<PuppetDialog>();
             dialog.titleContent = __content[14];
-
-            var dialogRect = __rect[0];
-            dialog.minSize = dialogRect.size;
-            dialog.maxSize = dialogRect.size;
-
+            dialog.minSize = __rect[0].size;
+            dialog.maxSize = __rect[0].size;
 
             var puppet = menuCommand.context as Puppet;
             var args = new PuppetEventArgs();
             args.puppet = puppet;
             args.path = AssetDatabase.GetAssetPath(Selection.activeObject);
             args.spec = puppet.spec;
-            args.skillSet = puppet.skillSet;
-            args.properName = puppet.properName;
+            args.resists = puppet.resists;
+            args.skillSet = puppet.skillSet;            
             args.icon = puppet.icon;
-            args.prefab = puppet.prefab;
+            args.properName = puppet.properName;
             args.puppetClass = puppet.puppetClass;
+            args.prefab = puppet.prefab;
 
             dialog._args = args;
             dialog._editMode = true;
@@ -195,6 +191,45 @@ namespace V4F
             }
 
             _colourIndices[1] = index;
+        }
+
+        private void ResistsDropArea(Vector3 mousePosition, bool dragPerform)
+        {
+            var index = 1;
+
+            if (__rect[2].Contains(mousePosition))
+            {
+                PuppetResists resists = null;
+
+                foreach (Object draggedObject in DragAndDrop.objectReferences)
+                {
+                    resists = draggedObject as PuppetResists;
+                    if (resists != null)
+                    {
+                        break;
+                    }
+                }
+
+                if (resists != null)
+                {
+                    DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+                    if (dragPerform)
+                    {
+                        DragAndDrop.AcceptDrag();
+                        _args.resists = resists;
+                    }
+                    else
+                    {
+                        index = 2;
+                    }
+                }
+                else
+                {
+                    DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
+                }
+            }
+
+            _colourIndices[2] = index;
         }
 
         private void SkillSetDropArea(Vector3 mousePosition, bool dragPerform)
@@ -342,13 +377,13 @@ namespace V4F
                     {
                         EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.ExpandHeight(true));
                         {
-                            EditorGUILayout.LabelField("Health Points", spec.GetStat(PuppetStats.HealthPoints).ToString());
-                            EditorGUILayout.LabelField("Accuracy", spec.GetStat(PuppetStats.Accuracy).ToString());
-                            EditorGUILayout.LabelField("Initiative", spec.GetStat(PuppetStats.Initiative).ToString());
-                            EditorGUILayout.LabelField("Stamina", spec.GetStat(PuppetStats.Stamina).ToString());
-                            EditorGUILayout.LabelField("Damage", string.Format("{0}-{1}", spec.GetStat(PuppetStats.MinDamage), spec.GetStat(PuppetStats.MaxDamage)));
-                            EditorGUILayout.LabelField("Critical Chance", string.Format("{0}%", spec.GetStat(PuppetStats.CriticalChance)));
-                            EditorGUILayout.LabelField("Critical Damage", string.Format("{0}%", spec.GetStat(PuppetStats.CriticalDamage)));
+                            EditorGUILayout.LabelField("Health Points", spec.GetStat(Stats.HealthPoints).ToString());
+                            EditorGUILayout.LabelField("Accuracy", spec.GetStat(Stats.Accuracy).ToString());
+                            EditorGUILayout.LabelField("Initiative", spec.GetStat(Stats.Initiative).ToString());
+                            EditorGUILayout.LabelField("Stamina", spec.GetStat(Stats.Stamina).ToString());
+                            EditorGUILayout.LabelField("Damage", string.Format("{0}-{1}", spec.GetStat(Stats.MinDamage), spec.GetStat(Stats.MaxDamage)));
+                            EditorGUILayout.LabelField("Critical Chance", string.Format("{0}%", spec.GetStat(Stats.CriticalChance)));
+                            EditorGUILayout.LabelField("Critical Damage", string.Format("{0}%", spec.GetStat(Stats.CriticalDamage)));
                         }                        
                         EditorGUILayout.EndVertical();
                     }
@@ -366,8 +401,62 @@ namespace V4F
 
         private void DrawResistances()
         {
-            EditorGUI.DrawRect(__rect[2], __colour[_colourIndices[2]]);
-            EditorGUI.LabelField(__rect[2], __content[2], CustomStyles.infoDrop);
+            var resists = _args.resists;
+
+            if (resists != null)
+            {
+                var op1 = GUILayout.Width(96f);
+                var op2 = new GUILayoutOption[]
+                {
+                    GUILayout.Width(EditorGUIUtility.singleLineHeight),
+                    GUILayout.Height(EditorGUIUtility.singleLineHeight),
+                };
+
+                GUILayout.BeginArea(__rect[2]);
+                {
+                    EditorGUILayout.BeginHorizontal();
+                    {
+                        EditorGUILayout.LabelField(__content[2], EditorStyles.boldLabel, op1);
+
+                        GUILayout.FlexibleSpace();
+
+                        if (GUILayout.Button(__content[8], op2))
+                        {
+                            Selection.activeObject = resists;
+                            EditorGUIUtility.PingObject(resists);
+                        }
+
+                        if (GUILayout.Button(__content[9], op2))
+                        {
+                            resists = null;
+                        }
+                    }
+                    EditorGUILayout.EndHorizontal();
+
+                    if (resists != null)
+                    {
+                        EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.ExpandHeight(true));
+                        {
+                            EditorGUILayout.LabelField("Magic Of Elements", string.Format("{0}%", resists.GetResist(Resists.MagicOfElements)));
+                            EditorGUILayout.LabelField("Magic Of Nature", string.Format("{0}%", resists.GetResist(Resists.MagicOfNature)));
+                            EditorGUILayout.LabelField("Magic Of Death", string.Format("{0}%", resists.GetResist(Resists.MagicOfDeath)));
+                            EditorGUILayout.LabelField("Disease", string.Format("{0}%", resists.GetResist(Resists.Disease)));
+                            EditorGUILayout.LabelField("Stun", string.Format("{0}%", resists.GetResist(Resists.Stun)));
+                            EditorGUILayout.LabelField("Bleed", string.Format("{0}%", resists.GetResist(Resists.Bleed)));
+                            EditorGUILayout.LabelField("Move", string.Format("{0}%", resists.GetResist(Resists.Move)));
+                        }
+                        EditorGUILayout.EndVertical();
+                    }
+                }
+                GUILayout.EndArea();
+            }
+            else
+            {
+                EditorGUI.DrawRect(__rect[2], __colour[_colourIndices[2]]);
+                EditorGUI.LabelField(__rect[2], __content[2], CustomStyles.infoDrop);
+            }
+
+            _args.resists = resists;
         }
 
         private void DrawSkillSet()
@@ -386,7 +475,7 @@ namespace V4F
                 };
 
                 GUILayout.BeginArea(__rect[3]);
-                {
+                {                    
                     EditorGUILayout.BeginHorizontal();
                     {
                         EditorGUILayout.LabelField(__content[3], EditorStyles.boldLabel, op1);
@@ -419,6 +508,8 @@ namespace V4F
 
                         EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.ExpandHeight(true));
                         {
+                            GUILayout.FlexibleSpace();
+
                             EditorGUILayout.BeginHorizontal();
                             {
                                 GUILayout.FlexibleSpace();
@@ -428,6 +519,8 @@ namespace V4F
                                 GUILayout.FlexibleSpace();
                             }                            
                             EditorGUILayout.EndHorizontal();
+
+                            GUILayout.FlexibleSpace();
                         }                        
                         EditorGUILayout.EndVertical();
 
@@ -479,24 +572,21 @@ namespace V4F
                 EditorGUILayout.BeginVertical();
                 {
                     EditorGUILayout.Separator();
-                    EditorGUILayout.LabelField(__content[11], CustomStyles.italicLabel);                    
-
+                    EditorGUILayout.LabelField(__content[11], CustomStyles.italicLabel);
                     var selectedIndex = Localization.GetKeyIndex(_args.properName);
                     var select = EditorGUILayout.Popup(selectedIndex, Localization.keys);
                     if (select != selectedIndex)
                     {
                         _args.properName = Localization.GetKey(select);
-                    }
-
-                    EditorGUILayout.Separator();
-                    EditorGUILayout.LabelField(__content[12], CustomStyles.italicLabel);
-
-                    _args.prefab = EditorGUILayout.ObjectField(_args.prefab, typeof(GameObject), false) as GameObject;
+                    }                    
 
                     EditorGUILayout.Separator();
                     EditorGUILayout.LabelField(__content[18], CustomStyles.italicLabel);
+                    _args.puppetClass = (PuppetClass)EditorGUILayout.EnumPopup(_args.puppetClass);
 
-                    _args.puppetClass = (PuppetClass) EditorGUILayout.EnumPopup(_args.puppetClass);
+                    EditorGUILayout.Separator();
+                    EditorGUILayout.LabelField(__content[12], CustomStyles.italicLabel);
+                    _args.prefab = EditorGUILayout.ObjectField(_args.prefab, typeof(GameObject), false) as GameObject;                    
                 }                
                 EditorGUILayout.EndVertical();
             }            
@@ -509,6 +599,7 @@ namespace V4F
             return (confirm && !(
                 (_args.spec == null) ||
                 (_args.skillSet == null) ||
+                (_args.resists == null) ||
                 (_args.icon == null) ||
                 (_args.prefab == null)
             ));
@@ -517,10 +608,11 @@ namespace V4F
         private void OnEnable()
         {
             _DragAndDrop += SpecDropArea;
+            _DragAndDrop += ResistsDropArea;
             _DragAndDrop += SkillSetDropArea;
             _DragAndDrop += IconDropArea;
 
-            _colourIndices = new int[] { 0, 1, 0, 1, 0, 0, 0, 1 };
+            _colourIndices = new int[] { 0, 1, 1, 1, 0, 0, 0, 1 };
             _saved = false;
         }
 
@@ -528,6 +620,7 @@ namespace V4F
         {
             _DragAndDrop -= IconDropArea;
             _DragAndDrop -= SkillSetDropArea;
+            _DragAndDrop -= ResistsDropArea;
             _DragAndDrop -= SpecDropArea;            
 
             if (_saved)

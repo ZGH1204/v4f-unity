@@ -6,6 +6,18 @@ using UnityEngine;
 namespace V4F.Puppets
 {
 
+    public enum Stats
+    {
+        HealthPoints,
+        Accuracy,
+        Initiative,
+        Stamina,
+        MinDamage,
+        MaxDamage,
+        CriticalChance,
+        CriticalDamage,
+    }
+
     [System.Serializable]
     public class PuppetSpec : ScriptableObject
     {
@@ -26,22 +38,22 @@ namespace V4F.Puppets
         public void Initialize()
         {
             _stats = new int[StatsCapacity];
-            _stats[(int)PuppetStats.HealthPoints] = 1;
-            _stats[(int)PuppetStats.Accuracy] = 1;
-            _stats[(int)PuppetStats.Initiative] = 1;
-            _stats[(int)PuppetStats.Stamina] = 1;
-            _stats[(int)PuppetStats.MinDamage] = 1;
-            _stats[(int)PuppetStats.MaxDamage] = 1;
-            _stats[(int)PuppetStats.CriticalChance] = 0;
-            _stats[(int)PuppetStats.CriticalDamage] = 0;
+            _stats[(int)Stats.HealthPoints] = 1;
+            _stats[(int)Stats.Accuracy] = 1;
+            _stats[(int)Stats.Initiative] = 1;
+            _stats[(int)Stats.Stamina] = 1;
+            _stats[(int)Stats.MinDamage] = 1;
+            _stats[(int)Stats.MaxDamage] = 1;
+            _stats[(int)Stats.CriticalChance] = 0;
+            _stats[(int)Stats.CriticalDamage] = 0;
         }
 
-        public int GetStat(PuppetStats stat)
+        public int GetStat(Stats stat)
         {
             return _stats[stat.GetIndex()];
         }
 
-        public void SetStat(PuppetStats stat, int value)
+        public void SetStat(Stats stat, int value)
         {
             _stats[stat.GetIndex()] = value;
         }

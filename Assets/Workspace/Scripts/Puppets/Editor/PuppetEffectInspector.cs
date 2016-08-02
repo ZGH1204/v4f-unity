@@ -31,12 +31,13 @@ namespace V4F.Puppets
                 new GUIContent("min"),
                 new GUIContent("max"),
                 new GUIContent("Stun"),
+                new GUIContent("Resistance:"),
             };
         }
         #endregion
 
         #region Methods
-        [MenuItem("Assets/Create/V4F/Personage/Effect", false, 801)]
+        [MenuItem("Assets/Create/V4F/Personage/Effect", false, 802)]
         private static void CreateAsset()
         {
             var asset = ScriptableHelper.CreateAsset<PuppetEffect>();
@@ -63,6 +64,11 @@ namespace V4F.Puppets
             {
                 titleProp.stringValue = Localization.GetKey(select);
             }
+
+            EditorGUILayout.Separator();
+            EditorGUILayout.LabelField(__content[8], CustomStyles.italicLabel);
+            var resistProp = serializedObject.FindProperty("_resist");
+            resistProp.enumValueIndex = (int)((Resists)EditorGUILayout.EnumPopup((Resists)resistProp.enumValueIndex));
 
             EditorGUILayout.Separator();
             EditorGUILayout.LabelField(__content[1], CustomStyles.italicLabel);

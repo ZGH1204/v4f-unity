@@ -17,6 +17,9 @@ namespace V4F.Puppets
         private string _description = "#BAD_TITLE";
 
         [SerializeField, HideInInspector]
+        private Resists _resist= Resists.None;
+
+        [SerializeField, HideInInspector]
         private float[] _modifiers = new float[PuppetSpec.StatsCapacity];
         #endregion
 
@@ -30,10 +33,15 @@ namespace V4F.Puppets
         {
             get { return _description; }            
         }
+
+        public Resists resist
+        {
+            get { return _resist; }
+        }
         #endregion
 
         #region Methods
-        public float GetModifier(PuppetStats stat)
+        public float GetModifier(Stats stat)
         {
             return _modifiers[stat.GetIndex()];
         }
