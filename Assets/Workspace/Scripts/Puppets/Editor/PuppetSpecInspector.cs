@@ -21,7 +21,6 @@ namespace V4F.Puppets
         {
             __content = new GUIContent[]
             {
-                new GUIContent("Сharacteristics"),
                 new GUIContent("Health Points:"),
                 new GUIContent("Accuracy:"),
                 new GUIContent("Initiative:"),
@@ -49,54 +48,55 @@ namespace V4F.Puppets
             serializedObject.Update();
 
             EditorGUILayout.BeginVertical();
+            {
+                EditorGUILayout.Space();
 
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField(__content[0], EditorStyles.boldLabel);
-            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+                {
+                    EditorGUILayout.Separator();
+                    EditorGUILayout.LabelField(__content[0], CustomStyles.italicLabel);
+                    _self.SetStat(Stats.HealthPoints, EditorGUILayout.IntSlider(_self.GetStat(Stats.HealthPoints), 1, 100));
 
-            EditorGUILayout.Separator();
-            EditorGUILayout.LabelField(__content[1], CustomStyles.italicLabel);
-            _self.SetStat(PuppetStats.HealthPoints, EditorGUILayout.IntSlider(_self.GetStat(PuppetStats.HealthPoints), 1, 100));
+                    EditorGUILayout.Separator();
+                    EditorGUILayout.LabelField(__content[1], CustomStyles.italicLabel);
+                    _self.SetStat(Stats.Accuracy, EditorGUILayout.IntSlider(_self.GetStat(Stats.Accuracy), 1, 100));
 
-            EditorGUILayout.Separator();
-            EditorGUILayout.LabelField(__content[2], CustomStyles.italicLabel);
-            _self.SetStat(PuppetStats.Accuracy, EditorGUILayout.IntSlider(_self.GetStat(PuppetStats.Accuracy), 1, 100));
+                    EditorGUILayout.Separator();
+                    EditorGUILayout.LabelField(__content[2], CustomStyles.italicLabel);
+                    _self.SetStat(Stats.Initiative, EditorGUILayout.IntSlider(_self.GetStat(Stats.Initiative), 1, 100));
 
-            EditorGUILayout.Separator();
-            EditorGUILayout.LabelField(__content[3], CustomStyles.italicLabel);
-            _self.SetStat(PuppetStats.Initiative, EditorGUILayout.IntSlider(_self.GetStat(PuppetStats.Initiative), 1, 100));
+                    EditorGUILayout.Separator();
+                    EditorGUILayout.LabelField(__content[3], CustomStyles.italicLabel);
+                    _self.SetStat(Stats.Stamina, EditorGUILayout.IntSlider(_self.GetStat(Stats.Stamina), 1, 100));
 
-            EditorGUILayout.Separator();
-            EditorGUILayout.LabelField(__content[4], CustomStyles.italicLabel);
-            _self.SetStat(PuppetStats.Stamina, EditorGUILayout.IntSlider(_self.GetStat(PuppetStats.Stamina), 1, 100));
+                    var op1 = GUILayout.Width(32f);
+                    EditorGUILayout.Separator();
+                    EditorGUILayout.LabelField(__content[4], CustomStyles.italicLabel);
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.LabelField(__content[5], op1);
+                    _self.SetStat(Stats.MinDamage, EditorGUILayout.IntSlider(_self.GetStat(Stats.MinDamage), 1, _self.GetStat(Stats.MaxDamage)));
+                    EditorGUILayout.EndHorizontal();
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.LabelField(__content[6], op1);
+                    _self.SetStat(Stats.MaxDamage, EditorGUILayout.IntSlider(_self.GetStat(Stats.MaxDamage), _self.GetStat(Stats.MinDamage), 100));
+                    EditorGUILayout.EndHorizontal();
 
-            var op1 = GUILayout.Width(32f);
-            EditorGUILayout.Separator();
-            EditorGUILayout.LabelField(__content[5], CustomStyles.italicLabel);
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(__content[6], op1);
-            _self.SetStat(PuppetStats.MinDamage, EditorGUILayout.IntSlider(_self.GetStat(PuppetStats.MinDamage), 1, _self.GetStat(PuppetStats.MaxDamage)));
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(__content[7], op1);
-            _self.SetStat(PuppetStats.MaxDamage, EditorGUILayout.IntSlider(_self.GetStat(PuppetStats.MaxDamage), _self.GetStat(PuppetStats.MinDamage), 100));
-            EditorGUILayout.EndHorizontal();
+                    var op2 = GUILayout.Width(52f);
+                    EditorGUILayout.Separator();
+                    EditorGUILayout.LabelField(__content[7], CustomStyles.italicLabel);
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.LabelField(__content[8], op2);
+                    _self.SetStat(Stats.CriticalChance, EditorGUILayout.IntSlider(_self.GetStat(Stats.CriticalChance), 0, 200));
+                    EditorGUILayout.EndHorizontal();
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.LabelField(__content[9], op2);
+                    _self.SetStat(Stats.CriticalDamage, EditorGUILayout.IntSlider(_self.GetStat(Stats.CriticalDamage), 0, 200));
+                    EditorGUILayout.EndHorizontal();
 
-            var op2 = GUILayout.Width(52f);
-            EditorGUILayout.Separator();
-            EditorGUILayout.LabelField(__content[8], CustomStyles.italicLabel);
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(__content[9], op2);
-            _self.SetStat(PuppetStats.CriticalChance, EditorGUILayout.IntSlider(_self.GetStat(PuppetStats.CriticalChance), 0, 200));
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(__content[10], op2);
-            _self.SetStat(PuppetStats.CriticalDamage, EditorGUILayout.IntSlider(_self.GetStat(PuppetStats.CriticalDamage), 0, 200));
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.Space();
-            EditorGUILayout.EndVertical();
-
+                    EditorGUILayout.Space();
+                }
+                EditorGUILayout.EndVertical();
+            }           
             EditorGUILayout.EndVertical();
 
             if (GUI.changed)

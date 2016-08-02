@@ -23,6 +23,9 @@ namespace V4F.Puppets
         private string _title = "#BAD_TITLE";
 
         [SerializeField, HideInInspector]
+        private Resists _resist = Resists.None;
+
+        [SerializeField, HideInInspector]
         private PuppetSkillTarget _useTo = PuppetSkillTarget.Enemies;
 
         [SerializeField, HideInInspector]
@@ -62,6 +65,11 @@ namespace V4F.Puppets
         public string title
         {
             get { return _title; }            
+        }
+
+        public Resists resist
+        {
+            get { return _resist; }
         }
 
         public PuppetSkillTarget useTo

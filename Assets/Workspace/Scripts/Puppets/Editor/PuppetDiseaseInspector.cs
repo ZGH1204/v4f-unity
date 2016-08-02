@@ -31,12 +31,13 @@ namespace V4F.Puppets
                 new GUIContent("Initiative (%):"),
                 new GUIContent("Stamina (%):"),
                 new GUIContent("Damage (%):"),
+                new GUIContent("Resistance:"),
             };
         }
         #endregion
 
         #region Methods
-        [MenuItem("Assets/Create/V4F/Personage/Disease", false, 802)]
+        [MenuItem("Assets/Create/V4F/Personage/Disease", false, 803)]
         private static void CreateAsset()
         {
             var asset = ScriptableHelper.CreateAsset<PuppetDisease>();
@@ -72,6 +73,11 @@ namespace V4F.Puppets
             }
 
             EditorGUILayout.Separator();
+            EditorGUILayout.LabelField(__content[8], CustomStyles.italicLabel);
+            var resistProp = serializedObject.FindProperty("_resist");
+            resistProp.enumValueIndex = (int)((Resists)EditorGUILayout.EnumPopup((Resists)resistProp.enumValueIndex));
+
+            EditorGUILayout.Separator();
             EditorGUILayout.LabelField(__content[2], EditorStyles.boldLabel);
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
 
@@ -79,28 +85,28 @@ namespace V4F.Puppets
 
             EditorGUILayout.Separator();
             EditorGUILayout.LabelField(__content[3], CustomStyles.italicLabel);
-            var prop = modifiersProp.GetArrayElementAtIndex((int)PuppetStats.HealthPoints);
+            var prop = modifiersProp.GetArrayElementAtIndex((int)Stats.HealthPoints);
             prop.floatValue = Mathf.Clamp(EditorGUILayout.IntSlider(Mathf.RoundToInt(prop.floatValue * 100f), -100, 100) * 0.01f, -1f, 1f);
 
             EditorGUILayout.Separator();
             EditorGUILayout.LabelField(__content[4], CustomStyles.italicLabel);
-            prop = modifiersProp.GetArrayElementAtIndex((int)PuppetStats.Accuracy);
+            prop = modifiersProp.GetArrayElementAtIndex((int)Stats.Accuracy);
             prop.floatValue = Mathf.Clamp(EditorGUILayout.IntSlider(Mathf.RoundToInt(prop.floatValue * 100f), -100, 100) * 0.01f, -1f, 1f);
 
             EditorGUILayout.Separator();
             EditorGUILayout.LabelField(__content[5], CustomStyles.italicLabel);
-            prop = modifiersProp.GetArrayElementAtIndex((int)PuppetStats.Initiative);
+            prop = modifiersProp.GetArrayElementAtIndex((int)Stats.Initiative);
             prop.floatValue = Mathf.Clamp(EditorGUILayout.IntSlider(Mathf.RoundToInt(prop.floatValue * 100f), -100, 100) * 0.01f, -1f, 1f);
 
             EditorGUILayout.Separator();
             EditorGUILayout.LabelField(__content[6], CustomStyles.italicLabel);
-            prop = modifiersProp.GetArrayElementAtIndex((int)PuppetStats.Stamina);
+            prop = modifiersProp.GetArrayElementAtIndex((int)Stats.Stamina);
             prop.floatValue = Mathf.Clamp(EditorGUILayout.IntSlider(Mathf.RoundToInt(prop.floatValue * 100f), -100, 100) * 0.01f, -1f, 1f);
 
             EditorGUILayout.Separator();
             EditorGUILayout.LabelField(__content[7], CustomStyles.italicLabel);
-            var minProp = modifiersProp.GetArrayElementAtIndex((int)PuppetStats.MinDamage);
-            var maxProp = modifiersProp.GetArrayElementAtIndex((int)PuppetStats.MaxDamage);
+            var minProp = modifiersProp.GetArrayElementAtIndex((int)Stats.MinDamage);
+            var maxProp = modifiersProp.GetArrayElementAtIndex((int)Stats.MaxDamage);
             minProp.floatValue = Mathf.Clamp(EditorGUILayout.IntSlider(Mathf.RoundToInt(minProp.floatValue * 100f), -100, 100) * 0.01f, -1f, 1f);
             maxProp.floatValue = minProp.floatValue;
 

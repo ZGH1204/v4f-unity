@@ -9,7 +9,12 @@ namespace V4F.Puppets
     public static class PuppetExtension
     {
         #region Methods
-        public static int GetIndex(this PuppetStats self)
+        public static int GetIndex(this Stats self)
+        {
+            return (int)self;
+        }
+
+        public static int GetIndex(this Resists self)
         {
             return (int)self;
         }
