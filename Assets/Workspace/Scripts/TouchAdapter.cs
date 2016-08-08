@@ -1,6 +1,8 @@
 ﻿// <copyright file="TouchAdapter.cs" company="Maxim Mikulski">Copyright (c) 2016 All Rights Reserved</copyright>
 // <author>Maxim Mikulski</author>
 
+using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -28,7 +30,8 @@ namespace V4F
         #endregion
 
         #region Fields
-        private static TouchAdapter __instance = null;
+        private static Stack<TouchAdapter> __stack = null;
+        private static TouchAdapter __active = null;
 
         [SerializeField, HideInInspector]
         private int _countButtons = 1;
@@ -45,38 +48,44 @@ namespace V4F
         [SerializeField, HideInInspector]
         public bool _longTouch = false;
 
-        private Vector3[] _coords = null;        
-        private float[] _timers = null;
-        private int[] _states = null;
+        private Vector3[] _coords = new Vector3[MaxNumFingers];        
+        private float[] _timers = new float[MaxNumFingers];
+        private int[] _states = new int[MaxNumFingers];
+        private Camera _camera = null;
+        public bool _first = false;
         #endregion
 
         #region Properties
-        public static TouchAdapter singleton
+        public static TouchAdapter current
         {
-            get { return __instance; }
-
-            private set
-            {
-#if UNITY_EDITOR
-                if (__instance != null)
-                {
-                    Debug.LogError("Multiple TouchAdapter in Scene!");
-                    value.gameObject.SetActive(false);
-                }
-                else
-#endif
-                {
-                    __instance = value;
-                    __instance._coords = new Vector3[MaxNumFingers];
-                    __instance._timers = new float[MaxNumFingers];
-                    __instance._states = new int[MaxNumFingers];
-                }
-            }
+            get { return __active; }
         }
 
-        public static bool multiTouch
+        public new Camera camera
         {
-            get { return ((__instance != null) && (__instance._countFingers > 1)); }
+            get { return __active._camera; }
+        }
+
+        private bool multiTouch
+        {
+            get { return(_countFingers > 1); }
+        }
+
+        private bool first
+        {
+            get { return _first; }
+            set
+            {
+                _first = value;
+                if (_first)
+                {
+                    __active = this;
+                }
+                else
+                {
+                    __active = null;
+                }                
+            }
         }
         #endregion
 
@@ -84,17 +93,43 @@ namespace V4F
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void RuntimeInitializeBefore()
         {
-            __instance = null;
+            __stack = new Stack<TouchAdapter>(32);
+            __active = null;
         }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void RuntimeInitializeAfter()
         {
-            if (__instance != null)
+            
+        }
+
+        private static void Push(TouchAdapter adapter)
+        {
+            if (__active != null)
+            {                                
+                __stack.Push(__active);
+                __active.enabled = false;
+                __active.first = false;
+            }
+            
+            Input.multiTouchEnabled = adapter.multiTouch;
+            Input.simulateMouseWithTouches = false;
+
+            adapter.first = true;
+        }
+
+        private static void Pop(TouchAdapter adapter)
+        {
+            if (adapter.first)
             {
-                Input.multiTouchEnabled = multiTouch;
-                Input.simulateMouseWithTouches = false;                
-            }            
+                adapter.first = false;
+
+                if (__stack.Count > 0)
+                {
+                    var prev = __stack.Pop();
+                    prev.enabled = true;
+                }
+            }
         }
 
         private void OnTouchDownCallback(TouchEventArgs args)
@@ -345,10 +380,20 @@ namespace V4F
 #endif
         }
 
-        private void Start()
+        private void Awake()
         {
-            singleton = this;
-        }        
+            _camera = GetComponent<Camera>();
+        }
+
+        private void OnEnable()
+        {
+            Push(this);
+        }
+
+        private void OnDisable()
+        {
+            Pop(this);
+        }
 
         private void Update()
         {
