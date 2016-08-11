@@ -9,6 +9,11 @@ namespace V4F.UI
     public interface ICell<T>
     {
         #region Properties
+        RectTransform rect
+        {
+            get;
+        }
+
         T subject
         {
             get;

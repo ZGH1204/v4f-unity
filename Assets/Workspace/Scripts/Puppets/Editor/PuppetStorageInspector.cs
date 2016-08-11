@@ -124,7 +124,7 @@ namespace V4F.Puppets
 
             if ((eventType == EventType.DragPerform) || (eventType == EventType.DragUpdated))
             {
-                if ((_self.countPuppets < PuppetSkillSet.MaxSkills) && dropArea.Contains(currentEvent.mousePosition))
+                if ((_self.countPuppets < PuppetStorage.MaxPuppets) && dropArea.Contains(currentEvent.mousePosition))
                 {
                     _drawDropArea = true;
 
