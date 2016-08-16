@@ -42,6 +42,36 @@ namespace V4F
             }
         }
 
+        public static GUIStyle boldItalicFoldout
+        {
+            get
+            {
+                if (__styles[3] == null)
+                {
+                    var style = new GUIStyle(EditorStyles.foldout);
+                    style.fontStyle = FontStyle.BoldAndItalic;
+
+                    __styles[3] = style;
+                }
+                return __styles[3];
+            }
+        }
+
+        public static GUIStyle italicFoldout
+        {
+            get
+            {
+                if (__styles[4] == null)
+                {
+                    var style = new GUIStyle(EditorStyles.foldout);
+                    style.fontStyle = FontStyle.Italic;
+
+                    __styles[4] = style;
+                }
+                return __styles[4];
+            }
+        }
+
         public static GUIStyle infoDrop
         {
             get
