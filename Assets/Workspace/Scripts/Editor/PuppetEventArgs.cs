@@ -3,7 +3,7 @@
 
 using UnityEngine;
 
-using V4F.Puppets;
+using V4F.Character;
 
 namespace V4F
 {
@@ -13,25 +13,23 @@ namespace V4F
         #region Properties    
         public string path { get; set; }
         public Puppet puppet { get; set; }
-        public PuppetSpec spec { get; set; }
-        public PuppetResists resists { get; set; }
-        public PuppetSkillSet skillSet { get; set; }
+        public Specification spec { get; set; }
+        public SkillSet skillSet { get; set; }
         public Sprite icon { get; set; }
+        public Classes charClass { get; set; }
         public string properName { get; set; }
-        public GameObject prefab { get; set; }
-        public PuppetClass puppetClass { get; set; }
+        public GameObject prefab { get; set; }        
         #endregion
 
         #region Constructors
         public PuppetEventArgs()
         {
             spec = null;
-            resists = null;
             skillSet = null;
             icon = null;
+            charClass = Classes.Warrior;
             properName = "#BAD_NAME";
-            prefab = null;
-            puppetClass = PuppetClass.Warrior;
+            prefab = null;            
         }
         #endregion
     }

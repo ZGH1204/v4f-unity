@@ -102,6 +102,53 @@ namespace V4F
                 return __styles[5];
             }
         }
+
+        public static GUIStyle tableHeader
+        {
+            get
+            {
+                if (__styles[6] == null)
+                {
+                    var style = new GUIStyle(EditorStyles.boldLabel);                    
+                    style.alignment = TextAnchor.MiddleCenter;
+                    style.normal.textColor = Color.white;
+
+                    __styles[6] = style;
+                }
+                return __styles[6];
+            }
+        }
+
+        public static GUIStyle tableFirstField
+        {
+            get
+            {
+                if (__styles[7] == null)
+                {
+                    var style = new GUIStyle(EditorStyles.label);
+                    style.alignment = TextAnchor.MiddleLeft;
+                    style.fontStyle = FontStyle.Italic;
+
+                    __styles[7] = style;
+                }
+                return __styles[7];
+            }
+        }
+
+        public static GUIStyle tableOtherField
+        {
+            get
+            {
+                if (__styles[8] == null)
+                {
+                    var style = new GUIStyle(EditorStyles.label);
+                    style.alignment = TextAnchor.MiddleRight;
+
+                    __styles[8] = style;
+                }
+                return __styles[8];
+            }
+        }
         #endregion
 
         #region Constructors

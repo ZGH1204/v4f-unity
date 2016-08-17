@@ -12,12 +12,52 @@ namespace V4F.Character
         #region Fields
         [SerializeField, HideInInspector]
         private Specification _spec;
+
+        [SerializeField, HideInInspector]
+        private SkillSet _skillSet;
+
+        [SerializeField, HideInInspector]
+        private Sprite _icon;
+
+        [SerializeField, HideInInspector]
+        private Classes _charClass;
+
+        [SerializeField, HideInInspector]
+        private string _properName;
+
+        [SerializeField, HideInInspector]
+        private GameObject _prefab;
         #endregion
 
         #region Properties
         public Specification spec
         {
             get { return _spec; }
+        }
+
+        public SkillSet skillSet
+        {
+            get { return _skillSet; }
+        }
+
+        public Sprite icon
+        {
+            get { return _icon; }
+        }
+
+        public Classes charClass
+        {
+            get { return _charClass; }
+        }
+
+        public string properName
+        {
+            get { return _properName; }
+        }
+
+        public GameObject prefab
+        {
+            get { return _prefab; }
         }
         #endregion
     }

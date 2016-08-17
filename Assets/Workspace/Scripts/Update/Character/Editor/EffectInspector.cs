@@ -35,7 +35,7 @@ namespace V4F.Character
         [MenuItem("Assets/Create/V4F/Character/Effect", false, 802)]
         private static void CreateAsset()
         {
-            ScriptableHelper.CreateAsset<Effect>().Initialize();
+            ScriptableHelper.CreateAsset<Effect>();
         }
 
         public override void OnInspectorGUI()

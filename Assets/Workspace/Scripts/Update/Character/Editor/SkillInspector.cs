@@ -107,7 +107,7 @@ namespace V4F.Character
         [MenuItem("Assets/Create/V4F/Character/Skill", false, 803)]
         private static void CreateAsset()
         {
-            ScriptableHelper.CreateAsset<Skill>().Initialize();
+            ScriptableHelper.CreateAsset<Skill>();
         }
 
         public override void OnInspectorGUI()
@@ -173,7 +173,7 @@ namespace V4F.Character
         }
 
         private int Setup(int index)
-        {
+        {            
             _stage = serializedObject.FindProperty("_stages").GetArrayElementAtIndex(index).objectReferenceValue as SkillStage;
             _stageObj = new SerializedObject(_stage);
 

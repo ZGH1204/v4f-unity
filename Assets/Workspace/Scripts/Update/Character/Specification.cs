@@ -224,16 +224,11 @@ namespace V4F.Character
         }
         #endregion
 
-        #region Methods
-        public void Initialize()
+        #region Methods        
+        private void Reset()
         {
             _attributes = new int[32] { 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             _factors = new float[32] { 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f };
-        }
-
-        private void Reset()
-        {
-            Initialize();
         }
         #endregion
     }
