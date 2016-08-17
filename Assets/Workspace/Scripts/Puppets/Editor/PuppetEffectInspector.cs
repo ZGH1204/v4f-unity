@@ -37,7 +37,7 @@ namespace V4F.Puppets
         #endregion
 
         #region Methods
-        [MenuItem("Assets/Create/V4F/Personage/Effect", false, 802)]
+        //[MenuItem("Assets/Create/V4F/Personage/Effect", false, 802)]
         private static void CreateAsset()
         {
             var asset = ScriptableHelper.CreateAsset<PuppetEffect>();

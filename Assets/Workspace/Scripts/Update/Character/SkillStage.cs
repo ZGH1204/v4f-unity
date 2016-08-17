@@ -1,15 +1,27 @@
 ﻿// <copyright file="SkillStage.cs" company="Maxim Mikulski">Copyright (c) 2016 All Rights Reserved</copyright>
 // <author>Maxim Mikulski</author>
 
+using System.Collections.Generic;
+
 using UnityEngine;
 
 namespace V4F.Character
 {
 
     [System.Serializable]
-    public class SkillStage
+    public class SkillStage : ScriptableObject
     {
+        #region Constants
+        public const int MaxEffects = 32;
+        #endregion
+
         #region Fields
+        [SerializeField, HideInInspector]
+        private List<Effect> _effects = new List<Effect>(MaxEffects);
+
+        [SerializeField, HideInInspector]
+        private List<bool> _effectsPassed = new List<bool>(MaxEffects);
+
         [SerializeField, HideInInspector]
         private Sprite _icon = null;
 
@@ -115,6 +127,16 @@ namespace V4F.Character
         {
             get { return _damageModifier; }
         }
+
+        public int countEffects
+        {
+            get { return _effects.Count; }
+        }
+
+        public Effect this[int index]
+        {
+            get { return (_effectsPassed[index] ? _effects[index] : null); }
+        }
         #endregion
 
         #region Methods
@@ -123,11 +145,11 @@ namespace V4F.Character
             get
             {
                 var valid = _icon != null;
-                valid = valid && string.IsNullOrEmpty(_title);
-                valid = valid && string.IsNullOrEmpty(_description);
-                valid = valid && (_damageType != DamageType.None);
-                //valid = valid && (_resistType != ResistanceType.None);
                 valid = valid && (_goal != SkillGoal.None);
+                //valid = valid && string.IsNullOrEmpty(_title);
+                //valid = valid && string.IsNullOrEmpty(_description);
+                //valid = valid && (_damageType != DamageType.None);
+                //valid = valid && (_resistType != ResistanceType.None);                
                 return valid;
             }
         }

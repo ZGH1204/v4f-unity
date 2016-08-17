@@ -87,6 +87,21 @@ namespace V4F
                 return __styles[2];
             }
         }
+
+        public static GUIStyle italicToggle
+        {
+            get
+            {
+                if (__styles[5] == null)
+                {
+                    var style = new GUIStyle(EditorStyles.toggle);
+                    style.fontStyle = FontStyle.Italic;
+
+                    __styles[5] = style;
+                }
+                return __styles[5];
+            }
+        }
         #endregion
 
         #region Constructors

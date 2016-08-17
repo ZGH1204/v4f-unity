@@ -1,4 +1,4 @@
-﻿// <copyright file="PuppetSkillSetInspector.cs" company="Maxim Mikulski">Copyright (c) 2016 All Rights Reserved</copyright>
+﻿// <copyright file="SkillSetInspector.cs" company="Maxim Mikulski">Copyright (c) 2016 All Rights Reserved</copyright>
 // <author>Maxim Mikulski</author>
 
 using System.Collections.Generic;
@@ -7,23 +7,21 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
 
-namespace V4F.Puppets
+namespace V4F.Character
 {
 
-    [CustomEditor(typeof(PuppetSkillSet)), InitializeOnLoad]
-    public class PuppetSkillSetInspector : Editor
+    [CustomEditor(typeof(SkillSet)), InitializeOnLoad]
+    public class SkillSetInspector : Editor
     {
         #region Fields
         private static readonly GUIContent[] __content = null;
         private static readonly float __heightNormal;
         private static readonly Color __colourActive;
         private static readonly Color __colourNormal;
-        
         private static GUIStyle __titleActiveSkillStyle = null;
-
-        private PuppetSkillSet _self;
+        private SkillSet _self;
         private ReorderableList _skills;
-        private PuppetSkill _skillForEdit;
+        private Skill _skillForEdit;
         private List<int> _queueOnRemove;
         private int _lastActiveIndex;
         private bool _drawDropArea;
@@ -36,7 +34,7 @@ namespace V4F.Puppets
             {
                 if (__titleActiveSkillStyle == null)
                 {
-                    __titleActiveSkillStyle = new GUIStyle(EditorStyles.boldLabel);                    
+                    __titleActiveSkillStyle = new GUIStyle(EditorStyles.boldLabel);
                     __titleActiveSkillStyle.normal.textColor = Color.white;
                 }
                 return __titleActiveSkillStyle;
@@ -45,7 +43,7 @@ namespace V4F.Puppets
         #endregion
 
         #region Constructors
-        static PuppetSkillSetInspector()
+        static SkillSetInspector()
         {
             __content = new GUIContent[]
             {
@@ -61,18 +59,18 @@ namespace V4F.Puppets
         #endregion
 
         #region Methods
-        //[MenuItem("Assets/Create/V4F/Personage/SkillSet", false, 805)]
+        [MenuItem("Assets/Create/V4F/Character/SkillSet", false, 804)]
         private static void CreateAsset()
         {
-            ScriptableHelper.CreateAsset<PuppetSkillSet>();
+            ScriptableHelper.CreateAsset<SkillSet>();
         }
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            
+
             EditorGUILayout.Space();
-            string message = string.Format("It remains to add {0} skills", (PuppetSkillSet.MaxSkills - _self.countSkills));
+            string message = string.Format("{0} skill(s) left.", (SkillSet.MaxSkills - _self.countSkills));
             EditorGUILayout.HelpBox(message, MessageType.Info);
 
             EditorGUILayout.Space();
@@ -85,12 +83,12 @@ namespace V4F.Puppets
                 _skills.serializedProperty.DeleteArrayElementAtIndex(removeIndex);
                 _skills.serializedProperty.DeleteArrayElementAtIndex(removeIndex);
 
-                serializedObject.ApplyModifiedProperties();
-
-                var upper = _skills.serializedProperty.arraySize;                
+                var upper = _skills.serializedProperty.arraySize;
                 _skills.index = Mathf.Min(index, (upper - 1));
 
                 _queueOnRemove.RemoveAt(0);
+
+                serializedObject.ApplyModifiedProperties();
             }
 
             var dropArea = GUILayoutUtility.GetRect(0f, 56f, GUILayout.ExpandWidth(true));
@@ -98,7 +96,7 @@ namespace V4F.Puppets
             {
                 EditorGUI.DrawRect(dropArea, new Color(0f, 0.75f, 0f, 0.25f));
                 EditorGUI.LabelField(dropArea, __content[2], CustomStyles.infoDrop);
-            }            
+            }
 
             if (GUI.changed)
             {
@@ -107,7 +105,7 @@ namespace V4F.Puppets
             }
 
             if (_skillForEdit != null)
-            {                
+            {
                 Selection.activeObject = _skillForEdit;
                 EditorGUIUtility.PingObject(_skillForEdit);
                 _skillForEdit = null;
@@ -134,7 +132,7 @@ namespace V4F.Puppets
                 if (_lastActiveIndex == index)
                 {
                     var property = list.serializedProperty.GetArrayElementAtIndex(list.index);
-                    var skill = property.objectReferenceValue as PuppetSkill;
+                    var skill = property.objectReferenceValue as Skill;
                     EditorGUIUtility.PingObject(skill);
                 }
                 else
@@ -170,7 +168,7 @@ namespace V4F.Puppets
             else
             {
                 EditorGUI.DrawRect(rect, __colourNormal);
-            }            
+            }
         }
 
         private void DrawElement(Rect rect, int index, bool isActive, bool isFocused)
@@ -181,7 +179,7 @@ namespace V4F.Puppets
             }
 
             var property = _skills.serializedProperty.GetArrayElementAtIndex(index);
-            var skill = property.objectReferenceValue as PuppetSkill;
+            var skill = property.objectReferenceValue as Skill;
             if (skill != null)
             {
                 rect.height = __heightNormal;
@@ -195,7 +193,7 @@ namespace V4F.Puppets
                 var rcEdit = new Rect(rcTitle.x + rcTitle.width + 2f, rect.y + 4f, 24f, 24f);
                 var rcCross = new Rect(rcEdit.x + rcEdit.width + 2f, rect.y + 4f, 24f, 24f);
 
-                Sprite icon = skill.icon;
+                Sprite icon = skill[0].icon;
                 if (icon != null)
                 {
                     EditorGUI.DrawTextureTransparent(rcIcon, icon.texture, ScaleMode.StretchToFill);
@@ -206,7 +204,7 @@ namespace V4F.Puppets
                 }
 
                 GUIStyle titleStyle = (isActive ? titleActiveSkillStyle : EditorStyles.label);
-                EditorGUI.LabelField(rcTitle, skill.title, titleStyle);
+                EditorGUI.LabelField(rcTitle, skill.name, titleStyle);
 
                 if (GUI.Button(rcEdit, __content[0]))
                 {
@@ -216,12 +214,12 @@ namespace V4F.Puppets
                 if (GUI.Button(rcCross, __content[1]))
                 {
                     _queueOnRemove.Insert(0, index);
-                }                
+                }
             }
             else
             {
                 _queueOnRemove.Insert(0, index);
-            }            
+            }
         }
 
         private bool EventsHandler(Rect dropArea)
@@ -232,12 +230,12 @@ namespace V4F.Puppets
 
             if (eventType == EventType.Layout)
             {
-                HandleUtility.AddDefaultControl(controlID);             
+                HandleUtility.AddDefaultControl(controlID);
             }
 
             if ((eventType == EventType.DragPerform) || (eventType == EventType.DragUpdated))
-            {                        
-                if ((_self.countSkills < PuppetSkillSet.MaxSkills) && dropArea.Contains(currentEvent.mousePosition))
+            {
+                if ((_self.countSkills < SkillSet.MaxSkills) && dropArea.Contains(currentEvent.mousePosition))
                 {
                     _drawDropArea = true;
 
@@ -247,19 +245,26 @@ namespace V4F.Puppets
                         DragAndDrop.AcceptDrag();
                         foreach (Object draggedObject in DragAndDrop.objectReferences)
                         {
-                            PuppetSkill skill = draggedObject as PuppetSkill;
+                            Skill skill = draggedObject as Skill;
                             if (skill != null)
                             {
-                                var index = _skills.serializedProperty.arraySize;
-                                _skills.serializedProperty.InsertArrayElementAtIndex(index);
-                                _skills.index = index;
+                                if (skill.editCompleted)
+                                {
+                                    var index = _skills.serializedProperty.arraySize;
+                                    _skills.serializedProperty.InsertArrayElementAtIndex(index);
+                                    _skills.index = index;
 
-                                var prop = _skills.serializedProperty.GetArrayElementAtIndex(index);
-                                prop.objectReferenceValue = skill;
+                                    var prop = _skills.serializedProperty.GetArrayElementAtIndex(index);
+                                    prop.objectReferenceValue = skill;
 
-                                serializedObject.ApplyModifiedProperties();
+                                    _lastActiveIndex = _skills.index;
 
-                                _lastActiveIndex = _skills.index;
+                                    serializedObject.ApplyModifiedProperties();
+                                }
+                                else
+                                {
+                                    Debug.LogErrorFormat("Add skill to skillset: skill \"{0}\" is not prepared!", skill.name);
+                                }                                
                             }
                         }
 
@@ -269,12 +274,12 @@ namespace V4F.Puppets
                 else
                 {
                     _drawDropArea = false;
-                }                
+                }
             }
 
             if (eventType == EventType.DragExited)
             {
-                _drawDropArea = false;                
+                _drawDropArea = false;
             }
 
             return _drawDropArea;
@@ -282,10 +287,10 @@ namespace V4F.Puppets
 
         private void OnEnable()
         {
-            _self = target as PuppetSkillSet;
+            _self = target as SkillSet;
             _skills = MakeSkillsList();
             _skillForEdit = null;
-            _queueOnRemove = new List<int>(8);
+            _queueOnRemove = new List<int>(SkillSet.MaxSkills * 2);
             _lastActiveIndex = _skills.index;
             _drawDropArea = false;
         }
