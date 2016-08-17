@@ -7,7 +7,7 @@ namespace V4F.Character
 {
 
     [System.Serializable]
-    public class Specification : UniqueObject
+    public class Specification : ScriptableObject
     {
         #region Fields
         [SerializeField, HideInInspector]
