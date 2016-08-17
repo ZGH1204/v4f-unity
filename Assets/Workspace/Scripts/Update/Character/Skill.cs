@@ -48,7 +48,7 @@ namespace V4F.Character
         #endregion
 
         #region Methods
-        public void Initialize()
+        private void Reset()
         {
             _stages = new SkillStage[AllStages];
             for (var i = 0; i < AllStages; ++i)
@@ -57,11 +57,6 @@ namespace V4F.Character
             }
 
             _lastEditStageIndex = -1;
-        }
-
-        private void Reset()
-        {
-            Initialize();
         }
         #endregion
     }

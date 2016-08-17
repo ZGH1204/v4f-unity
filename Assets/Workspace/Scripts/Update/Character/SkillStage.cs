@@ -137,9 +137,7 @@ namespace V4F.Character
         {
             get { return (_effectsPassed[index] ? _effects[index] : null); }
         }
-        #endregion
 
-        #region Methods
         public bool validate
         {
             get
@@ -152,6 +150,16 @@ namespace V4F.Character
                 //valid = valid && (_resistType != ResistanceType.None);                
                 return valid;
             }
+        }
+        #endregion
+
+        #region Methods
+        private void Reset()
+        {
+            // ВАЖНО!!!
+            // Если не создавать из ScriptableObject'а физический ассет на диске, то нужно пометить его обязательо этим флагом!
+            // Это предотвратит от того, что юнити не удалит его, когда будет чистить от не используемых ресурсов, а так как он не имеет корня, то таким и является.
+            hideFlags = HideFlags.HideAndDontSave;
         }
         #endregion
     }

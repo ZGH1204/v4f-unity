@@ -57,7 +57,7 @@ namespace V4F.Character
         [MenuItem("Assets/Create/V4F/Character/Specification", false, 800)]
         private static void CreateAsset()
         {
-            ScriptableHelper.CreateAsset<Specification>().Initialize();
+            ScriptableHelper.CreateAsset<Specification>();
         }
 
         public override void OnInspectorGUI()

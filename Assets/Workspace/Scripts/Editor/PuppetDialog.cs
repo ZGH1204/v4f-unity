@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEditor;
 
-using V4F.Puppets;
+using V4F.Character;
 
 namespace V4F
 {
@@ -14,15 +14,17 @@ namespace V4F
     [InitializeOnLoad]
     public class PuppetDialog : EditorWindow
     {
+        #region Types
         public delegate void DialogEventHandler(PuppetDialog sender, PuppetEventArgs args);
-
         private delegate void DragAndDropEventHandler(Vector3 mousePosition, bool dragPerform);
+        #endregion
 
         #region Fields
-        private static readonly GUIContent[]    __content = null;        
-        private static readonly Rect[]          __rect = null;
-        private static readonly Color[]         __colour = null;
-        private static readonly GUIStyle[]      __styles = null;
+        private static readonly GUIContent[] __content = null;
+        private static readonly Rect[] __rect = null;
+        private static readonly Color[] __colour = null;
+        private static readonly GUIStyle[] __styles = null;
+        private static readonly GUIContent[] __table = null;
 
         public static event DialogEventHandler OnCreate;
         public static event DialogEventHandler OnEdit;
@@ -63,10 +65,10 @@ namespace V4F
         {
             __content = new GUIContent[]
             {
-                new GUIContent("Create personage"),
+                new GUIContent("Create Puppet"),
                 new GUIContent("Specification"),
                 new GUIContent("Resistances"),
-                new GUIContent("Skill Set"),
+                new GUIContent("Skillset"),
                 GUIContent.none,
                 new GUIContent("Create"),
                 new GUIContent("Cancel"),
@@ -77,7 +79,7 @@ namespace V4F
                 new GUIContent("Name:"),
                 new GUIContent("Prefab:"),
                 GUIContent.none,
-                new GUIContent("Editing Personage"),
+                new GUIContent("Editing Puppet"),
                 new GUIContent("Icon"),
                 new GUIContent("Save"),
                 GUIContent.none,
@@ -86,13 +88,13 @@ namespace V4F
 
             __rect = new Rect[]
             {
-                new Rect(0f, 0f, 597, 328f),
-                new Rect(8f, 8f, 200f, 160f),
-                new Rect(212f, 8f, 200f, 160f),
-                new Rect(8f, 172f, 404f, 108f),
-                new Rect(420f, 0f, 1f, 328f),
-                new Rect(461f, 268f, 96f, 24f),
-                new Rect(461f, 296f, 96f, 24f),
+                new Rect(0f, 0f, 597, 494f),
+                new Rect(8f, 8f, 404f, 363f),
+                new Rect(0f, 0f, 0f, 0f),
+                new Rect(8f, 378f, 404f, 108f),
+                new Rect(420f, 0f, 1f, 494f),
+                new Rect(461f, 434f, 96f, 24f),
+                new Rect(461f, 462f, 96f, 24f),
                 new Rect(461f, 8f, 96f, 96f),
                 new Rect(463f, 10f, 92f, 92f),
                 new Rect(429f, 108f, 160f, 156f),
@@ -103,24 +105,49 @@ namespace V4F
                 new Color(0.2f, 0.2f, 0.2f, 1f),
                 new Color(0.5f, 0.5f, 0.5f, 0.25f),
                 new Color(0f, 0.75f, 0f, 0.25f),
+
+                new Color32(41, 128, 185, 255),
+                new Color32(236, 240, 241, 255),
+                new Color32(189, 195, 199, 255),
             };
 
             __styles = new GUIStyle[5];
+
+            __table = new GUIContent[]
+            {
+                new GUIContent("Strength"),
+                new GUIContent("Dexterity"),
+                new GUIContent("Magic"),
+                new GUIContent("Vitality"),
+                new GUIContent("Health points"),
+                new GUIContent("Damage (melee)"),
+                new GUIContent("Damage (range)"),
+                new GUIContent("Damage (magic)"),
+                new GUIContent("Chance to dodge"),
+                new GUIContent("Chance to crit"),
+                new GUIContent("Resistance (Fire) "),
+                new GUIContent("Resistance (Ice)"),
+                new GUIContent("Resistance (Lighting)"),
+                new GUIContent("Resistance (Death)"),
+                new GUIContent("Resistance (Poison)"),
+                new GUIContent("Resistance (Stun/Move)"),
+                new GUIContent("Resistance (Immune)"),
+                new GUIContent("Resistance (Bleeding)"),
+            };
         }
         #endregion
 
-        #region Methods
-        [MenuItem("Assets/Create/V4F/Personage/Puppet", false, 806)]
-        private static void ShowCreateDialog()
-        {            
-            var dialog = CreateInstance<PuppetDialog>();            
+        #region Methods                
+        public static void ShowCreateDialog()
+        {
+            var dialog = CreateInstance<PuppetDialog>();
             dialog.titleContent = __content[0];
             dialog.minSize = __rect[0].size;
             dialog.maxSize = __rect[0].size;
 
-            var args = new PuppetEventArgs();
-            args.puppet = null;
+            var args = new PuppetEventArgs();            
             args.path = AssetDatabase.GetAssetPath(Selection.activeObject);
+            args.puppet = null;
 
             dialog._args = args;            
             dialog._editMode = false;
@@ -128,31 +155,28 @@ namespace V4F
             dialog.ShowUtility();
         }
 
-        [MenuItem("CONTEXT/Puppet/Edit Data", false)]
-        private static void ShowEditDialog(MenuCommand menuCommand)
+        public static void ShowEditDialog(Puppet puppet)
         {
             var dialog = CreateInstance<PuppetDialog>();
             dialog.titleContent = __content[14];
             dialog.minSize = __rect[0].size;
             dialog.maxSize = __rect[0].size;
 
-            var puppet = menuCommand.context as Puppet;
             var args = new PuppetEventArgs();
-            args.puppet = puppet;
             args.path = AssetDatabase.GetAssetPath(Selection.activeObject);
+            args.puppet = puppet;
             args.spec = puppet.spec;
-            args.resists = puppet.resists;
-            args.skillSet = puppet.skillSet;            
+            args.skillSet = puppet.skillSet;
             args.icon = puppet.icon;
+            args.charClass = puppet.charClass;
             args.properName = puppet.properName;
-            args.puppetClass = puppet.puppetClass;
             args.prefab = puppet.prefab;
 
             dialog._args = args;
             dialog._editMode = true;
 
             dialog.ShowUtility();
-        }        
+        }
 
         private void SpecDropArea(Vector3 mousePosition, bool dragPerform)
         {
@@ -160,11 +184,11 @@ namespace V4F
 
             if (__rect[1].Contains(mousePosition))
             {
-                PuppetSpec spec = null;
+                Specification spec = null;
 
                 foreach (Object draggedObject in DragAndDrop.objectReferences)
                 {
-                    spec = draggedObject as PuppetSpec;
+                    spec = draggedObject as Specification;
                     if (spec != null)
                     {
                         break;
@@ -191,46 +215,7 @@ namespace V4F
             }
 
             _colourIndices[1] = index;
-        }
-
-        private void ResistsDropArea(Vector3 mousePosition, bool dragPerform)
-        {
-            var index = 1;
-
-            if (__rect[2].Contains(mousePosition))
-            {
-                PuppetResists resists = null;
-
-                foreach (Object draggedObject in DragAndDrop.objectReferences)
-                {
-                    resists = draggedObject as PuppetResists;
-                    if (resists != null)
-                    {
-                        break;
-                    }
-                }
-
-                if (resists != null)
-                {
-                    DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
-                    if (dragPerform)
-                    {
-                        DragAndDrop.AcceptDrag();
-                        _args.resists = resists;
-                    }
-                    else
-                    {
-                        index = 2;
-                    }
-                }
-                else
-                {
-                    DragAndDrop.visualMode = DragAndDropVisualMode.Rejected;
-                }
-            }
-
-            _colourIndices[2] = index;
-        }
+        }        
 
         private void SkillSetDropArea(Vector3 mousePosition, bool dragPerform)
         {
@@ -238,11 +223,11 @@ namespace V4F
 
             if (__rect[3].Contains(mousePosition))
             {
-                PuppetSkillSet skillSet = null;
+                SkillSet skillSet = null;
 
                 foreach (Object draggedObject in DragAndDrop.objectReferences)
                 {
-                    skillSet = draggedObject as PuppetSkillSet;
+                    skillSet = draggedObject as SkillSet;
                     if (skillSet != null)
                     {
                         break;
@@ -337,6 +322,108 @@ namespace V4F
             {
                 OnEdit(this, args);
             }
+        }        
+
+        private void DrawSpecTable(Rect rect)
+        {
+            var cellHeight = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+            var cellWidth = new float[] { rect.width * 0.4f, rect.width * 0.3f, rect.width * 0.3f };            
+
+            var rowCount = 18;
+            var rectColumn1 = new Rect[rowCount];
+            var rectColumn2 = new Rect[rowCount];
+            var rectColumn3 = new Rect[rowCount];
+
+            var rcHeader = new Rect(rect.x, rect.y, rect.width, cellHeight);
+            EditorGUI.DrawRect(rcHeader, __colour[3]);
+
+            var rcRowBackground = new Rect(rect.x, rect.y, rect.width, cellHeight);
+            for (var i = 0; i < rowCount; ++i)
+            {
+                rcRowBackground.y = rect.y + cellHeight * (i + 1);
+                EditorGUI.DrawRect(rcRowBackground, __colour[4 + (i % 2)]);
+
+                rectColumn1[i].Set(rcRowBackground.x + 4f, rcRowBackground.y, cellWidth[0] - 8f, cellHeight);
+                rectColumn2[i].Set(rcRowBackground.x + cellWidth[0] + 5f, rcRowBackground.y, cellWidth[1] - 8f, cellHeight);
+                rectColumn3[i].Set(rcRowBackground.x + cellWidth[0] + cellWidth[1] + 6f, rcRowBackground.y, cellWidth[2] - 8f, cellHeight);
+            }
+
+            EditorGUILayout.BeginHorizontal(GUILayout.Height(cellHeight));
+            {
+                rcHeader.width = cellWidth[0];
+                EditorGUI.LabelField(rcHeader, "Attributes", CustomStyles.tableHeader);
+                rcHeader.x = rcHeader.x + cellWidth[0] + 1f;
+                rcHeader.width = cellWidth[1];
+                EditorGUI.LabelField(rcHeader, "Base", CustomStyles.tableHeader);
+                rcHeader.x = rcHeader.x + cellWidth[1] + 1f;
+                rcHeader.width = cellWidth[2];
+                EditorGUI.LabelField(rcHeader, "Сalculated", CustomStyles.tableHeader);
+            }
+            EditorGUILayout.EndHorizontal();
+
+            var spec = _args.spec;
+
+            var baseParam = new string[]
+            {
+                string.Format("{0}", spec.strength),
+                string.Format("{0}", spec.dexterity),
+                string.Format("{0}", spec.magic),
+                string.Format("{0}", spec.vitality),
+                string.Format("{0}", spec.healthPoints),
+                string.Format("{0} - {1}", spec.minDamageMelee, spec.maxDamageMelee),
+                string.Format("{0} - {1}", spec.minDamageRange, spec.maxDamageRange),
+                string.Format("{0} - {1}", spec.minDamageMagic, spec.maxDamageMagic),
+                string.Format("{0}%", spec.chanceToDodge),
+                string.Format("{0}%", spec.chanceToCrit),
+                string.Format("{0}%", spec.fireResistance),
+                string.Format("{0}%", spec.iceResistance),
+                string.Format("{0}%", spec.lightingResistance),
+                string.Format("{0}%", spec.deathResistance),
+                string.Format("{0}%", spec.poisonResistance),
+                string.Format("{0}%", spec.stunMoveResistance),
+                string.Format("{0}%", spec.immuneResistance),
+                string.Format("{0}%", spec.bleedingResistance),
+            };
+
+            var calcParam = new string[]
+            {
+                string.Format("{0}", spec.strength),
+                string.Format("{0}", spec.dexterity),
+                string.Format("{0}", spec.magic),
+                string.Format("{0}", spec.vitality),
+                string.Format("{0}", spec.CalcHealthPoints()),
+                string.Format("{0} - {1}", spec.CalcMinDamageMelee(), spec.CalcMaxDamageMelee()),
+                string.Format("{0} - {1}", spec.CalcMinDamageRange(), spec.CalcMaxDamageRange()),
+                string.Format("{0} - {1}", spec.CalcMinDamageMagic(), spec.CalcMaxDamageMagic()),
+                string.Format("{0}%", spec.chanceToDodge),
+                string.Format("{0}%", spec.chanceToCrit),
+                string.Format("{0}%", spec.fireResistance),
+                string.Format("{0}%", spec.iceResistance),
+                string.Format("{0}%", spec.lightingResistance),
+                string.Format("{0}%", spec.deathResistance),
+                string.Format("{0}%", spec.poisonResistance),
+                string.Format("{0}%", spec.stunMoveResistance),
+                string.Format("{0}%", spec.immuneResistance),
+                string.Format("{0}%", spec.bleedingResistance),
+            };
+
+            for (var i = 0; i < rowCount; ++i)
+            {
+                EditorGUILayout.BeginHorizontal(GUILayout.Height(cellHeight));
+                {
+                    EditorGUI.LabelField(rectColumn1[i], __table[i], CustomStyles.tableFirstField);
+                    EditorGUI.LabelField(rectColumn2[i], baseParam[i], CustomStyles.tableOtherField);
+                    EditorGUI.LabelField(rectColumn3[i], calcParam[i], CustomStyles.tableOtherField);
+                }
+                EditorGUILayout.EndHorizontal();
+            }            
+
+            var rcColumn = new Rect(rect.x - 1f, rect.y, 1f, rect.height);
+            for (var i = 0; i < (cellWidth.Length - 1); ++i)
+            {
+                rcColumn.x = rcColumn.x + cellWidth[i] + 1f;
+                EditorGUI.DrawRect(rcColumn, __colour[0]);
+            }            
         }
 
         private void DrawSpec()
@@ -372,19 +459,11 @@ namespace V4F
                         }
                     }                    
                     EditorGUILayout.EndHorizontal();
-
+                    
                     if (spec != null)
                     {
-                        EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.ExpandHeight(true));
-                        {
-                            EditorGUILayout.LabelField("Health Points", spec.GetStat(Stats.HealthPoints).ToString());
-                            EditorGUILayout.LabelField("Accuracy", spec.GetStat(Stats.Accuracy).ToString());
-                            EditorGUILayout.LabelField("Initiative", spec.GetStat(Stats.Initiative).ToString());
-                            EditorGUILayout.LabelField("Stamina", spec.GetStat(Stats.Stamina).ToString());
-                            EditorGUILayout.LabelField("Damage", string.Format("{0}-{1}", spec.GetStat(Stats.MinDamage), spec.GetStat(Stats.MaxDamage)));
-                            EditorGUILayout.LabelField("Critical Chance", string.Format("{0}%", spec.GetStat(Stats.CriticalChance)));
-                            EditorGUILayout.LabelField("Critical Damage", string.Format("{0}%", spec.GetStat(Stats.CriticalDamage)));
-                        }                        
+                        var rect = EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.ExpandHeight(true));                        
+                        DrawSpecTable(rect);                                                    
                         EditorGUILayout.EndVertical();
                     }
                 }                
@@ -397,67 +476,7 @@ namespace V4F
             }
 
             _args.spec = spec;
-        }
-
-        private void DrawResistances()
-        {
-            var resists = _args.resists;
-
-            if (resists != null)
-            {
-                var op1 = GUILayout.Width(96f);
-                var op2 = new GUILayoutOption[]
-                {
-                    GUILayout.Width(EditorGUIUtility.singleLineHeight),
-                    GUILayout.Height(EditorGUIUtility.singleLineHeight),
-                };
-
-                GUILayout.BeginArea(__rect[2]);
-                {
-                    EditorGUILayout.BeginHorizontal();
-                    {
-                        EditorGUILayout.LabelField(__content[2], EditorStyles.boldLabel, op1);
-
-                        GUILayout.FlexibleSpace();
-
-                        if (GUILayout.Button(__content[8], op2))
-                        {
-                            Selection.activeObject = resists;
-                            EditorGUIUtility.PingObject(resists);
-                        }
-
-                        if (GUILayout.Button(__content[9], op2))
-                        {
-                            resists = null;
-                        }
-                    }
-                    EditorGUILayout.EndHorizontal();
-
-                    if (resists != null)
-                    {
-                        EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.ExpandHeight(true));
-                        {
-                            EditorGUILayout.LabelField("Magic Of Elements", string.Format("{0}%", resists.GetResist(Resists.MagicOfElements)));
-                            EditorGUILayout.LabelField("Magic Of Nature", string.Format("{0}%", resists.GetResist(Resists.MagicOfNature)));
-                            EditorGUILayout.LabelField("Magic Of Death", string.Format("{0}%", resists.GetResist(Resists.MagicOfDeath)));
-                            EditorGUILayout.LabelField("Disease", string.Format("{0}%", resists.GetResist(Resists.Disease)));
-                            EditorGUILayout.LabelField("Stun", string.Format("{0}%", resists.GetResist(Resists.Stun)));
-                            EditorGUILayout.LabelField("Bleed", string.Format("{0}%", resists.GetResist(Resists.Bleed)));
-                            EditorGUILayout.LabelField("Move", string.Format("{0}%", resists.GetResist(Resists.Move)));
-                        }
-                        EditorGUILayout.EndVertical();
-                    }
-                }
-                GUILayout.EndArea();
-            }
-            else
-            {
-                EditorGUI.DrawRect(__rect[2], __colour[_colourIndices[2]]);
-                EditorGUI.LabelField(__rect[2], __content[2], CustomStyles.infoDrop);
-            }
-
-            _args.resists = resists;
-        }
+        }        
 
         private void DrawSkillSet()
         {
@@ -502,8 +521,8 @@ namespace V4F
                         for (int i = 0; i < countSkills; ++i)
                         {
                             var skill = skillSet[i];
-                            var texture = ((skill.icon != null) ? skill.icon.texture : null);
-                            skillSetContent[i] = new GUIContent(skill.title, texture);
+                            var texture = skill[0].icon.texture;
+                            skillSetContent[i] = new GUIContent(skill.name, texture);
                         }
 
                         EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.ExpandHeight(true));
@@ -582,7 +601,7 @@ namespace V4F
 
                     EditorGUILayout.Separator();
                     EditorGUILayout.LabelField(__content[18], CustomStyles.italicLabel);
-                    _args.puppetClass = (PuppetClass)EditorGUILayout.EnumPopup(_args.puppetClass);
+                    _args.charClass = (Classes)EditorGUILayout.EnumPopup(_args.charClass);
 
                     EditorGUILayout.Separator();
                     EditorGUILayout.LabelField(__content[12], CustomStyles.italicLabel);
@@ -599,7 +618,6 @@ namespace V4F
             return (confirm && !(
                 (_args.spec == null) ||
                 (_args.skillSet == null) ||
-                (_args.resists == null) ||
                 (_args.icon == null) ||
                 (_args.prefab == null)
             ));
@@ -607,20 +625,20 @@ namespace V4F
 
         private void OnEnable()
         {
+            hideFlags = HideFlags.HideAndDontSave;
+
             _DragAndDrop += SpecDropArea;
-            _DragAndDrop += ResistsDropArea;
             _DragAndDrop += SkillSetDropArea;
             _DragAndDrop += IconDropArea;
 
             _colourIndices = new int[] { 0, 1, 1, 1, 0, 0, 0, 1 };
-            _saved = false;
+            _saved = false;            
         }
 
         private void OnDisable()
         {
             _DragAndDrop -= IconDropArea;
             _DragAndDrop -= SkillSetDropArea;
-            _DragAndDrop -= ResistsDropArea;
             _DragAndDrop -= SpecDropArea;            
 
             if (_saved)
@@ -644,7 +662,6 @@ namespace V4F
         private void OnGUI()
         {            
             DrawSpec();
-            DrawResistances();
             DrawSkillSet();            
 
             // Separator

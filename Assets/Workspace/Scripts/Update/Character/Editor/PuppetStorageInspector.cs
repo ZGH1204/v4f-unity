@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
 
-namespace V4F.Puppets
+namespace V4F.Character
 {
 
     [CustomEditor(typeof(PuppetStorage)), InitializeOnLoad]
@@ -61,7 +61,7 @@ namespace V4F.Puppets
         #endregion
 
         #region Methods
-        //[MenuItem("Assets/Create/V4F/Personage/Storage", false, 807)]
+        [MenuItem("Assets/Create/V4F/Character/Puppet storage", false, 806)]
         private static void CreateAsset()
         {
             ScriptableHelper.CreateAsset<PuppetStorage>();
@@ -69,7 +69,7 @@ namespace V4F.Puppets
 
         public override void OnInspectorGUI()
         {
-            serializedObject.Update();            
+            serializedObject.Update();
 
             EditorGUILayout.Space();
             _puppets.DoLayoutList();
@@ -104,9 +104,8 @@ namespace V4F.Puppets
             }
 
             if (_puppetForEdit != null)
-            {
-                Selection.activeObject = _puppetForEdit;
-                EditorGUIUtility.PingObject(_puppetForEdit);
+            {                
+                PuppetDialog.ShowEditDialog(_puppetForEdit);
                 _puppetForEdit = null;
             }
         }
@@ -234,7 +233,7 @@ namespace V4F.Puppets
                 }
 
                 GUIStyle titleStyle = (isActive ? titleActiveStyle : EditorStyles.label);
-                EditorGUI.LabelField(rcTitle, puppet.properName, titleStyle);
+                EditorGUI.LabelField(rcTitle, puppet.name, titleStyle);
 
                 if (GUI.Button(rcEdit, __content[0]))
                 {

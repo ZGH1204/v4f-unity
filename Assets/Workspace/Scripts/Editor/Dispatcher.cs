@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.Callbacks;
 
-using V4F.Puppets;
+using V4F.Character;
 
 namespace V4F
 {
@@ -72,10 +72,7 @@ namespace V4F
                 serializedObject.Update();
 
                 var spec = serializedObject.FindProperty("_spec");
-                spec.objectReferenceValue = args.spec;
-
-                var resists = serializedObject.FindProperty("_resists");
-                resists.objectReferenceValue = args.resists;
+                spec.objectReferenceValue = args.spec;                
 
                 var skillSet = serializedObject.FindProperty("_skillSet");
                 skillSet.objectReferenceValue = args.skillSet;
@@ -83,11 +80,11 @@ namespace V4F
                 var icon = serializedObject.FindProperty("_icon");
                 icon.objectReferenceValue = args.icon;
 
-                var properName = serializedObject.FindProperty("_name");
-                properName.stringValue = args.properName;
+                var charClass = serializedObject.FindProperty("_charClass");
+                charClass.enumValueIndex = (int)args.charClass;
 
-                var puppetClass = serializedObject.FindProperty("_class");
-                puppetClass.enumValueIndex = (int)args.puppetClass;
+                var properName = serializedObject.FindProperty("_properName");
+                properName.stringValue = args.properName;                
 
                 var prefab = serializedObject.FindProperty("_prefab");
                 prefab.objectReferenceValue = args.prefab;                                                

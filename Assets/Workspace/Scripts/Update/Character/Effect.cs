@@ -75,14 +75,7 @@ namespace V4F.Character
         {
             get { return _makeDamage; }
         }
-        #endregion
-
-        #region Methods
-        public void Initialize()
-        {
-
-        }
-        #endregion
+        #endregion       
     }
 
 }
