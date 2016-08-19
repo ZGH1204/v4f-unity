@@ -4,7 +4,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-using V4F.Puppets;
+using V4F.Character;
 
 namespace V4F.UI.Valhalla
 {
@@ -15,7 +15,7 @@ namespace V4F.UI.Valhalla
         private RectTransform _self = null;
         private Image _image = null;
         private Image _frame = null;
-        private PuppetSkill _skill = null;
+        private Skill _skill = null;
         #endregion
 
         #region Properties
@@ -24,20 +24,16 @@ namespace V4F.UI.Valhalla
             get { return _self; }
         }
 
-        public PuppetSkill skill
+        public Skill subject
         {
             get { return _skill; }
             set
             {
                 _skill = value;
 
-                _image.sprite = ((!empty) ? _skill.icon : null);
+                _frame.enabled = false;
                 _image.enabled = !empty;
-
-                if (_frame != null)
-                {
-                    _frame.enabled = false;
-                }                
+                _image.sprite = _skill[0].icon;
             }
         }
 
@@ -48,13 +44,7 @@ namespace V4F.UI.Valhalla
 
         public bool focus
         {
-            set
-            {
-                if (!empty && _frame != null)
-                {
-                    _frame.enabled = value;
-                }
-            }
+            set { _frame.enabled = (!empty && value); }
         }
         #endregion
 
@@ -63,13 +53,7 @@ namespace V4F.UI.Valhalla
         {
             _self = GetComponent<RectTransform>();
             _image = GetComponent<Image>();
-
-            var child = _self.GetChild(0);
-            if (child != null)
-            {
-                _frame = child.GetComponent<Image>();
-                _frame.enabled = false;
-            }
+            _frame = _self.GetChild(0).GetComponent<Image>();
         }
         #endregion
     }

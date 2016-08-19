@@ -264,7 +264,7 @@ namespace V4F.Character
                     EditorGUILayout.BeginHorizontal();
                     {
                         EditorGUILayout.LabelField(__content[3], op1);
-                        factorOut = DrawFloatAttribute(__content[2], factorIn, -100f, 100f, false);
+                        factorOut = DrawFloatAttribute(__content[2], factorIn, 0f, 100f, false);
                     }
                     EditorGUILayout.EndHorizontal();
                 }                

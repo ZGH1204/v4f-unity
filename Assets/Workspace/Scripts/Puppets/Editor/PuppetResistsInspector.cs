@@ -36,7 +36,7 @@ namespace V4F.Puppets
         #endregion
 
         #region Methods
-        [MenuItem("Assets/Create/V4F/Personage/Resistances", false, 801)]
+        //[MenuItem("Assets/Create/V4F/Personage/Resistances", false, 801)]
         private static void CreateAsset()
         {
             var asset = ScriptableHelper.CreateAsset<PuppetResists>();

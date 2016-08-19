@@ -4,18 +4,18 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-using V4F.Game;
+using V4F.Character;
 
 namespace V4F.UI.Valhalla
 {
 
-    public class HeroCell : MonoBehaviour, ICell<Hero>, IDraggable
+    public class ActorCell : MonoBehaviour, ICell<Actor>, IDraggable
     {
         #region Fields
         private RectTransform _rect = null;        
         private Image _image = null;
         private Image _frame = null;
-        private Hero _hero = null;
+        private Actor _actor = null;
         private bool _select = false;
         #endregion
 
@@ -25,29 +25,29 @@ namespace V4F.UI.Valhalla
             get { return _rect; }
         }
 
-        public Hero subject
+        public Actor subject
         {
-            get { return _hero; }
+            get { return _actor; }
             set
             {
-                _hero = value;
+                _actor = value;
                 _image.sprite = (!empty ? icon : null);
             }
         }
 
         public bool empty
         {
-            get { return (_hero == null); }
+            get { return (_actor == null); }
         }
 
         public DraggableType type
         {
-            get { return DraggableType.Hero; }
+            get { return DraggableType.Actor; }
         }
 
         public Sprite icon
         {
-            get { return _hero.puppet.icon; }
+            get { return _actor.puppet.icon; }
         }
 
         public bool focus

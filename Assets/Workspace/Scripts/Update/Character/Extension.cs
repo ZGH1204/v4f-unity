@@ -42,6 +42,17 @@ namespace V4F.Character
         {
             return Mathf.FloorToInt(self.vitality * self.healthPointsFactor + self.healthPoints);
         }
+
+        public static int Сalculate(this AttributeType self, Actor actor, int add, float mul)
+        {
+            if (self == AttributeType.HealthPoints)
+            {
+                var basic = Mathf.FloorToInt(actor[AttributeType.Vitality].value * actor.puppet.spec.healthPointsFactor);
+                return Mathf.FloorToInt((basic + add) * (1f + mul));
+            }
+
+            return 0;
+        }
     }
 	
 }
