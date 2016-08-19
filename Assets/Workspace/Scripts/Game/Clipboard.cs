@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using V4F.Character;
+
 namespace V4F.Game
 {
 
@@ -12,30 +14,29 @@ namespace V4F.Game
     {
         #region Fields
         private static Clipboard __instance = null;
-
-        private Stack<Hero> _heroes = null;
+        private Stack<Actor> _actors = null;
         #endregion
 
         #region Constructors
         private Clipboard()
         {
-            _heroes = new Stack<Hero>(16);
+            _actors = new Stack<Actor>(16);
         }
         #endregion
 
         #region Methods
-        public static void SetHero(Hero hero)
+        public static void SetActor(Actor actor)
         {
-            var buffer = __instance._heroes;
-            if (hero != null)
+            var buffer = __instance._actors;
+            if (actor != null)
             {
-                buffer.Push(hero);
+                buffer.Push(actor);
             }            
         }
 
-        public static Hero GetHero()
+        public static Actor GetActor()
         {
-            var buffer = __instance._heroes;
+            var buffer = __instance._actors;
             if (buffer.Count > 0)
             {
                 return buffer.Pop();

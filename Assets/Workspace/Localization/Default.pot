@@ -6,3 +6,18 @@ msgstr ""
 
 msgid "#STRKEY_03"
 msgstr ""
+
+msgid "#ATTRIBUTE_STRENGTH"
+msgstr ""
+
+msgid "#ATTRIBUTE_DEXTERITY"
+msgstr ""
+
+msgid "#ATTRIBUTE_MAGIC"
+msgstr ""
+
+msgid "#ATTRIBUTE_VITALITY"
+msgstr ""
+
+msgid "#ATTRIBUTE_HEALTHPOINTS"
+msgstr ""

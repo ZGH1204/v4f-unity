@@ -6,26 +6,27 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-using V4F.Game;
-using V4F.Puppets;
+using V4F.Character;
 
 namespace V4F.UI.Valhalla
 {
 
     public class Statistics : MonoBehaviour
     {
+        public delegate void HeroFocusedEventHandler(Actor hero);
+        public delegate void SkillFocusedEventHandler(Skill skill);
+
         public RectTransform content;
         public Stock stockList;
         public Barracks barracksList;
-
-        public Text specInfo;
+                
         public Button payButton;
 
         public RectTransform skills;
-        public SkillCell skill1;
-        public SkillCell skill2;
-        public SkillCell skill3;
-        public SkillCell skill4;
+        public SkillCell[] skillCells = new SkillCell[4];        
+
+        public event HeroFocusedEventHandler OnHeroFocused;
+        public event SkillFocusedEventHandler OnSkillFocused;
 
         private RectTransform _self;
         private Vector2 _capturePosition = Vector2.zero;
@@ -39,8 +40,8 @@ namespace V4F.UI.Valhalla
 
         private IEnumerator _tweaking = null;
 
-        private HeroCell _heroFocused;
-        private Hero _hero;
+        private ActorCell _heroFocused;
+        private Actor _hero;
         private int _heroIndex;
         private SkillCell _skillFocused;
 
@@ -113,35 +114,49 @@ namespace V4F.UI.Valhalla
         {
             if (RectTransformUtility.RectangleContainsScreenPoint(skills, args.position, sender.camera))
             {
-                SkillCell skill = null;
+                SkillCell focus = null;
+                for (var i = 0; i < skillCells.Length; ++i)
+                {
+                    var verifiable = skillCells[i];
+                    if (RectTransformUtility.RectangleContainsScreenPoint(verifiable.rect, args.position, sender.camera))
+                    {
+                        focus = verifiable;
+                        break;
+                    }
+                }                                
 
-                if (RectTransformUtility.RectangleContainsScreenPoint(skill1.rect, args.position, sender.camera))
-                {
-                    skill = skill1;
-                }
-                if (RectTransformUtility.RectangleContainsScreenPoint(skill2.rect, args.position, sender.camera))
-                {
-                    skill = skill2;
-                }
-                if (RectTransformUtility.RectangleContainsScreenPoint(skill3.rect, args.position, sender.camera))
-                {
-                    skill = skill3;
-                }
-                if (RectTransformUtility.RectangleContainsScreenPoint(skill4.rect, args.position, sender.camera))
-                {
-                    skill = skill4;
-                }
-
-                if ((skill != null) && (skill != _skillFocused))
+                if ((focus != null) && (focus != _skillFocused))
                 {
                     if (_skillFocused != null)
                     {
                         _skillFocused.focus = false;
                     }
 
-                    _skillFocused = skill;
+                    _skillFocused = focus;
                     _skillFocused.focus = true;
-                }                
+
+                    OnSkillFocusedCallback(focus.subject);
+                }
+                else
+                {
+                    OnSkillFocusedCallback(null);
+                }
+            }
+        }
+
+        private void OnHeroFocusedCallback(Actor hero)
+        {
+            if (OnHeroFocused != null)
+            {
+                OnHeroFocused(hero);
+            }
+        }
+
+        private void OnSkillFocusedCallback(Skill skill)
+        {
+            if (OnSkillFocused != null)
+            {
+                OnSkillFocused(skill);
             }
         }
 
@@ -184,21 +199,21 @@ namespace V4F.UI.Valhalla
             _tweaking = null;
         }
 
-        private void OnStockSelectHandler(ListBox<HeroCell> sender, ListBoxEventArgs args)
+        private void OnStockSelectHandler(ListBox<ActorCell> sender, ListBoxEventArgs args)
         {
+            content.gameObject.SetActive(true);
             _heroIndex = args.index;            
-            UpdateHeroStats(sender[_heroIndex], true);
-            content.gameObject.SetActive(true);
+            UpdateHeroStats(sender[_heroIndex], true);            
         }
 
-        private void OnBarracksSelectHandler(ListBox<HeroCell> sender, ListBoxEventArgs args)
+        private void OnBarracksSelectHandler(ListBox<ActorCell> sender, ListBoxEventArgs args)
         {
-            _heroIndex = -1;
-            UpdateHeroStats(sender[args.index], false);
             content.gameObject.SetActive(true);
+            _heroIndex = -1;
+            UpdateHeroStats(sender[args.index], false);            
         }
 
-        private void UpdateHeroStats(HeroCell cell, bool payButton)
+        private void UpdateHeroStats(ActorCell cell, bool payButton)
         {
             if (_heroFocused != null)
             {
@@ -211,22 +226,20 @@ namespace V4F.UI.Valhalla
                 _skillFocused.focus = false;
                 _skillFocused = null;
             }
-
-            _heroFocused = cell;
-            _hero = _heroFocused.subject;
-
-            var spec = _hero.puppet.spec;
-            specInfo.text = string.Format("Health Points  {0}\nAccuracy       {1}\nInitiative     {2}\nStamina        {3}",
-                spec.GetStat(Stats.HealthPoints), spec.GetStat(Stats.Accuracy), spec.GetStat(Stats.Initiative), spec.GetStat(Stats.Stamina));
-
+            
             this.payButton.disable = !payButton;
 
-            var skillSet = _hero.puppet.skillSet;
-            var skillIndex = 0;
-            skill1.skill = (skillIndex < skillSet.countSkills) ? skillSet[skillIndex++] : null;
-            skill2.skill = (skillIndex < skillSet.countSkills) ? skillSet[skillIndex++] : null;
-            skill3.skill = (skillIndex < skillSet.countSkills) ? skillSet[skillIndex++] : null;
-            skill4.skill = (skillIndex < skillSet.countSkills) ? skillSet[skillIndex++] : null;            
+            _hero = cell.subject;
+            _heroFocused = cell;
+                        
+            var skillSet = _hero.puppet.skillSet;            
+            for (var i = 0; i < skillCells.Length; ++i)
+            {
+                var skillCell = skillCells[i];
+                skillCell.subject = ((i < skillSet.countSkills) ? skillSet[i] : null);
+            }
+
+            OnHeroFocusedCallback(_hero);
         }
 
         private void OnClickPayButton(Button sender, ButtonEventArgs args)
@@ -238,17 +251,19 @@ namespace V4F.UI.Valhalla
                 _heroFocused = null;
                 _heroIndex = -1;
 
+                content.gameObject.SetActive(true);
+
                 var item = barracksList.Add();
                 item.subject = _hero;
+                item.focus = true;
+                UpdateHeroStats(item, false);                
             }
         }
 
         private void Awake()
         {
-            _self = GetComponent<RectTransform>();
-                        
+            _self = GetComponent<RectTransform>();                        
             _halfPosition = content.anchoredPosition;
-
             _heroFocused = null;
         }
 
@@ -266,7 +281,6 @@ namespace V4F.UI.Valhalla
 
             stockList.OnSelect += OnStockSelectHandler;
             barracksList.OnSelect += OnBarracksSelectHandler;
-
             payButton.OnClick += OnClickPayButton;
         }
 
@@ -279,7 +293,6 @@ namespace V4F.UI.Valhalla
 
             stockList.OnSelect -= OnStockSelectHandler;
             barracksList.OnSelect -= OnBarracksSelectHandler;
-
             payButton.OnClick -= OnClickPayButton;
         }
     }

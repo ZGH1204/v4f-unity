@@ -9,7 +9,7 @@ namespace V4F.UI
     public enum DraggableType
     {
         None,
-        Hero,
+        Actor,
     }
 	
 }

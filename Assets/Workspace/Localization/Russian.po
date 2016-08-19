@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-08-01 11:40+0300\n"
+"PO-Revision-Date: 2016-08-19 10:35+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru_RU\n"
@@ -22,6 +22,21 @@ msgstr "Тестовая строка 02"
 
 msgid "#STRKEY_03"
 msgstr "Тестовая строка 03"
+
+msgid "#ATTRIBUTE_STRENGTH"
+msgstr "Сила"
+
+msgid "#ATTRIBUTE_DEXTERITY"
+msgstr "Ловкость"
+
+msgid "#ATTRIBUTE_MAGIC"
+msgstr "Магия"
+
+msgid "#ATTRIBUTE_VITALITY"
+msgstr "Выносливость"
+
+msgid "#ATTRIBUTE_HEALTHPOINTS"
+msgstr "Очки жизни"
 
 #~ msgid "#STRKEY_TEST"
 #~ msgstr "Тест"

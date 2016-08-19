@@ -7,7 +7,7 @@ namespace V4F.Game
     public enum Location
     {	
         None,
-        Draft,
+        Valhalla,
         Reserve,
     }
 	

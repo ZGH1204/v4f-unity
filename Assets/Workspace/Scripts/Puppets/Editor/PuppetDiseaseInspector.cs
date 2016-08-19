@@ -37,7 +37,7 @@ namespace V4F.Puppets
         #endregion
 
         #region Methods
-        [MenuItem("Assets/Create/V4F/Personage/Disease", false, 803)]
+        //[MenuItem("Assets/Create/V4F/Personage/Disease", false, 803)]
         private static void CreateAsset()
         {
             var asset = ScriptableHelper.CreateAsset<PuppetDisease>();

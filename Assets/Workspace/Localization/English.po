@@ -21,5 +21,20 @@ msgstr "Test string 02"
 msgid "#STRKEY_03"
 msgstr "Test string 03"
 
+msgid "#ATTRIBUTE_STRENGTH"
+msgstr "Strength"
+
+msgid "#ATTRIBUTE_DEXTERITY"
+msgstr "Dexterity"
+
+msgid "#ATTRIBUTE_MAGIC"
+msgstr "Magic"
+
+msgid "#ATTRIBUTE_VITALITY"
+msgstr "Vitality"
+
+msgid "#ATTRIBUTE_HEALTHPOINTS"
+msgstr "Health points"
+
 #~ msgid "#STRKEY_TEST"
 #~ msgstr "Test"

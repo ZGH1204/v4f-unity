@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using V4F.Puppets;
+using V4F.Character;
 
 namespace V4F.Game
 {
@@ -14,9 +14,8 @@ namespace V4F.Game
     {
         #region Fields
         private static Database __instance = null;
-
-        private Dictionary<string, Hero> _heroesTable = null;
-        private List<Hero> _heroesList = null;
+        private Dictionary<string, Actor> _heroesTable = null;
+        private List<Actor> _heroesList = null;
         #endregion
 
         #region Properties
@@ -24,15 +23,15 @@ namespace V4F.Game
         #endregion
 
         #region Constructors
-        private Database()
+        private Database(string save)
         {
-            _heroesTable = new Dictionary<string, Hero>(256);
-            _heroesList = new List<Hero>(256);
+            _heroesTable = new Dictionary<string, Actor>(256);
+            _heroesList = new List<Actor>(256);
         }
         #endregion
 
         #region Methods        
-        public static Hero[] QueryHeroesByLocation(Location location)
+        public static Actor[] QueryHeroesByLocation(Location location)
         {
             return __instance._heroesList.FindAll(x => x.location == location).ToArray();
         }
@@ -40,13 +39,13 @@ namespace V4F.Game
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Initialize()
         {
-            __instance = new Database();
+            __instance = new Database("SaveFile.sav"); // пока просто образец
 
             var storages = Resources.LoadAll<PuppetStorage>("");
             for (var i = 0; i < storages.Length; ++i)
             {
                 __instance.Include(storages[i]);
-            }
+            }            
         }
         
         private void Include(PuppetStorage storage)
@@ -55,9 +54,15 @@ namespace V4F.Game
             for (var i = 0; i < count; ++i)
             {
                 var puppet = storage[i];
-                var hero = new Hero(puppet, Location.Draft);
-                _heroesTable.Add(puppet.uniqueID, hero);
-                _heroesList.Add(hero);
+
+                var actor = new Actor(puppet);
+                // load data form save for actor
+                // ...
+                // while
+                actor.location = Location.Valhalla;
+
+                _heroesTable.Add(puppet.uniqueID, actor);
+                _heroesList.Add(actor);
             }            
         }        
         #endregion

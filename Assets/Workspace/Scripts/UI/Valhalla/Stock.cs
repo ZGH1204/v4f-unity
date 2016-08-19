@@ -8,7 +8,7 @@ using V4F.Game;
 namespace V4F.UI.Valhalla
 {
 
-    public class Stock : ListBox<HeroCell>
+    public class Stock : ListBox<ActorCell>
     {
         #region Fields
         public RectTransform content;
@@ -68,7 +68,7 @@ namespace V4F.UI.Valhalla
             OnRemove -= OnRemoveHandler;
         }
 
-        private void OnSelectHandler(ListBox<HeroCell> sender, ListBoxEventArgs args)
+        private void OnSelectHandler(ListBox<ActorCell> sender, ListBoxEventArgs args)
         {
             if (_selected != args.index)
             {
@@ -90,7 +90,7 @@ namespace V4F.UI.Valhalla
             }
         }
 
-        private void OnRemoveHandler(ListBox<HeroCell> sender, ListBoxEventArgs args)
+        private void OnRemoveHandler(ListBox<ActorCell> sender, ListBoxEventArgs args)
         {
             if (_selected == args.index)
             {
@@ -100,7 +100,7 @@ namespace V4F.UI.Valhalla
 
         private void Start()
         {
-            var heroes = Database.QueryHeroesByLocation(Location.Draft);
+            var heroes = Database.QueryHeroesByLocation(Location.Valhalla);
             for (var i = 0; i < heroes.Length; ++i)
             {
                 var item = Add();
