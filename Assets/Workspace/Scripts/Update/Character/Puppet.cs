@@ -11,22 +11,22 @@ namespace V4F.Character
     {
         #region Fields
         [SerializeField, HideInInspector]
-        private Specification _spec;
+        private Specification _spec = null;
 
         [SerializeField, HideInInspector]
-        private SkillSet _skillSet;
+        private SkillSet _skillSet = null;
 
         [SerializeField, HideInInspector]
-        private Sprite _icon;
+        private Sprite _icon = null;
 
         [SerializeField, HideInInspector]
-        private Classes _charClass;
+        private Classes _charClass = Classes.Warrior;
 
         [SerializeField, HideInInspector]
-        private string _properName;
+        private string _properName = null;
 
         [SerializeField, HideInInspector]
-        private GameObject _prefab;
+        private GameObject _prefab = null;
         #endregion
 
         #region Properties
@@ -58,6 +58,13 @@ namespace V4F.Character
         public GameObject prefab
         {
             get { return _prefab; }
+        }
+        #endregion
+
+        #region Methods
+        protected override void OnEnable()
+        {
+            base.OnEnable();
         }
         #endregion
     }

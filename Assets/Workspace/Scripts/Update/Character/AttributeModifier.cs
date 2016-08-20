@@ -26,7 +26,7 @@ namespace V4F.Character
         #endregion
 
         #region Methods
-        private void Reset()
+        private void OnEnable()
         {
             hideFlags = HideFlags.HideAndDontSave;
         }

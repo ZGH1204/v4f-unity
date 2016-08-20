@@ -1,6 +1,8 @@
 ﻿// <copyright file="Skill.cs" company="Maxim Mikulski">Copyright (c) 2016 All Rights Reserved</copyright>
 // <author>Maxim Mikulski</author>
 
+using System.Collections.Generic;
+
 using UnityEngine;
 
 namespace V4F.Character
@@ -15,7 +17,7 @@ namespace V4F.Character
 
         #region Fields
         [SerializeField, HideInInspector]
-        private SkillStage[] _stages = null;
+        private List<SkillStage> _stages = null;
 
         [SerializeField, HideInInspector]
         private int _lastEditStageIndex = -1;
@@ -48,15 +50,14 @@ namespace V4F.Character
         #endregion
 
         #region Methods
-        private void Reset()
+        protected override void OnEnable()
         {
-            _stages = new SkillStage[AllStages];
-            for (var i = 0; i < AllStages; ++i)
-            {
-                _stages[i] = CreateInstance<SkillStage>();
-            }
+            base.OnEnable();
 
-            _lastEditStageIndex = -1;
+            if (_stages == null)
+            {
+                _stages = new List<SkillStage>(AllStages);                
+            }
         }
         #endregion
     }

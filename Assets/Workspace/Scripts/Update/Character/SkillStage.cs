@@ -15,21 +15,24 @@ namespace V4F.Character
         public const int MaxEffects = 32;
         #endregion
 
-        #region Fields
+        #region Fields        
         [SerializeField, HideInInspector]
-        private List<Effect> _effects = new List<Effect>(MaxEffects);
+        private List<Effect> _effects = null;
 
         [SerializeField, HideInInspector]
-        private List<bool> _effectsPassed = new List<bool>(MaxEffects);
+        private List<bool> _effectsPassed = null;
+
+        [SerializeField, HideInInspector]
+        private Skill _parent = null;
 
         [SerializeField, HideInInspector]
         private Sprite _icon = null;
 
         [SerializeField, HideInInspector]
-        private string _title = "#BAD_TITLE";
+        private string _title = null;
 
         [SerializeField, HideInInspector]
-        private string _description = "#BAD_DESCRIPTION";
+        private string _description = null;
 
         [SerializeField, HideInInspector]
         private DamageType _damageType = DamageType.None;
@@ -63,6 +66,11 @@ namespace V4F.Character
         #endregion
 
         #region Properties
+        public Skill parent
+        {
+            get { return _parent; }
+        }
+
         public Sprite icon
         {
             get { return _icon; }
@@ -142,24 +150,35 @@ namespace V4F.Character
         {
             get
             {
-                var valid = _icon != null;
+                var valid = (_icon != null);
                 valid = valid && (_goal != SkillGoal.None);
-                //valid = valid && string.IsNullOrEmpty(_title);
-                //valid = valid && string.IsNullOrEmpty(_description);
-                //valid = valid && (_damageType != DamageType.None);
-                //valid = valid && (_resistType != ResistanceType.None);                
                 return valid;
             }
         }
         #endregion
 
         #region Methods
-        private void Reset()
+        private void OnEnable()
         {
-            // ВАЖНО!!!
-            // Если не создавать из ScriptableObject'а физический ассет на диске, то нужно пометить его обязательо этим флагом!
-            // Это предотвратит от того, что юнити не удалит его, когда будет чистить от не используемых ресурсов, а так как он не имеет корня, то таким и является.
-            hideFlags = HideFlags.HideAndDontSave;
+            if (_effects == null)
+            {
+                _effects = new List<Effect>(MaxEffects);
+            }
+
+            if (_effectsPassed == null)
+            {
+                _effectsPassed = new List<bool>(MaxEffects);
+            }
+
+            if (string.IsNullOrEmpty(_title))
+            {
+                _title = "#BAD_TITLE";
+            }
+
+            if (string.IsNullOrEmpty(_description))
+            {
+                _description = "#BAD_DESCRIPTION";
+            }
         }
         #endregion
     }
