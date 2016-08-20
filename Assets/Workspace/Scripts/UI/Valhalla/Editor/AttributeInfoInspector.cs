@@ -40,14 +40,14 @@ namespace V4F.UI.Valhalla
             var typeProp = serializedObject.FindProperty("_type");            
             typeProp.enumValueIndex = (int)((AttributeType)EditorGUILayout.EnumPopup(__content[1], __attributes[typeProp.enumValueIndex]));
 
+            var titleProp = serializedObject.FindProperty("_title");
+            titleProp.stringValue = DrawLocalization(__content[4], titleProp.stringValue);
+
             var titleUIProp = serializedObject.FindProperty("_titleUI");
             EditorGUILayout.PropertyField(titleUIProp, __content[2]);
 
             var valueUIProp = serializedObject.FindProperty("_valueUI");
-            EditorGUILayout.PropertyField(valueUIProp, __content[3]);
-
-            var titleProp = serializedObject.FindProperty("_title");
-            titleProp.stringValue = DrawLocalization(__content[4], titleProp.stringValue);
+            EditorGUILayout.PropertyField(valueUIProp, __content[3]);            
 
             if (GUI.changed)
             {
@@ -57,11 +57,9 @@ namespace V4F.UI.Valhalla
         }
 
         private string DrawLocalization(GUIContent content, string key)
-        {
-            EditorGUILayout.LabelField(content, CustomStyles.italicLabel);
-
+        {            
             var selectedIndex = Localization.GetKeyIndex(key);
-            var select = EditorGUILayout.Popup(selectedIndex, Localization.keys);
+            var select = EditorGUILayout.Popup(content.text, selectedIndex, Localization.keys);
             if (select != selectedIndex)
             {
                 return Localization.GetKey(select);

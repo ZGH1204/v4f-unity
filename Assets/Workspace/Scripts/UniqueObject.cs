@@ -17,16 +17,19 @@ namespace V4F
         #region Properties
         public string uniqueID
         {
-            get
+            get { return _uniqueID; }
+        }
+        #endregion
+
+        #region Methods
+        protected virtual void OnEnable()
+        {
+            if (string.IsNullOrEmpty(_uniqueID))
             {
-                if (string.IsNullOrEmpty(_uniqueID))
-                {
-                    _uniqueID = System.Guid.NewGuid().ToString();
-                }
-                return _uniqueID;
+                _uniqueID = System.Guid.NewGuid().ToString();
             }
         }
-        #endregion        
+        #endregion
     }
 
 }

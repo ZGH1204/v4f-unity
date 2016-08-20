@@ -17,7 +17,7 @@ namespace V4F.Character
 
         #region Fields
         [SerializeField, HideInInspector]
-        private List<Puppet> _puppets = new List<Puppet>(MaxPuppets);
+        private List<Puppet> _puppets = null;
         #endregion
 
         #region Properties
@@ -43,6 +43,14 @@ namespace V4F.Character
         {
             var puppet = _puppets.Find(x => (string.Compare(x.uniqueID.ToUpper(), uniqueID.ToUpper()) == 0));
             return (puppet != null);
+        }
+
+        private void OnEnable()
+        {
+            if (_puppets == null)
+            {
+                _puppets = new List<Puppet>(MaxPuppets);
+            }
         }
         #endregion
     }

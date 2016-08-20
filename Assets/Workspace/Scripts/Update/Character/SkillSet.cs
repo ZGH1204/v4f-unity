@@ -17,7 +17,7 @@ namespace V4F.Character
 
         #region Fields
         [SerializeField, HideInInspector]
-        private List<Skill> _skills = new List<Skill>(MaxSkills);
+        private List<Skill> _skills = null;
         #endregion
 
         #region Properties
@@ -29,6 +29,16 @@ namespace V4F.Character
         public Skill this[int index]
         {
             get { return _skills[index]; }
+        }
+        #endregion
+
+        #region Methods
+        private void OnEnable()
+        {
+            if (_skills == null)
+            {
+                _skills = new List<Skill>(MaxSkills);
+            }
         }
         #endregion
     }

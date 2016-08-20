@@ -10,7 +10,7 @@ namespace V4F.Character
     {
         public static int CalcMinDamageMelee(this Specification self)
         {
-            return Mathf.FloorToInt(self.vitality * self.minDamageMeleeFactor + self.minDamageMelee);
+            return Mathf.FloorToInt(self.strength * self.minDamageMeleeFactor + self.minDamageMelee);
         }
 
         public static int CalcMaxDamageMelee(this Specification self)

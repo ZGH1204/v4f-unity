@@ -11,10 +11,10 @@ namespace V4F.Character
     {
         #region Fields
         [SerializeField, HideInInspector]
-        private string _title = "#BAD_TITLE";
+        private string _title = null;
 
         [SerializeField, HideInInspector]
-        private string _description = "#BAD_DESCRIPTION";
+        private string _description = null;
 
         [SerializeField, HideInInspector]
         private ResistanceType _resistType = ResistanceType.None;
@@ -75,7 +75,24 @@ namespace V4F.Character
         {
             get { return _makeDamage; }
         }
-        #endregion       
+        #endregion
+
+        #region Methods
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+
+            if (string.IsNullOrEmpty(_title))
+            {
+                _title = "#BAD_TITLE";
+            }
+
+            if (string.IsNullOrEmpty(_description))
+            {
+                _description = "#BAD_DESCRIPTION";
+            }
+        }
+        #endregion
     }
 
 }

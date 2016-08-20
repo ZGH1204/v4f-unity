@@ -33,8 +33,7 @@ namespace V4F.UI.Valhalla
 
         private void Start()
         {
-            _titleUI.text = _title;
-            _valueUI.text = "";
+            _titleUI.text = _title;            
         }
 
         private void OnEnable()
