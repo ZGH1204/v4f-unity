@@ -4,24 +4,25 @@
 using UnityEngine;
 
 using V4F.Game;
+using V4F.UI;
 
-namespace V4F.Prototype.UI.Valhalla
+namespace V4F.UI.Valhalla
 {
 
-    public class ValhallaList : ListBox<ValhallaItem>
+    public class BarracksList : ListBox<ValhallaItem>
     {
         public ValhallaItem itemPrefab;
 
         protected override ValhallaItem prefab
         {
-            get { return itemPrefab; }            
+            get { return itemPrefab; }
         }
 
         protected override void OnEnable()
         {
             base.OnEnable();
 
-            var heroes = Database.QueryHeroesByLocation(Location.Valhalla);
+            var heroes = Database.QueryHeroesByLocation(Location.Reserve);
             for (var i = 0; i < heroes.Length; ++i)
             {
                 var item = AddItem();
@@ -33,8 +34,8 @@ namespace V4F.Prototype.UI.Valhalla
         {
             base.OnDisable();
 
-            Clear();            
+            Clear();
         }
     }
-	
+
 }

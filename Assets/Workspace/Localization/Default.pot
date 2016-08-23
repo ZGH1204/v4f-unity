@@ -21,3 +21,27 @@ msgstr ""
 
 msgid "#ATTRIBUTE_HEALTHPOINTS"
 msgstr ""
+
+msgid "#RESIST_FIRE"
+msgstr ""
+
+msgid "#RESIST_ICE"
+msgstr ""
+
+msgid "#RESIST_LIGHTING"
+msgstr ""
+
+msgid "#RESIST_DEATH"
+msgstr ""
+
+msgid "#RESIST_POISON"
+msgstr ""
+
+msgid "#RESIST_STUNMOVE"
+msgstr ""
+
+msgid "#RESIST_IMMUNE"
+msgstr ""
+
+msgid "#RESIST_BLEEDING"
+msgstr ""

@@ -20,11 +20,12 @@ namespace V4F.UI.Valhalla
         {
             __content = new GUIContent[]
             {
-                new GUIContent("Statistics"),
+                new GUIContent("Dispatcher"),
                 new GUIContent("Attribute"),
                 new GUIContent("Title UI"),
                 new GUIContent("Value UI"),
                 new GUIContent("Title"),
+                new GUIContent("Percent"),
             };
 
             __attributes = System.Enum.GetValues(typeof(AttributeType)) as AttributeType[];
@@ -34,7 +35,7 @@ namespace V4F.UI.Valhalla
         {
             serializedObject.Update();
 
-            var statsProp = serializedObject.FindProperty("_stats");
+            var statsProp = serializedObject.FindProperty("_dispatcher");
             EditorGUILayout.PropertyField(statsProp, __content[0]);
 
             var typeProp = serializedObject.FindProperty("_type");            
@@ -47,7 +48,10 @@ namespace V4F.UI.Valhalla
             EditorGUILayout.PropertyField(titleUIProp, __content[2]);
 
             var valueUIProp = serializedObject.FindProperty("_valueUI");
-            EditorGUILayout.PropertyField(valueUIProp, __content[3]);            
+            EditorGUILayout.PropertyField(valueUIProp, __content[3]);
+
+            var percentProp = serializedObject.FindProperty("_percent");
+            EditorGUILayout.PropertyField(percentProp, __content[5]);
 
             if (GUI.changed)
             {

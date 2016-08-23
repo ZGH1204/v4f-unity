@@ -2,7 +2,7 @@
 // <author>Maxim Mikulski</author>
 
 
-namespace V4F.Prototype.UI
+namespace V4F.UI
 {
 
     public enum ListBoxDirection

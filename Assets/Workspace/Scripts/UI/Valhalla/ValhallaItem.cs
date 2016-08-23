@@ -5,8 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using V4F.Character;
+using V4F.UI;
 
-namespace V4F.Prototype.UI.Valhalla
+namespace V4F.UI.Valhalla
 {
 
     public class ValhallaItem : MonoBehaviour, IListItem

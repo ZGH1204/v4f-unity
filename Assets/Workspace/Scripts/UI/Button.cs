@@ -9,39 +9,98 @@ namespace V4F.UI
 
     public class Button : MonoBehaviour
     {
+        #region Types
         public delegate void ButtonEventHandler(Button sender, ButtonEventArgs args);
+        #endregion
 
+        #region Events
+        public event ButtonEventHandler OnClick;
+        #endregion
+
+        #region Fields
         public Sprite normal;
         public Sprite pressed;
         public Sprite disabled;
 
-        public event ButtonEventHandler OnClick;
-
-        private RectTransform _self;
+        private RectTransform _rect;
         private Image _image;
-
+        
         private bool _disable;
         private bool _capture;
+        private bool _locked;
+        #endregion
 
+        #region Properties
         public bool disable
         {
             get { return _disable; }
             set
             {
+                _image.sprite = ((value) ? disabled : normal);
                 _disable = value;
-                _image.sprite = ((!_disable) ? normal : disabled);
+            }
+        }
+
+        public bool locked
+        {
+            get { return _locked; }
+            set { _locked = value; }
+        }
+
+        protected RectTransform rect
+        {
+            get { return _rect; }
+        }
+
+        protected Image image
+        {
+            get { return _image; }
+        }
+        #endregion
+
+        #region Methods
+        protected virtual void Awake()
+        {
+            _rect = GetComponent<RectTransform>();
+            _image = GetComponent<Image>();
+        }
+
+        protected virtual void OnEnable()
+        {
+            TouchAdapter.OnTouchDown += TouchDownHandler;
+            TouchAdapter.OnTouchUp += TouchUpHandler;
+            TouchAdapter.OnTouchTap += TouchTapHandler;
+        }
+
+        protected virtual void OnDisable()
+        {
+            TouchAdapter.OnTouchDown -= TouchDownHandler;
+            TouchAdapter.OnTouchUp -= TouchUpHandler;
+            TouchAdapter.OnTouchTap -= TouchTapHandler;
+        }
+
+        protected virtual void Start()
+        {
+            _image.sprite = normal;
+        }
+
+        private void OnClickCallback(ButtonEventArgs args)
+        {
+            if (OnClick != null)
+            {
+                OnClick(this, args);
             }
         }
 
         private void TouchDownHandler(TouchAdapter sender, TouchEventArgs args)
         {
-            if (!_disable)
+            if (!(_locked || _disable))
             {
-                _capture = RectTransformUtility.RectangleContainsScreenPoint(_self, args.position, sender.camera);
+                _capture = RectTransformUtility.RectangleContainsScreenPoint(_rect, args.position, sender.camera);
                 if (_capture)
                 {
                     _image.sprite = pressed;
-                }                
+                }
             }
         }
 
@@ -56,40 +115,12 @@ namespace V4F.UI
 
         private void TouchTapHandler(TouchAdapter sender, TouchEventArgs args)
         {
-            if (!_disable && _capture)
+            if (_capture)
             {
-                OnClickCallback(null);                
+                OnClickCallback(null);
             }
         }
-
-        private void OnClickCallback(ButtonEventArgs args)
-        {
-            if (OnClick != null)
-            {
-                OnClick(this, args);
-            }
-        }
-
-        private void Awake()
-        {
-            _self = GetComponent<RectTransform>();
-            _image = GetComponent<Image>();
-        }
-
-        private void OnEnable()
-        {
-            TouchAdapter.OnTouchDown += TouchDownHandler;
-            TouchAdapter.OnTouchUp += TouchUpHandler;
-            TouchAdapter.OnTouchTap += TouchTapHandler;
-        }
-
-        private void OnDisable()
-        {
-            TouchAdapter.OnTouchDown -= TouchDownHandler;
-            TouchAdapter.OnTouchUp -= TouchUpHandler;
-            TouchAdapter.OnTouchTap -= TouchTapHandler;
-        }
-
+        #endregion
     }
-	
+
 }

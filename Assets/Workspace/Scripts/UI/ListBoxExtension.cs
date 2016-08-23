@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-namespace V4F.Prototype.UI
+namespace V4F.UI
 {
 
     public static class ListBoxExtension

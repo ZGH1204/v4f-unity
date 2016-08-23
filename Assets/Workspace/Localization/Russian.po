@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-08-19 10:35+0300\n"
+"PO-Revision-Date: 2016-08-24 02:33+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru_RU\n"
@@ -37,6 +37,30 @@ msgstr "Выносливость"
 
 msgid "#ATTRIBUTE_HEALTHPOINTS"
 msgstr "Очки жизни"
+
+msgid "#RESIST_FIRE"
+msgstr "Огонь"
+
+msgid "#RESIST_ICE"
+msgstr "Лед"
+
+msgid "#RESIST_LIGHTING"
+msgstr "Молнии"
+
+msgid "#RESIST_DEATH"
+msgstr "Смерть"
+
+msgid "#RESIST_POISON"
+msgstr "Отравление"
+
+msgid "#RESIST_STUNMOVE"
+msgstr "Оглушение"
+
+msgid "#RESIST_IMMUNE"
+msgstr "Болезни"
+
+msgid "#RESIST_BLEEDING"
+msgstr "Кровотечение"
 
 #~ msgid "#STRKEY_TEST"
 #~ msgstr "Тест"

@@ -36,5 +36,29 @@ msgstr "Vitality"
 msgid "#ATTRIBUTE_HEALTHPOINTS"
 msgstr "Health points"
 
+msgid "#RESIST_FIRE"
+msgstr "Fire"
+
+msgid "#RESIST_ICE"
+msgstr "Ice"
+
+msgid "#RESIST_LIGHTING"
+msgstr "Lighting"
+
+msgid "#RESIST_DEATH"
+msgstr "Death"
+
+msgid "#RESIST_POISON"
+msgstr "Poison"
+
+msgid "#RESIST_STUNMOVE"
+msgstr "Stun"
+
+msgid "#RESIST_IMMUNE"
+msgstr "Immune"
+
+msgid "#RESIST_BLEEDING"
+msgstr "Bleeding"
+
 #~ msgid "#STRKEY_TEST"
 #~ msgstr "Test"

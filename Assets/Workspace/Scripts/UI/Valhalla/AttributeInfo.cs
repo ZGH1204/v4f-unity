@@ -11,8 +11,11 @@ namespace V4F.UI.Valhalla
 
     public class AttributeInfo : MonoBehaviour
     {
+        private const string _Format01 = "{0} ";
+        private const string _Format02 = "{0}%";
+
         [SerializeField, HideInInspector]
-        private Statistics _stats;
+        private Dispatcher _dispatcher;
 
         [SerializeField, HideInInspector]
         private AttributeType _type;
@@ -26,24 +29,27 @@ namespace V4F.UI.Valhalla
         [SerializeField, HideInInspector]
         private string _title;
 
-        private void OnHeroFocused(Actor hero)
+        [SerializeField, HideInInspector]
+        private bool _percent;
+
+        private void OnHeroSelected(Actor hero)
         {
-            _valueUI.text = string.Format("{0}", hero[_type].value);
+            _valueUI.text = string.Format((_percent ? _Format02 : _Format01), hero[_type].value);
         }
 
         private void Start()
         {
-            _titleUI.text = _title;            
+            _titleUI.text = _title;
         }
 
         private void OnEnable()
-        {            
-            _stats.OnHeroFocused += OnHeroFocused;
+        {
+            _dispatcher.OnHeroSelected += OnHeroSelected;
         }
 
         private void OnDisable()
         {
-            _stats.OnHeroFocused -= OnHeroFocused;
+            _dispatcher.OnHeroSelected -= OnHeroSelected;
         }
     }
 	

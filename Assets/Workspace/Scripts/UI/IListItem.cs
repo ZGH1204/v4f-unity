@@ -3,7 +3,7 @@
 
 using UnityEngine;
 
-namespace V4F.Prototype.UI
+namespace V4F.UI
 {
 
     public interface IListItem
