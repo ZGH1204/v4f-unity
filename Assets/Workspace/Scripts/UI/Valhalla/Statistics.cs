@@ -17,8 +17,6 @@ namespace V4F.UI.Valhalla
         public delegate void SkillFocusedEventHandler(Skill skill);
 
         public RectTransform content;
-        public Stock stockList;
-        public Barracks barracksList;
                 
         public Button payButton;
 
@@ -244,6 +242,7 @@ namespace V4F.UI.Valhalla
 
         private void OnClickPayButton(Button sender, ButtonEventArgs args)
         {
+            /*
             if (_heroIndex != -1)
             {
                 _heroFocused.focus = false;                
@@ -258,6 +257,7 @@ namespace V4F.UI.Valhalla
                 item.focus = true;
                 UpdateHeroStats(item, false);                
             }
+            */
         }
 
         private void Awake()
@@ -279,8 +279,8 @@ namespace V4F.UI.Valhalla
             TouchAdapter.OnTouchUp += TouchUpHandler;
             TouchAdapter.OnTouchTap += TouchTapHandler;
 
-            stockList.OnSelect += OnStockSelectHandler;
-            barracksList.OnSelect += OnBarracksSelectHandler;
+            //stockList.OnSelect += OnStockSelectHandler;
+            //barracksList.OnSelect += OnBarracksSelectHandler;
             payButton.OnClick += OnClickPayButton;
         }
 
@@ -291,8 +291,8 @@ namespace V4F.UI.Valhalla
             TouchAdapter.OnTouchUp -= TouchUpHandler;
             TouchAdapter.OnTouchTap -= TouchTapHandler;
 
-            stockList.OnSelect -= OnStockSelectHandler;
-            barracksList.OnSelect -= OnBarracksSelectHandler;
+            //stockList.OnSelect -= OnStockSelectHandler;
+            //barracksList.OnSelect -= OnBarracksSelectHandler;
             payButton.OnClick -= OnClickPayButton;
         }
     }
