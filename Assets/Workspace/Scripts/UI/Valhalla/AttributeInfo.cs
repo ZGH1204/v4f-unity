@@ -13,6 +13,8 @@ namespace V4F.UI.Valhalla
     {
         private const string _Format01 = "{0} ";
         private const string _Format02 = "{0}%";
+        private const string _Format03 = "- {0} ";
+        private const string _Format04 = "- {0}%";
 
         [SerializeField, HideInInspector]
         private Dispatcher _dispatcher;
@@ -21,10 +23,16 @@ namespace V4F.UI.Valhalla
         private AttributeType _type;
 
         [SerializeField, HideInInspector]
+        private AttributeType _type2;
+
+        [SerializeField, HideInInspector]
         private Text _titleUI;
 
         [SerializeField, HideInInspector]
         private Text _valueUI;
+
+        [SerializeField, HideInInspector]
+        private Text _valueUI2;
 
         [SerializeField, HideInInspector]
         private string _title;
@@ -32,9 +40,19 @@ namespace V4F.UI.Valhalla
         [SerializeField, HideInInspector]
         private bool _percent;
 
+        [SerializeField, HideInInspector]
+        private bool _percent2;
+
         private void OnHeroSelected(Actor hero)
         {
-            _valueUI.text = string.Format((_percent ? _Format02 : _Format01), hero[_type].value);
+            if (_valueUI != null)
+            {
+                _valueUI.text = string.Format((_percent ? _Format02 : _Format01), hero[_type].value);
+            }                
+            if (_valueUI2 != null)
+            {
+                _valueUI2.text = string.Format((_percent2 ? _Format04 : _Format03), hero[_type2].value);
+            }
         }
 
         private void Start()

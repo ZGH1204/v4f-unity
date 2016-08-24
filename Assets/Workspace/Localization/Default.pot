@@ -7,19 +7,34 @@ msgstr ""
 msgid "#STRKEY_03"
 msgstr ""
 
-msgid "#ATTRIBUTE_STRENGTH"
+msgid "#ATTR_STRENGTH"
 msgstr ""
 
-msgid "#ATTRIBUTE_DEXTERITY"
+msgid "#ATTR_DEXTERITY"
 msgstr ""
 
-msgid "#ATTRIBUTE_MAGIC"
+msgid "#ATTR_MAGIC"
 msgstr ""
 
-msgid "#ATTRIBUTE_VITALITY"
+msgid "#ATTR_VITALITY"
 msgstr ""
 
-msgid "#ATTRIBUTE_HEALTHPOINTS"
+msgid "#ATTR_HEALTHPOINTS"
+msgstr ""
+
+msgid "#ATTR_DAMAGEMELEE"
+msgstr ""
+
+msgid "#ATTR_DAMAGERANGE"
+msgstr ""
+
+msgid "#ATTR_DAMAGEMAGIC"
+msgstr ""
+
+msgid "#ATTR_CHTOCRIT"
+msgstr ""
+
+msgid "#ATTR_CHTODODGE"
 msgstr ""
 
 msgid "#RESIST_FIRE"

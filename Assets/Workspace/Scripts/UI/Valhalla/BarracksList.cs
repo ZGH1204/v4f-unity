@@ -20,13 +20,15 @@ namespace V4F.UI.Valhalla
 
         protected override void OnEnable()
         {
+            ValhallaItem item = null;
+
             base.OnEnable();
 
             var heroes = Database.QueryHeroesByLocation(Location.Reserve);
             for (var i = 0; i < heroes.Length; ++i)
             {
-                var item = AddItem();
-                item.actor = heroes[i];
+                AddItem(out item);
+                item.actor = heroes[i];                
             }
         }
 

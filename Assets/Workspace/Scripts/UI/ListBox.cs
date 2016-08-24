@@ -26,6 +26,7 @@ namespace V4F.UI
         public float margin;
         public float divider;
         public int availableCount = 4;
+        public bool scrollLock = false;
 
         private RectTransform _rect;
         private RectTransform _rectAnchor;
@@ -57,34 +58,39 @@ namespace V4F.UI
         #endregion
 
         #region Methods
-        public T AddItem()
+        public int AddItem(out T item)
         {
             var index = _items.Count;
-
             var cell = GetFreeCell();
-            cell.SetActive(true);
 
-            var cellPosition = direction.GetFirstPosition(sizeCell, margin) + direction.GetOffset(sizeCell, divider) * index;
-            _points.Add(cellPosition);
-
-            var anchorPosition = ((_anchors.Count > 0) ? _anchors[_anchors.Count - 1] : _anchorPosition);
-            if (!(index < availableCount))
+            item = cell.GetComponent<T>();
+            if (item != null)
             {
-                anchorPosition += direction.GetAnchorOffset(sizeCell, divider);
+                cell.SetActive(true);                
+
+                var cellPosition = direction.GetFirstPosition(sizeCell, margin) + direction.GetOffset(sizeCell, divider) * index;
+                _points.Add(cellPosition);
+
+                var anchorPosition = ((_anchors.Count > 0) ? _anchors[_anchors.Count - 1] : _anchorPosition);
+                if (!(index < availableCount))
+                {
+                    anchorPosition += direction.GetAnchorOffset(sizeCell, divider);
+                }
+                _anchors.Add(anchorPosition);
+
+                var rect = cell.GetComponent<RectTransform>();
+                rect.anchorMin = new Vector2(0.5f, 0.5f);
+                rect.anchorMax = new Vector2(0.5f, 0.5f);
+                rect.SetParent(_rectAnchor, false);
+                rect.anchoredPosition = cellPosition;
+
+                item.size = sizeCell;
+                _items.Add(item);
+
+                return index;
             }
-            _anchors.Add(anchorPosition);
 
-            var rect = cell.GetComponent<RectTransform>();
-            rect.anchorMin = new Vector2(0.5f, 0.5f);
-            rect.anchorMax = new Vector2(0.5f, 0.5f);
-            rect.SetParent(_rectAnchor, false);
-            rect.anchoredPosition = cellPosition;            
-
-            var item = cell.GetComponent<T>();
-            item.size = sizeCell;
-            _items.Add(item);
-
-            return item;
+            return -1;
         }
 
         public void Clear()
@@ -117,6 +123,21 @@ namespace V4F.UI
             }
         }
 
+        public void SelectItem(int index)
+        {
+            if (_selectIndex != -1)
+            {
+                _items[_selectIndex].select = false;
+            }
+
+            _items[index].select = true;
+            _selectIndex = index;
+
+            var eventArgs = new ListBoxEventArgs();
+            eventArgs.index = _selectIndex;
+            OnSelectCallback(eventArgs);
+        }
+
         public void RemoveAt(int index)
         {
             var args = new ListBoxEventArgs();
@@ -124,12 +145,13 @@ namespace V4F.UI
             OnRemoveCallback(args);
 
             var item = _items[index];
-
+            
             if ((_selectIndex == index) || item.select)
-            {
-                item.select = false;
+            {                
                 _selectIndex = -1;
-            }            
+            }
+
+            item.Clear();
 
             var last = _points[index];
             _points.RemoveAt(index);
@@ -224,7 +246,7 @@ namespace V4F.UI
 
         private void TouchDownHandler(TouchAdapter sender, TouchEventArgs args)
         {
-            _captureScroll = RectTransformUtility.RectangleContainsScreenPoint(_rect, args.position, sender.camera);
+            _captureScroll = (!scrollLock) && RectTransformUtility.RectangleContainsScreenPoint(_rect, args.position, sender.camera);
             if (_captureScroll)
             {
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(_rect, args.position, sender.camera, out _beforPosition);
@@ -259,25 +281,14 @@ namespace V4F.UI
 
         private void TouchTapHandler(TouchAdapter sender, TouchEventArgs args)
         {
-            if (_captureScroll)
+            if (_captureScroll || scrollLock)
             {
                 var count = Mathf.Min(_anchorIndex + availableCount, _items.Count);
                 for (var i = _anchorIndex; i < count; ++i)
                 {                    
                     if (RectTransformUtility.RectangleContainsScreenPoint(_items[i].rect, args.position, sender.camera))
                     {
-                        if (_selectIndex != -1)
-                        {
-                            _items[_selectIndex].select = false;
-                        }                
-                                
-                        _items[i].select = true;
-                        _selectIndex = i;
-
-                        var eventArgs = new ListBoxEventArgs();
-                        eventArgs.index = _selectIndex;
-                        OnSelectCallback(eventArgs);
-
+                        SelectItem(i);
                         break;
                     }
                 }

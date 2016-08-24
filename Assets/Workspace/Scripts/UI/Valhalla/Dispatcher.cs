@@ -4,6 +4,7 @@
 using UnityEngine;
 
 using V4F.Character;
+using V4F.Game;
 
 namespace V4F.UI.Valhalla
 {
@@ -16,11 +17,13 @@ namespace V4F.UI.Valhalla
 
         public ValhallaList valhalla;
         public BarracksList barracks;
+        public Button payButton;
         public GameObject GUI;
 
         private ValhallaItem _selectOnValhalla = null;
         private ValhallaItem _selectOnBarracks = null;
         private Actor _selectActor = null;
+        private int _selectIndex = -1;
 
         private Actor selectActor
         {
@@ -52,7 +55,11 @@ namespace V4F.UI.Valhalla
             }
 
             _selectOnValhalla = sender[args.index];
+            _selectIndex = args.index;
+
             selectActor = _selectOnValhalla.actor;
+
+            payButton.disable = false;
         }
 
         private void OnBarracksSelect(ListBox<ValhallaItem> sender, ListBoxEventArgs args)
@@ -64,19 +71,40 @@ namespace V4F.UI.Valhalla
             }
 
             _selectOnBarracks = sender[args.index];
+            _selectIndex = args.index;
+
             selectActor = _selectOnBarracks.actor;
+
+            payButton.disable = true;
+        }
+
+        private void OnPayClick(Button sender, ButtonEventArgs args)
+        {
+            if (_selectOnValhalla != null)
+            {
+                valhalla.RemoveAt(_selectIndex);
+                _selectOnValhalla = null;
+
+                selectActor.location = Location.Reserve;
+                
+                var index = barracks.AddItem(out _selectOnBarracks);
+                _selectOnBarracks.actor = selectActor;
+                barracks.SelectItem(index);
+            }
         }
 
         private void OnEnable()
         {
             valhalla.OnSelect += OnValhallaSelect;
             barracks.OnSelect += OnBarracksSelect;
+            payButton.OnClick += OnPayClick;
         }
 
         private void OnDisable()
         {
             valhalla.OnSelect -= OnValhallaSelect;
             barracks.OnSelect -= OnBarracksSelect;
+            payButton.OnClick -= OnPayClick;
         }
 
     }

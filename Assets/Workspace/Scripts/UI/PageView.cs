@@ -38,11 +38,13 @@ namespace V4F.UI
         private float[] _currToPrev;
         private float[] _currToNext;
         private int _anchorIndex;
-        private int _selectIndex;        
+        private int _selectIndex;
+        private int _waitIndex;
         private bool _captureScroll;
         private bool _captureLock;
 
         private IEnumerator _tweaking = null;
+        private IEnumerator _scroll = null;
         private float _step;
         #endregion
 
@@ -89,9 +91,7 @@ namespace V4F.UI
             _tweaking = null;
             _selectIndex = 0;
             _captureScroll = false;
-            _captureLock = false;
-
-            pageBar.Select(_selectIndex);
+            _captureLock = false;            
         }
 
         protected virtual void OnEnable()
@@ -100,7 +100,7 @@ namespace V4F.UI
             TouchAdapter.OnTouchMove += TouchMoveHandler;            
             TouchAdapter.OnTouchUp += TouchUpHandler;
 
-            pageBar.OnClick += OnPageBarClick;
+            pageBar.OnClick += OnPageBarClick;            
         }
 
         protected virtual void OnDisable()
@@ -109,7 +109,7 @@ namespace V4F.UI
             TouchAdapter.OnTouchMove -= TouchMoveHandler;
             TouchAdapter.OnTouchUp -= TouchUpHandler;
 
-            pageBar.OnClick -= OnPageBarClick;
+            pageBar.OnClick -= OnPageBarClick;            
         }
 
         protected virtual void Start()
@@ -119,6 +119,7 @@ namespace V4F.UI
                 pages[i].anchoredPosition = nextAnchor.anchoredPosition;
             }
 
+            pageBar.Select(_selectIndex);
             PlayTweaking(false, true);
         }
 
@@ -244,7 +245,12 @@ namespace V4F.UI
             {
                 if (!(index < 0) && (index < pages.Length))
                 {
-                    StartCoroutine(Scroll(index));
+                    _waitIndex = index;
+                    if (_scroll == null)
+                    {
+                        _scroll = Scroll();
+                        StartCoroutine(_scroll);
+                    }                    
                 }                
             }
         }
@@ -279,13 +285,14 @@ namespace V4F.UI
             }            
         }
 
-        private IEnumerator Tweaking(float scaleTime = 1f)
+        private IEnumerator Tweaking(float scaleTime = 1f, bool express = false)
         {
             RectTransform rect = null;
 
-            _step = 0f;
-
-            while (_step < 1f)
+            var roof = (express ? 0.5f : 1f);
+            _step = (express ? 0f : 0f);
+            
+            while (_step < roof)
             {
                 _step = Mathf.Clamp01(_step + Time.smoothDeltaTime * scaleTime);
 
@@ -310,46 +317,44 @@ namespace V4F.UI
                 yield return null;
             }
 
-            rect = currPage;
-            if (rect != null)
-            {
-                rect.anchoredPosition = _tweakPosition[0];
-            }
-
-            rect = prevPage;
-            if (rect != null)
-            {
-                rect.anchoredPosition = _tweakPosition[1];
-            }
-
-            rect = nextPage;
-            if (rect != null)
-            {
-                rect.anchoredPosition = _tweakPosition[2];
-            }
-
             _tweaking = null;
 
-            /*
-            if (!_captureScroll)
+            if (!express)
             {
-                var eventArgs = new PageViewEventArgs();
-                OnScrollEndCallback(eventArgs);
-            }
-            */
+                rect = currPage;
+                if (rect != null)
+                {
+                    rect.anchoredPosition = _tweakPosition[0];
+                }
+
+                rect = prevPage;
+                if (rect != null)
+                {
+                    rect.anchoredPosition = _tweakPosition[1];
+                }
+
+                rect = nextPage;
+                if (rect != null)
+                {
+                    rect.anchoredPosition = _tweakPosition[2];
+                }
+            }            
         }
 
-        private IEnumerator Scroll(int index)
+        private IEnumerator Scroll()
         {
             _captureLock = true;
 
-            var step = ((index < _selectIndex) ? -1 : 1);
+            var step = ((_waitIndex < _selectIndex) ? -1 : 1);
 
-            while (_selectIndex != index)
+            while (_selectIndex != _waitIndex)
             {
                 _selectIndex += step;
-                yield return StartCoroutine(Tweaking(scrollMultiplier));
-            }            
+                yield return StartCoroutine(Tweaking(scrollMultiplier, (_selectIndex != _waitIndex)));
+                step = ((_waitIndex < _selectIndex) ? -1 : 1);
+            }
+
+            _scroll = null;
 
             _captureLock = false;
         }

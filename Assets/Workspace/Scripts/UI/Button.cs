@@ -24,10 +24,11 @@ namespace V4F.UI
 
         private RectTransform _rect;
         private Image _image;
-        
+
+        private bool _clickEvent;
         private bool _disable;
         private bool _capture;
-        private bool _locked;
+        private bool _locked;        
         #endregion
 
         #region Properties
@@ -82,6 +83,10 @@ namespace V4F.UI
         protected virtual void Start()
         {
             _image.sprite = normal;
+            _clickEvent = false;
+            _disable = false;
+            _capture = false;
+            _locked = false;
         }
 
         private void OnClickCallback(ButtonEventArgs args)
@@ -110,6 +115,14 @@ namespace V4F.UI
             {
                 _image.sprite = normal;
                 _capture = false;
+
+                if (_clickEvent || RectTransformUtility.RectangleContainsScreenPoint(_rect, args.position, sender.camera))
+                {
+                    var eventArgs = new ButtonEventArgs();
+                    OnClickCallback(eventArgs);
+
+                    _clickEvent = false;
+                }
             }
         }
 
@@ -117,7 +130,7 @@ namespace V4F.UI
         {
             if (_capture)
             {
-                OnClickCallback(null);
+                _clickEvent = true;                
             }
         }
         #endregion
