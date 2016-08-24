@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-08-19 10:35+0300\n"
+"PO-Revision-Date: 2016-08-24 10:25+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru_RU\n"
@@ -23,20 +23,74 @@ msgstr "Тестовая строка 02"
 msgid "#STRKEY_03"
 msgstr "Тестовая строка 03"
 
-msgid "#ATTRIBUTE_STRENGTH"
+msgid "#ATTR_STRENGTH"
 msgstr "Сила"
 
-msgid "#ATTRIBUTE_DEXTERITY"
+msgid "#ATTR_DEXTERITY"
 msgstr "Ловкость"
 
-msgid "#ATTRIBUTE_MAGIC"
+msgid "#ATTR_MAGIC"
 msgstr "Магия"
 
-msgid "#ATTRIBUTE_VITALITY"
+msgid "#ATTR_VITALITY"
 msgstr "Выносливость"
 
-msgid "#ATTRIBUTE_HEALTHPOINTS"
+msgid "#ATTR_HEALTHPOINTS"
 msgstr "Очки жизни"
+
+msgid "#ATTR_DAMAGEMELEE"
+msgstr "Физ. урон"
+
+msgid "#ATTR_DAMAGERANGE"
+msgstr "Стрельба"
+
+msgid "#ATTR_DAMAGEMAGIC"
+msgstr "Маг. урон"
+
+msgid "#ATTR_CHTOCRIT"
+msgstr "Шанс крит. удара"
+
+msgid "#ATTR_CHTODODGE"
+msgstr "Шанс уворота"
+
+msgid "#RESIST_FIRE"
+msgstr "Огонь"
+
+msgid "#RESIST_ICE"
+msgstr "Лед"
+
+msgid "#RESIST_LIGHTING"
+msgstr "Молнии"
+
+msgid "#RESIST_DEATH"
+msgstr "Смерть"
+
+msgid "#RESIST_POISON"
+msgstr "Отравление"
+
+msgid "#RESIST_STUNMOVE"
+msgstr "Оглушение"
+
+msgid "#RESIST_IMMUNE"
+msgstr "Болезни"
+
+msgid "#RESIST_BLEEDING"
+msgstr "Кровотечение"
+
+#~ msgid "#ATTRIBUTE_STRENGTH"
+#~ msgstr "Сила"
+
+#~ msgid "#ATTRIBUTE_DEXTERITY"
+#~ msgstr "Ловкость"
+
+#~ msgid "#ATTRIBUTE_MAGIC"
+#~ msgstr "Магия"
+
+#~ msgid "#ATTRIBUTE_VITALITY"
+#~ msgstr "Выносливость"
+
+#~ msgid "#ATTRIBUTE_HEALTHPOINTS"
+#~ msgstr "Очки жизни"
 
 #~ msgid "#STRKEY_TEST"
 #~ msgstr "Тест"

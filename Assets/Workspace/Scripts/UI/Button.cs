@@ -9,57 +9,84 @@ namespace V4F.UI
 
     public class Button : MonoBehaviour
     {
+        #region Types
         public delegate void ButtonEventHandler(Button sender, ButtonEventArgs args);
+        #endregion
 
+        #region Events
+        public event ButtonEventHandler OnClick;
+        #endregion
+
+        #region Fields
         public Sprite normal;
         public Sprite pressed;
         public Sprite disabled;
 
-        public event ButtonEventHandler OnClick;
-
-        private RectTransform _self;
+        private RectTransform _rect;
         private Image _image;
 
+        private bool _clickEvent;
         private bool _disable;
         private bool _capture;
+        private bool _locked;        
+        #endregion
 
+        #region Properties
         public bool disable
         {
             get { return _disable; }
             set
             {
+                _image.sprite = ((value) ? disabled : normal);
                 _disable = value;
-                _image.sprite = ((!_disable) ? normal : disabled);
             }
         }
 
-        private void TouchDownHandler(TouchAdapter sender, TouchEventArgs args)
+        public bool locked
         {
-            if (!_disable)
-            {
-                _capture = RectTransformUtility.RectangleContainsScreenPoint(_self, args.position, sender.camera);
-                if (_capture)
-                {
-                    _image.sprite = pressed;
-                }                
-            }
+            get { return _locked; }
+            set { _locked = value; }
         }
 
-        private void TouchUpHandler(TouchAdapter sender, TouchEventArgs args)
+        protected RectTransform rect
         {
-            if (_capture)
-            {
-                _image.sprite = normal;
-                _capture = false;
-            }
+            get { return _rect; }
         }
 
-        private void TouchTapHandler(TouchAdapter sender, TouchEventArgs args)
+        protected Image image
         {
-            if (!_disable && _capture)
-            {
-                OnClickCallback(null);                
-            }
+            get { return _image; }
+        }
+        #endregion
+
+        #region Methods
+        protected virtual void Awake()
+        {
+            _rect = GetComponent<RectTransform>();
+            _image = GetComponent<Image>();
+        }
+
+        protected virtual void OnEnable()
+        {
+            TouchAdapter.OnTouchDown += TouchDownHandler;
+            TouchAdapter.OnTouchUp += TouchUpHandler;
+            TouchAdapter.OnTouchTap += TouchTapHandler;
+        }
+
+        protected virtual void OnDisable()
+        {
+            TouchAdapter.OnTouchDown -= TouchDownHandler;
+            TouchAdapter.OnTouchUp -= TouchUpHandler;
+            TouchAdapter.OnTouchTap -= TouchTapHandler;
+        }
+
+        protected virtual void Start()
+        {
+            _image.sprite = normal;
+            _clickEvent = false;
+            _disable = false;
+            _capture = false;
+            _locked = false;
         }
 
         private void OnClickCallback(ButtonEventArgs args)
@@ -70,26 +97,43 @@ namespace V4F.UI
             }
         }
 
-        private void Awake()
+        private void TouchDownHandler(TouchAdapter sender, TouchEventArgs args)
         {
-            _self = GetComponent<RectTransform>();
-            _image = GetComponent<Image>();
+            if (!(_locked || _disable))
+            {
+                _capture = RectTransformUtility.RectangleContainsScreenPoint(_rect, args.position, sender.camera);
+                if (_capture)
+                {
+                    _image.sprite = pressed;
+                }
+            }
         }
 
-        private void OnEnable()
+        private void TouchUpHandler(TouchAdapter sender, TouchEventArgs args)
         {
-            TouchAdapter.OnTouchDown += TouchDownHandler;
-            TouchAdapter.OnTouchUp += TouchUpHandler;
-            TouchAdapter.OnTouchTap += TouchTapHandler;
+            if (_capture)
+            {
+                _image.sprite = normal;
+                _capture = false;
+
+                if (_clickEvent || RectTransformUtility.RectangleContainsScreenPoint(_rect, args.position, sender.camera))
+                {
+                    var eventArgs = new ButtonEventArgs();
+                    OnClickCallback(eventArgs);
+
+                    _clickEvent = false;
+                }
+            }
         }
 
-        private void OnDisable()
+        private void TouchTapHandler(TouchAdapter sender, TouchEventArgs args)
         {
-            TouchAdapter.OnTouchDown -= TouchDownHandler;
-            TouchAdapter.OnTouchUp -= TouchUpHandler;
-            TouchAdapter.OnTouchTap -= TouchTapHandler;
+            if (_capture)
+            {
+                _clickEvent = true;                
+            }
         }
-
+        #endregion
     }
-	
+
 }
