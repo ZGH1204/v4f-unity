@@ -1,0 +1,145 @@
+
+skeleton_shaman.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+body
+  rotate: true
+  xy: 129, 81
+  size: 191, 265
+  orig: 230, 287
+  offset: 20, 12
+  index: -1
+cloak+bag
+  rotate: false
+  xy: 129, 274
+  size: 266, 236
+  orig: 290, 258
+  offset: 7, 13
+  index: -1
+cloak_top
+  rotate: false
+  xy: 563, 368
+  size: 120, 142
+  orig: 151, 161
+  offset: 14, 19
+  index: -1
+head
+  rotate: false
+  xy: 397, 328
+  size: 164, 182
+  orig: 204, 199
+  offset: 27, 10
+  index: -1
+knife
+  rotate: true
+  xy: 36, 6
+  size: 34, 50
+  orig: 61, 72
+  offset: 19, 6
+  index: -1
+left_arm
+  rotate: true
+  xy: 790, 366
+  size: 74, 76
+  orig: 116, 145
+  offset: 16, 29
+  index: -1
+left_arm_for_staff
+  rotate: false
+  xy: 645, 318
+  size: 42, 48
+  orig: 42, 51
+  offset: 0, 0
+  index: -1
+left_bedro
+  rotate: false
+  xy: 396, 189
+  size: 52, 65
+  orig: 76, 95
+  offset: 8, 9
+  index: -1
+left_boot
+  rotate: false
+  xy: 563, 327
+  size: 80, 39
+  orig: 111, 93
+  offset: 18, 26
+  index: -1
+left_leg
+  rotate: false
+  xy: 396, 114
+  size: 44, 73
+  orig: 92, 115
+  offset: 21, 9
+  index: -1
+light_bedro
+  rotate: false
+  xy: 868, 371
+  size: 55, 69
+  orig: 78, 102
+  offset: 13, 8
+  index: -1
+poyas
+  rotate: false
+  xy: 2, 42
+  size: 112, 26
+  orig: 139, 69
+  offset: 15, 15
+  index: -1
+right_arm
+  rotate: false
+  xy: 790, 442
+  size: 137, 68
+  orig: 166, 90
+  offset: 18, 0
+  index: -1
+right_arm_for_staff
+  rotate: true
+  xy: 2, 2
+  size: 38, 32
+  orig: 41, 32
+  offset: 0, 0
+  index: -1
+right_boot
+  rotate: false
+  xy: 929, 453
+  size: 76, 57
+  orig: 108, 90
+  offset: 19, 16
+  index: -1
+right_leg
+  rotate: true
+  xy: 397, 256
+  size: 43, 75
+  orig: 68, 97
+  offset: 15, 8
+  index: -1
+right_pie4o
+  rotate: false
+  xy: 685, 369
+  size: 103, 141
+  orig: 113, 160
+  offset: 10, 14
+  index: -1
+skull
+  rotate: false
+  xy: 689, 327
+  size: 37, 40
+  orig: 41, 56
+  offset: 4, 5
+  index: -1
+staff
+  rotate: false
+  xy: 2, 70
+  size: 125, 440
+  orig: 125, 440
+  offset: 0, 0
+  index: -1
+tunica_za_nogoi
+  rotate: false
+  xy: 397, 301
+  size: 108, 25
+  orig: 125, 74
+  offset: 17, 20
+  index: -1

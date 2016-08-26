@@ -87,7 +87,10 @@ namespace V4F
                 properName.stringValue = args.properName;                
 
                 var prefab = serializedObject.FindProperty("_prefab");
-                prefab.objectReferenceValue = args.prefab;                                                
+                prefab.objectReferenceValue = args.prefab;
+
+                var prefabUI = serializedObject.FindProperty("_prefabUI");
+                prefabUI.objectReferenceValue = args.prefabUI;
 
                 serializedObject.ApplyModifiedProperties();
             }

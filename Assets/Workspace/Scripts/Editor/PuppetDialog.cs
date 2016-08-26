@@ -84,6 +84,7 @@ namespace V4F
                 new GUIContent("Save"),
                 GUIContent.none,
                 new GUIContent("Class:"),
+                new GUIContent("Prefab UI:"),
             };
 
             __rect = new Rect[]
@@ -97,7 +98,7 @@ namespace V4F
                 new Rect(461f, 462f, 96f, 24f),
                 new Rect(461f, 8f, 96f, 96f),
                 new Rect(463f, 10f, 92f, 92f),
-                new Rect(429f, 108f, 160f, 156f),
+                new Rect(429f, 108f, 160f, 200f),
             };
 
             __colour = new Color[]
@@ -171,6 +172,7 @@ namespace V4F
             args.charClass = puppet.charClass;
             args.properName = puppet.properName;
             args.prefab = puppet.prefab;
+            args.prefabUI = puppet.prefabUI;
 
             dialog._args = args;
             dialog._editMode = true;
@@ -605,7 +607,11 @@ namespace V4F
 
                     EditorGUILayout.Separator();
                     EditorGUILayout.LabelField(__content[12], CustomStyles.italicLabel);
-                    _args.prefab = EditorGUILayout.ObjectField(_args.prefab, typeof(GameObject), false) as GameObject;                    
+                    _args.prefab = EditorGUILayout.ObjectField(_args.prefab, typeof(GameObject), false) as GameObject;
+
+                    EditorGUILayout.Separator();
+                    EditorGUILayout.LabelField(__content[19], CustomStyles.italicLabel);
+                    _args.prefabUI = EditorGUILayout.ObjectField(_args.prefabUI, typeof(GameObject), false) as GameObject;
                 }                
                 EditorGUILayout.EndVertical();
             }            

@@ -18,7 +18,8 @@ namespace V4F
         public Sprite icon { get; set; }
         public Classes charClass { get; set; }
         public string properName { get; set; }
-        public GameObject prefab { get; set; }        
+        public GameObject prefab { get; set; }
+        public GameObject prefabUI { get; set; }
         #endregion
 
         #region Constructors
@@ -29,7 +30,8 @@ namespace V4F
             icon = null;
             charClass = Classes.Warrior;
             properName = "#BAD_NAME";
-            prefab = null;            
+            prefab = null;
+            prefabUI = null;
         }
         #endregion
     }
