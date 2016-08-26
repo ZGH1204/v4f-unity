@@ -31,13 +31,13 @@ namespace V4F.Prototype.Dungeon
             if (args.position.x < half)
             {
                 _targetPosition = transform.position;
-                _targetPosition.x = 5f;
+                _targetPosition.x = -25f;
                 _speed = speedBackward;
             }
             else
             {
                 _targetPosition = transform.position;
-                _targetPosition.x = -5f;
+                _targetPosition.x = 25f;
                 _speed = speedForward;
             }
 
@@ -83,11 +83,9 @@ namespace V4F.Prototype.Dungeon
 
         private IEnumerator Movement()
         {
-            var velocity = Vector3.zero;
-
             while (_move)
             {                
-                transform.position = Vector3.SmoothDamp(transform.position, _targetPosition, ref velocity, 0.2f, _speed);
+                transform.position = Vector3.MoveTowards(transform.position, _targetPosition, _speed * Time.deltaTime);
                 OnMoveCallback(transform.position);
                 yield return null;                
             }
