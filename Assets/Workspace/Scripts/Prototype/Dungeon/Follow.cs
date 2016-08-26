@@ -13,20 +13,20 @@ namespace V4F.Prototype.Dungeon
         public Locomotion motion;
 
         [Range(0f, 100f)]
-        public float speedFollow = 20f;
+        public float speedFollow = 15f;
 
         private IEnumerator _tweaking;
         private Vector3 _targetPosition;        
 
         private void OnMove(Locomotion sender, Vector3 position)
         {
-            _targetPosition.x = Mathf.Clamp(position.x, -4, 4);
+            _targetPosition.x = Mathf.Clamp(position.x + 4.5f, -20f, 20f);
             PlayTweaking();
         }
 
         private void Start()
         {
-            _targetPosition = transform.position;
+            _targetPosition = transform.position;            
         }
 	
         private void OnEnable()
@@ -52,7 +52,7 @@ namespace V4F.Prototype.Dungeon
         {
             while (Vector3.Distance(transform.position, _targetPosition) > Mathf.Epsilon)
             {
-                transform.position = Vector3.Lerp(transform.position, _targetPosition, speedFollow * Time.smoothDeltaTime);
+                transform.position = Vector3.Lerp(transform.position, _targetPosition, speedFollow * Time.deltaTime);
                 yield return null;
             }
 
