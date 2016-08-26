@@ -1,0 +1,124 @@
+
+skeleton_marauder.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+body
+  rotate: true
+  xy: 2, 67
+  size: 183, 291
+  orig: 197, 312
+  offset: 14, 5
+  index: -1
+elbow_patch
+  rotate: true
+  xy: 262, 41
+  size: 24, 31
+  orig: 41, 42
+  offset: 12, 5
+  index: -1
+fabric
+  rotate: false
+  xy: 630, 148
+  size: 111, 102
+  orig: 129, 122
+  offset: 12, 10
+  index: -1
+head
+  rotate: true
+  xy: 498, 138
+  size: 112, 130
+  orig: 127, 140
+  offset: 8, 5
+  index: -1
+knife
+  rotate: true
+  xy: 394, 20
+  size: 93, 51
+  orig: 111, 68
+  offset: 9, 7
+  index: -1
+knife_throw
+  rotate: true
+  xy: 394, 20
+  size: 93, 51
+  orig: 111, 68
+  offset: 9, 7
+  index: -1
+left_arm
+  rotate: false
+  xy: 848, 170
+  size: 97, 80
+  orig: 102, 94
+  offset: 5, 7
+  index: -1
+left_hip
+  rotate: true
+  xy: 152, 12
+  size: 53, 108
+  orig: 77, 122
+  offset: 10, 5
+  index: -1
+left_leg
+  rotate: true
+  xy: 295, 115
+  size: 36, 159
+  orig: 74, 171
+  offset: 19, 4
+  index: -1
+left_shoulder
+  rotate: false
+  xy: 947, 165
+  size: 57, 85
+  orig: 81, 101
+  offset: 12, 9
+  index: -1
+metal_shoulder
+  rotate: false
+  xy: 295, 35
+  size: 97, 78
+  orig: 112, 92
+  offset: 10, 9
+  index: -1
+plait
+  rotate: true
+  xy: 933, 119
+  size: 44, 74
+  orig: 60, 89
+  offset: 10, 6
+  index: -1
+right_arm+axe
+  rotate: true
+  xy: 295, 153
+  size: 97, 201
+  orig: 124, 210
+  offset: 21, 5
+  index: -1
+right_arm+axe_damage
+  rotate: true
+  xy: 295, 153
+  size: 97, 201
+  orig: 124, 210
+  offset: 21, 5
+  index: -1
+right_hip
+  rotate: true
+  xy: 743, 149
+  size: 101, 103
+  orig: 111, 119
+  offset: 6, 7
+  index: -1
+right_leg
+  rotate: true
+  xy: 2, 2
+  size: 63, 148
+  orig: 88, 160
+  offset: 16, 7
+  index: -1
+right_shoulder
+  rotate: true
+  xy: 848, 137
+  size: 31, 83
+  orig: 39, 99
+  offset: 5, 7
+  index: -1

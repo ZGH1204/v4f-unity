@@ -27,6 +27,9 @@ namespace V4F.Character
 
         [SerializeField, HideInInspector]
         private GameObject _prefab = null;
+
+        [SerializeField, HideInInspector]
+        private GameObject _prefabUI = null;
         #endregion
 
         #region Properties
@@ -58,6 +61,11 @@ namespace V4F.Character
         public GameObject prefab
         {
             get { return _prefab; }
+        }
+
+        public GameObject prefabUI
+        {
+            get { return _prefabUI; }
         }
         #endregion
 
