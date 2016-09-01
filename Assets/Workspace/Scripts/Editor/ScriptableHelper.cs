@@ -62,8 +62,7 @@ namespace V4F
             Selection.activeObject = asset;
 
             return asset;
-        }
-
+        }        
 
     }
 	
