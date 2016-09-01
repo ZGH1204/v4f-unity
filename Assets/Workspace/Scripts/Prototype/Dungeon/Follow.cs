@@ -10,33 +10,41 @@ namespace V4F.Prototype.Dungeon
 
     public class Follow : MonoBehaviour
     {
-        public Locomotion motion;
-
-        [Range(0f, 100f)]
-        public float speedFollow = 15f;
-
+        private Transform _transform;
         private IEnumerator _tweaking;
-        private Vector3 _targetPosition;        
+        private Vector3 _targetPosition;
+        private float _speedFollow;
 
         private void OnMove(Locomotion sender, Vector3 position)
-        {
-            _targetPosition.x = Mathf.Clamp(position.x + 4.5f, -20f, 20f);
-            PlayTweaking();
+        {           
+            _targetPosition.x = position.x;            
+            if (position.z < 0f)
+            {
+                StopTweaking();
+                _speedFollow = 0f;
+                _transform.position = _targetPosition;
+            }
+            else
+            {
+                _speedFollow = position.y;
+                PlayTweaking();
+            }            
         }
 
-        private void Start()
+        private void Awake()
         {
-            _targetPosition = transform.position;            
+            _transform = GetComponent<Transform>();
+            _targetPosition = _transform.position;
         }
 	
         private void OnEnable()
         {
-            motion.OnMove += OnMove;
+            Locomotion.OnMove += OnMove;
         }
 
         private void OnDisable()
         {
-            motion.OnMove -= OnMove;
+            Locomotion.OnMove -= OnMove;
         }
 
         private void PlayTweaking()
@@ -48,16 +56,26 @@ namespace V4F.Prototype.Dungeon
             }
         }
 
+        private void StopTweaking()
+        {
+            if (_tweaking != null)
+            {
+                StopCoroutine(_tweaking);
+                _tweaking = null;
+            }
+        }
+
         private IEnumerator Tweaking()
         {
-            while (Vector3.Distance(transform.position, _targetPosition) > Mathf.Epsilon)
+            var wait = new WaitForFixedUpdate();
+
+            while (Vector3.Distance(_transform.position, _targetPosition) > Mathf.Epsilon)
             {
-                transform.position = Vector3.Lerp(transform.position, _targetPosition, speedFollow * Time.deltaTime);
-                yield return null;
+                _transform.position = Vector3.Lerp(_transform.position, _targetPosition, _speedFollow * Time.fixedDeltaTime);
+                yield return wait;
             }
 
-            transform.position = _targetPosition;
-
+            _transform.position = _targetPosition;
             _tweaking = null;
         }
     }

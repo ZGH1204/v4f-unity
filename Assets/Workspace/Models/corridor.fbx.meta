@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: bf11c1e5a5012af43a1e338e7f6bd9bf
-timeCreated: 1472214049
+guid: 6fc43b95af04fc94db4f05a5dbdecc6f
+timeCreated: 1472286677
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: corridor_floor
+    4300000: corridor
   materials:
     importMaterials: 0
     materialName: 0

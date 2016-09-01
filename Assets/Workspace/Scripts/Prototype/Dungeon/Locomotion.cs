@@ -12,7 +12,7 @@ namespace V4F.Prototype.Dungeon
     {
         public delegate void MoveEventHandler(Locomotion sender, Vector3 position);
 
-        public event MoveEventHandler OnMove;
+        public static event MoveEventHandler OnMove;        
 
         [Range(0f, 100f)]
         public float speedForward = 3f;
@@ -20,24 +20,43 @@ namespace V4F.Prototype.Dungeon
         [Range(0f, 100f)]
         public float speedBackward = 1f;
 
+        [Range(-10f, 10f)]
+        public float offsetFollow = 4f;
+
+        [Range(0f, 100f)]
+        public float speedFollow = 3f;
+
+        private Vector3[] _bounds;
+        private Rigidbody _rigidbody;
+        private Transform _transform;
         private IEnumerator _movement = null;
-        private Vector3 _targetPosition;        
+        private Vector3 _direction;
         private float _speed;
         private bool _move;
+        
+        public void Initialize(Vector3 positionBounds, Vector3 cameraBounds)
+        {
+            _bounds = new Vector3[] { positionBounds, cameraBounds };
+
+            var startPosition = _transform.position;
+            startPosition.x = positionBounds.z;
+            _transform.position = startPosition;
+
+            var cameraPosition = Mathf.Clamp(startPosition.x + offsetFollow, cameraBounds.x, cameraBounds.y);
+            OnMoveCallback(this, new Vector3(cameraPosition, speedFollow, -1f));
+        }
 
         private void OnTouchPress(TouchAdapter sender, TouchEventArgs args)
         {            
             var half = Screen.width * 0.5f;
             if (args.position.x < half)
             {
-                _targetPosition = transform.position;
-                _targetPosition.x = -25f;
+                _direction = Vector3.left;
                 _speed = speedBackward;
             }
             else
             {
-                _targetPosition = transform.position;
-                _targetPosition.x = 25f;
+                _direction = Vector3.right;
                 _speed = speedForward;
             }
 
@@ -46,17 +65,23 @@ namespace V4F.Prototype.Dungeon
 
         private void OnTouchUp(TouchAdapter sender, TouchEventArgs args)
         {
-            _move = false;
             _speed = 0f;
+            _move = false;            
         }
 
-        private void OnMoveCallback(Vector3 position)
+        private static void OnMoveCallback(Locomotion sender, Vector3 position)
         {
             if (OnMove != null)
             {
-                OnMove(this, position);
+                OnMove(sender, position);
             }
         }
+
+        private void Awake()
+        {
+            _rigidbody = GetComponent<Rigidbody>();
+            _transform = GetComponent<Transform>();
+        }        
 
         private void OnEnable()
         {
@@ -83,11 +108,20 @@ namespace V4F.Prototype.Dungeon
 
         private IEnumerator Movement()
         {
+            var wait = new WaitForFixedUpdate();
+
             while (_move)
-            {                
-                transform.position = Vector3.MoveTowards(transform.position, _targetPosition, _speed * Time.deltaTime);
-                OnMoveCallback(transform.position);
-                yield return null;                
+            {
+                var playerPosition = _transform.position + _direction * (_speed * Time.fixedDeltaTime);
+                var playerBounds = _bounds[0];
+                playerPosition.x = Mathf.Clamp(playerPosition.x, playerBounds.x, playerBounds.y);
+                _rigidbody.MovePosition(playerPosition);
+
+                var cameraBounds = _bounds[1];
+                var cameraPosition = Mathf.Clamp(playerPosition.x + offsetFollow, cameraBounds.x, cameraBounds.y);
+                OnMoveCallback(this, new Vector3(cameraPosition, speedFollow, 0f));
+
+                yield return wait;
             }
 
             _movement = null;
