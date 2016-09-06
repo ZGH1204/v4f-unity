@@ -15,7 +15,8 @@ namespace V4F.MapEditor
 
         public override void Enable(Form sender)
         {
-            sender.hoverEnabled = true;
+            sender.hoverRoomEnabled = true;
+            sender.hoverTransitionEnabled = true;
             sender.closestEnabled = false;
         }
 
