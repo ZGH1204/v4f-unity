@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: ed4a1bad0d20ca744a5b6ed6eb7f0584
-timeCreated: 1472708374
+timeCreated: 1473173787
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -12,6 +12,10 @@ TextureImporter:
     21300010: 5
     21300012: 6
     21300014: 7
+    21300016: 8
+    21300018: 9
+    21300020: 10
+    21300022: 11
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -133,7 +137,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 2
-        y: 46
+        y: 35
         width: 32
         height: 32
       alignment: 0
@@ -163,7 +167,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 2
-        y: 11
+        y: 1
         width: 32
         height: 32
       alignment: 0
@@ -174,6 +178,50 @@ TextureImporter:
         - {x: -16, y: -16}
         - {x: 16, y: -16}
         - {x: 16, y: 16}
+    - name: 8
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 6
+        width: 12
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: 9
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 4
+        width: 48
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: 10
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 6
+        width: 12
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: 11
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 68
+        width: 48
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
     outline: []
   spritePackingTag: 
   userData: 

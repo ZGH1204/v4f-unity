@@ -7,7 +7,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEditor;
 
-using V4F.Prototype.Dungeon;
+using V4F.Prototype.Map;
 
 namespace V4F.MapEditor
 {
@@ -24,34 +24,33 @@ namespace V4F.MapEditor
         #endregion
 
         #region Fields
-        private static readonly Tools[] __tools = null;
-        private static readonly GUIStyle[] __styles = null;
-        private static readonly GUIContent[] __content = null;
-        private static readonly GUIContent[] __toolbar = null;        
-        private static readonly Color[] __colour = null;
-        private static readonly Rect[] __rect = null;
-        private static readonly Texture __background = null;
-        private static readonly Texture __mapTexture = null;
-        private static readonly Rect[] __mapSprites = null;
-        private static readonly Rect[] __rectHalls = null;
+        private static readonly Tools[]         __tools = null;
+        private static readonly GUIStyle[]      __styles = null;
+        private static readonly GUIContent[]    __content = null;
+        private static readonly GUIContent[]    __toolbar = null;
+        private static readonly Color[]         __colour = null;
+        private static readonly Rect[]          __rect = null;
+        private static readonly Texture         __background = null;
+        private static readonly Texture         __mapTexture = null;
+        private static readonly Rect[]          __mapSprites = null;
+        private static readonly Rect[]          __rectMarker = null;
 
-        private Dictionary<Tools, ITool> _toolMap = null;        
+        private Dictionary<Tools, ITool> _toolMap = null;
         private int _toolSelected = -1;
         private int _toolPrevious = -1;
         private Vector2 _displayOffset;
         private Vector3 _mousePosition;
         private int _indexSelected;
-        private bool _hoverEnabled;
+        private bool _hoverRoomEnabled;
+        private bool _hoverTransitionEnabled;
         private bool _closestEnabled;
         private bool _selectTrigger;
         private bool _activateTrigger;
         private bool _removeTrigger;
 
-        private Preset _editable = null;
-        private int[] _stateHalls;
-        private Dictionary<int, Rect> _activeHalls;
-        private Dictionary<Link, Rect> _linkHalls;
-        private int _entryPoint;
+        private Data _data = null;
+        private Dictionary<Node, Rect> _activeRooms;
+        private Dictionary<Node, Rect> _activeTransitions;
         #endregion
 
         #region Properties        
@@ -109,16 +108,74 @@ namespace V4F.MapEditor
             get { return _mousePosition; }
         }
 
-        public bool hoverEnabled
+        public bool hoverRoomEnabled
         {
-            get { return _hoverEnabled; }
-            set { _hoverEnabled = value; }
+            get { return _hoverRoomEnabled; }
+            set { _hoverRoomEnabled = value; }
+        }
+
+        public bool hoverTransitionEnabled
+        {
+            get { return _hoverTransitionEnabled; }
+            set { _hoverTransitionEnabled = value; }
         }
 
         public bool closestEnabled
         {
             get { return _closestEnabled; }
             set { _closestEnabled = value; }
+        }
+
+        private Data data
+        {
+            set
+            {
+                if (_data != value)
+                {
+                    if (value != null)
+                    {
+                        _activeRooms = new Dictionary<Node, Rect>(Data.RoomsCount * Data.RoomsCount);
+                        _activeTransitions = new Dictionary<Node, Rect>(Data.RowCount * Data.RowCount);
+
+                        var entry = value.entry;
+
+                        _activeRooms.Add(value[entry], __rectMarker[entry]);
+                        for (var i = 0; i < value.length; ++i)
+                        {
+                            if (i != entry)
+                            {
+                                var room = value[i];
+                                switch (room.type)
+                                {
+                                    case NodeType.Room:
+                                        _activeRooms.Add(room, __rectMarker[i]);
+                                        break;
+
+                                    case NodeType.TransitionHor:
+                                    case NodeType.TransitionVer:
+                                        _activeTransitions.Add(room, __rectMarker[i]);
+                                        break;
+
+                                    default: break;
+                                }
+                            }
+                        }
+
+                        titleContent = new GUIContent(string.Format("{0} - {1}", __content[0].text, value.name));
+                    }
+                    else
+                    {
+                        _activeRooms = new Dictionary<Node, Rect>(0);
+                        _activeTransitions = new Dictionary<Node, Rect>(0);
+
+                        titleContent = __content[0];
+                    }
+
+                    _indexSelected = -1;
+                }                
+
+                _data = value;
+            }
         }
 
         private bool selectTrigger
@@ -188,7 +245,7 @@ namespace V4F.MapEditor
                 new Rect(0f, 0f, 768f, 768f),       // map editor
                 new Rect(768f, 0f, 256f, 768f),     // toolbar panel
                 new Rect(772f, 4f, 152f, 32f),      // tools
-                new Rect(772f, 42f, 248f, 722f),    // modify panel
+                new Rect(772f, 42f, 248f, 686f),    // modify panel
                 new Rect(776f, 716f, 244f, 16f),     // open title
                 new Rect(776f, 740f, 244f, 16f),     // open dialog
                 new Rect(775f, 716f, 228f, 16f),     // open dialog
@@ -201,12 +258,12 @@ namespace V4F.MapEditor
             };
 
             __background = AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/MapEditor/background.png");
-
             __mapTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Workspace/EditorExtensions/MapEditor/map_ui.png");
+            
             var sprites = AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(__mapTexture)).OfType<Sprite>().ToArray();
             __mapSprites = new Rect[sprites.Length];
             for (var i = 0; i < sprites.Length; ++i)
-            {
+            {                
                 var rect = sprites[i].textureRect;
                 rect.x /= __mapTexture.width;
                 rect.y /= __mapTexture.height;
@@ -215,17 +272,40 @@ namespace V4F.MapEditor
                 __mapSprites[i] = rect;
             }
 
-            __rectHalls = new Rect[19 * 19];
-            for (var j = -9; j < 10; ++j)
+            __rectMarker = new Rect[Data.RowCount * Data.RowCount];
+            
+            var delta = Data.RowCount / 2;
+            for (var j = 0; j < Data.RowCount; ++j)
             {
-                var y = j + 9;
-                for (var i = -9; i < 10; ++i)
+                var horizontal = ((j % 2) == 0);
+                for (var i = 0; i < Data.RowCount; ++i)
                 {
-                    var x = i + 9;
-                    var rect = new Rect(0f, 0f, 32f, 32f);
-                    rect.center = new Vector2(i * 78f, j * 78f);
-                    __rectHalls[y * 19 + x] = rect;
-                }
+                    var rect = new Rect(0f, 0f, 0f, 0f);
+                    var even = (i % 2) == 0;
+
+                    if (even)
+                    {
+                        if (horizontal)
+                        {
+                            rect.size = new Vector2(32f, 32f);
+                        }
+                        else
+                        {
+                            rect.size = new Vector2(10f, 46f);
+                        }
+                    }
+                    else
+                    {
+                        if (horizontal)
+                        {
+                            rect.size = new Vector2(46f, 10f);
+                        }                        
+                    }
+
+                    rect.center = new Vector2((i - delta) * 39f, (j - delta) * 39f);
+
+                    __rectMarker[j * Data.RowCount + i] = rect;
+                }                                                
             }
         }
         #endregion
@@ -235,6 +315,18 @@ namespace V4F.MapEditor
         public static void ShowWindow()
         {
             CreateInstance<Form>().Initialize();
+        }
+
+        [MenuItem("Assets/V4F/Edit map", false, -100)]
+        public static void DoEditMap()
+        {
+            CreateInstance<Form>().Initialize(Selection.activeObject as Data);
+        }
+
+        [MenuItem("Assets/V4F/Edit map", true, -100)]
+        public static bool DoEditMapValidate()
+        {            
+            return (Selection.activeObject.GetType() == typeof(Data));
         }
 
         public void TrySelectHall()
@@ -256,8 +348,8 @@ namespace V4F.MapEditor
         {
             _indexSelected = -1;
         }
-
-        private void Initialize()
+        
+        private void Initialize(Data editable = null)
         {
             titleContent = __content[0];
             minSize = __rect[0].size;
@@ -278,20 +370,15 @@ namespace V4F.MapEditor
             _displayOffset = new Vector2(displayRect.width * 0.5f, displayRect.height * 0.5f);
 
             _indexSelected = -1;
-            _hoverEnabled = false;
-            _closestEnabled = false;
-
-            _entryPoint = 9 * 19 + 9;
-            _activeHalls = new Dictionary<int, Rect>(__rectHalls.Length);
-            _activeHalls.Add(_entryPoint, __rectHalls[_entryPoint]);
-            _stateHalls = new int[19 * 19];
-            _stateHalls[_entryPoint] = 1;
-
-            _linkHalls = new Dictionary<Link, Rect>(__rectHalls.Length, new Link.Comparer());
+            _hoverRoomEnabled = false;
+            _hoverTransitionEnabled = false;
+            _closestEnabled = false;                       
 
             _selectTrigger = false;
             _activateTrigger = false;
             _removeTrigger = false;
+
+            data = editable;            
 
             ShowUtility();
         }
@@ -315,41 +402,26 @@ namespace V4F.MapEditor
                 OnChangeTool(this, last, next);
             }
         }
-
-        private bool DrawClosestHall(int x, int y, out int hoverIndex)
+        
+        private bool DrawClosestRoom(int x, int y, out int hoverIndex)
         {
             hoverIndex = -1;
 
-            var index = y * 19 + x;
-            if ((index == Mathf.Clamp(index, 0, __rectHalls.Length)) && (_stateHalls[index] == 0))
+            var room = _data.GetRoom(x, y);
+            if ((room != null) && (room.type == NodeType.None))
             {
-                var rect = __rectHalls[index];
+                var rect = __rectMarker[room.index];
                 rect.center += _displayOffset;
                 GUI.DrawTextureWithTexCoords(rect, __mapTexture, __mapSprites[5], true);
 
                 if (rect.Contains(_mousePosition))
                 {
-                    hoverIndex = index;
+                    hoverIndex = room.index;
                 }
             }
 
             return (hoverIndex != -1);
-        }
-
-        private bool RemoveLink(int index, int dx, int dy)
-        {
-            var x = index % 19;
-            var y = index / 19;
-
-            var pairIndex = (y + dy) * 19 + (x + dx);
-            if ((pairIndex == Mathf.Clamp(pairIndex, 0, __rectHalls.Length)) && (_stateHalls[pairIndex] == 1))
-            {
-                var vertical = Mathf.Abs(dx) < Mathf.Abs(dy);
-                return _linkHalls.Remove(new Link(index, pairIndex, vertical));
-            }
-
-            return false;                
-        }
+        }        
 
         private void EventsHandler()
         {
@@ -425,164 +497,219 @@ namespace V4F.MapEditor
                 }                
             }
         }
+        
+        private void DataHandler()
+        {                        
+            var hoverTransition = -1;
+            var hoverRoom = -1;
 
-        private void MapEditorHandler()
-        {            
-            var hoverIndex = -1;
-
-            foreach (KeyValuePair<Link, Rect> pair in _linkHalls)
+            foreach (KeyValuePair<Node, Rect> pair in _activeTransitions)
             {
                 var rect = pair.Value;
                 rect.center += _displayOffset;
                 if (__rect[1].Overlaps(rect))
                 {
-                    var index = pair.Key.vertical ? 2 : 1;
+                    var index = (pair.Key.type == NodeType.TransitionVer) ? 2 : 1;
                     GUI.DrawTextureWithTexCoords(rect, __mapTexture, __mapSprites[index], true);
-                }
-            }
-
-            foreach (KeyValuePair<int, Rect> pair in _activeHalls)
-            {
-                var rect = pair.Value;
-                rect.center += _displayOffset;
-                if (__rect[1].Overlaps(rect))
-                {
-                    var index = (pair.Key == _entryPoint) ? 7 : 0;
-                    GUI.DrawTextureWithTexCoords(rect, __mapTexture, __mapSprites[index], true);
-                    if ((hoverIndex == -1) && rect.Contains(_mousePosition))
+                    if ((hoverTransition == -1) && rect.Contains(_mousePosition))
                     {
-                        hoverIndex = pair.Key;
+                        hoverTransition = pair.Key.index;
                     }
                 }
             }
 
-            if (_hoverEnabled && (hoverIndex != -1))
+            foreach (KeyValuePair<Node, Rect> pair in _activeRooms)
             {
-                var rect = __rectHalls[hoverIndex];
+                var rect = pair.Value;
+                rect.center += _displayOffset;
+                if (__rect[1].Overlaps(rect))
+                {
+                    var index = (pair.Key.index == _data.entry) ? 7 : 0;
+                    GUI.DrawTextureWithTexCoords(rect, __mapTexture, __mapSprites[index], true);
+                    if ((hoverRoom == -1) && rect.Contains(_mousePosition))
+                    {
+                        hoverRoom = pair.Key.index;
+                    }
+                }
+            }
+
+            if (_hoverRoomEnabled && hoverRoom != -1)
+            {
+                var rect = __rectMarker[hoverRoom];
                 rect.center += _displayOffset;
                 GUI.DrawTextureWithTexCoords(rect, __mapTexture, __mapSprites[3], true);
             }
 
+            if (_hoverTransitionEnabled && hoverTransition != -1)
+            {
+                var hover = _data[hoverTransition];
+                var index = (hover.type == NodeType.TransitionVer) ? 10 : 11;
+
+                var rect = __rectMarker[hoverTransition];
+                rect.center += _displayOffset;
+                GUI.DrawTextureWithTexCoords(rect, __mapTexture, __mapSprites[index], true);
+            }
+
             if (selectTrigger)
             {
-                _indexSelected = hoverIndex;                
+                _indexSelected = Mathf.Max(hoverRoom, hoverTransition);
             }
 
             if (_indexSelected != -1)
             {
-                var rect = __rectHalls[_indexSelected];
+                var selected = _data[_indexSelected];
+
+                var index = 4;
+                index = (selected.type == NodeType.TransitionHor) ? 9 : index;
+                index = (selected.type == NodeType.TransitionVer) ? 8 : index;
+
+                var rect = __rectMarker[_indexSelected];
                 rect.center += _displayOffset;
-                GUI.DrawTextureWithTexCoords(rect, __mapTexture, __mapSprites[4], true);
-
-                if (_closestEnabled)
+                GUI.DrawTextureWithTexCoords(rect, __mapTexture, __mapSprites[index], true);
+                
+                if (_closestEnabled && (selected.type == NodeType.Room))
                 {
-                    var x = _indexSelected % 19;
-                    var y = _indexSelected / 19;
-                    var h = -1;
-
                     var hover = false;
+                    var h = -1;
+                    var x = 0;
+                    var y = 0;
+
+                    _data.IndexToPoint(_indexSelected, out x, out y);
                     
-                    if (DrawClosestHall(x + 1, y, out h))
+                    if (DrawClosestRoom(x + 1, y, out h))
                     {
                         hover = hover || true;
-                        hoverIndex = h;
+                        hoverRoom = h;
                     }                    
-                    if (DrawClosestHall(x, y + 1, out h))
+                    if (DrawClosestRoom(x, y + 1, out h))
                     {
                         hover = hover || true;
-                        hoverIndex = h;
+                        hoverRoom = h;
                     }                    
-                    if (DrawClosestHall(x - 1, y, out h))
+                    if (DrawClosestRoom(x - 1, y, out h))
                     {
                         hover = hover || true;
-                        hoverIndex = h;
+                        hoverRoom = h;
                     }                    
-                    if (DrawClosestHall(x, y - 1, out h))
+                    if (DrawClosestRoom(x, y - 1, out h))
                     {
                         hover = hover || true;
-                        hoverIndex = h;
+                        hoverRoom = h;
                     }
 
-                    hover = hover && _hoverEnabled;
+                    hover = hover && _hoverRoomEnabled;
 
-                    if (hover && (hoverIndex != -1))
+                    if (hover && (hoverRoom != -1))
                     {
-                        rect = __rectHalls[hoverIndex];
+                        rect = __rectMarker[hoverRoom];
                         rect.center += _displayOffset;
                         GUI.DrawTextureWithTexCoords(rect, __mapTexture, __mapSprites[6], true);
                     }                    
                 }
             }
 
-            if (activateTrigger && (_indexSelected != hoverIndex))
-            {
-                if ((_indexSelected != -1) && (hoverIndex != -1))
+            if (activateTrigger)
+            {                
+                var selected = (_indexSelected != -1) ? _data[_indexSelected] : null;
+                if (hoverRoom != -1)
                 {
-                    var closest = false;
-
-                    if (_stateHalls[hoverIndex] == 0)
+                    if ((selected != null) && (selected.type == NodeType.Room))
                     {
-                        _activeHalls.Add(hoverIndex, __rectHalls[hoverIndex]);
-                        _stateHalls[hoverIndex] = 1;
+                        var closest = false;
 
-                        closest = true;
-                    }
-                    else
-                    {
-                        var x1 = _indexSelected % 19;
-                        var y1 = _indexSelected / 19;
-                        var x2 = hoverIndex % 19;
-                        var y2 = hoverIndex / 19;
+                        var x1 = 0;
+                        var y1 = 0;
+                        _data.IndexToPoint(hoverRoom, out x1, out y1);
 
-                        closest = (Mathf.Abs(x2 - x1) + Mathf.Abs(y2 - y1)) == 1;
-                    }
+                        var x2 = 0;
+                        var y2 = 0;
+                        _data.IndexToPoint(_indexSelected, out x2, out y2);
 
-                    if (closest)
-                    {
-                        var rc1 = __rectHalls[_indexSelected];
-                        var rc2 = __rectHalls[hoverIndex];
-
-                        var diff = rc2.center - rc1.center;
-                        var vertical = Mathf.Abs(diff.x) < Mathf.Abs(diff.y);
-                        var length = diff.magnitude;
-
-                        var link = new Link(_indexSelected, hoverIndex, vertical);
-                        if (!_linkHalls.Keys.Contains(link))
+                        var room = _data.GetRoom(x1, y1);
+                        if (room.type == NodeType.None)
                         {
-                            var rect = vertical ? new Rect(0f, 0f, 10f, 46f) : new Rect(0f, 0f, 46f, 10f);
-                            rect.center = rc1.center + diff.normalized * (length * 0.5f);
+                            if (_data.AddRoom(x1, y1, out room))
+                            {
+                                _activeRooms.Add(room, __rectMarker[room.index]);
+                            }
+                            closest = true;
+                        }
+                        else
+                        {
+                            closest = (Mathf.Abs(x2 - x1) + Mathf.Abs(y2 - y1)) == 1;
+                        }
 
-                            _linkHalls.Add(link, rect);                            
-                        }                        
-                    }
+                        if (closest)
+                        {
+                            if (_data.AddTransition(x1, y1, x2, y2, out room))
+                            {
+                                _activeTransitions.Add(room, __rectMarker[room.index]);
+                            }
+                        }
+                        
+                    }                    
 
-                    _indexSelected = hoverIndex;
-                }
-                else if((_indexSelected == -1) && (hoverIndex != -1))
-                {
-                    _indexSelected = hoverIndex;
+                    _indexSelected = hoverRoom;
                 }                
             }
 
-            if (removeTrigger && (hoverIndex != -1) && (hoverIndex != _entryPoint))
+            if (removeTrigger) 
             {
-                if (_stateHalls[hoverIndex] != 0)
+                if ((hoverRoom != -1) && (hoverRoom != _data.entry))
                 {
-                    _activeHalls.Remove(hoverIndex);
-                    _stateHalls[hoverIndex] = 0;
+                    var x = 0;
+                    var y = 0;
+                    _data.IndexToPoint(hoverRoom, out x, out y);
 
-                    RemoveLink(hoverIndex, 1, 0);
-                    RemoveLink(hoverIndex, 0, 1);
-                    RemoveLink(hoverIndex, -1, 0);
-                    RemoveLink(hoverIndex, 0, -1);
+                    Node room = null;
+                    if (_data.RemoveRoom(x, y, out room))
+                    {
+                        _activeRooms.Remove(room);
+                        if (_data.RemoveTransition(x, y, x - 1, y, out room))
+                        {
+                            _activeTransitions.Remove(room);
+                        }
+                        if (_data.RemoveTransition(x, y, x, y - 1, out room))
+                        {
+                            _activeTransitions.Remove(room);
+                        }
+                        if (_data.RemoveTransition(x, y, x + 1, y, out room))
+                        {
+                            _activeTransitions.Remove(room);
+                        }
+                        if (_data.RemoveTransition(x, y, x, y + 1, out room))
+                        {
+                            _activeTransitions.Remove(room);
+                        }
+                    }
 
-                    if (_indexSelected == hoverIndex)
+                    if (_indexSelected == hoverRoom)
                     {
                         _indexSelected = -1;
                     }
-                }                
+                }
+                else if (hoverTransition != -1)
+                {
+                    var x1 = 0;
+                    var y1 = 0;
+                    var x2 = 0;
+                    var y2 = 0;
+                    if (_data.IndexToPoints(hoverTransition, out x1, out y1, out x2, out y2))
+                    {
+                        Node room = null;
+                        if (_data.RemoveTransition(x1, y1, x2, y2, out room))
+                        {
+                            _activeTransitions.Remove(room);
+                        }
+                    }
+
+                    if (_indexSelected == hoverTransition)
+                    {
+                        _indexSelected = -1;
+                    }
+                }
             }
-        }
+        }        
 
         private void ToolbarHandler()
         {
@@ -602,11 +729,25 @@ namespace V4F.MapEditor
             }
             GUILayout.EndArea();
         }
-
-        private void CreateOrOpenPresetHandler()
+        
+        private void CreateDataHandler()
         {
-            GUI.Button(__rect[7], __content[2], buttonStyle);
-            EditorGUI.ObjectField(__rect[6], null, typeof(Preset), false);            
+            EditorGUI.DrawRect(__rect[2], __colour[1]);
+
+            if (GUI.Button(__rect[7], __content[2], buttonStyle))
+            {
+                var path = EditorUtility.SaveFilePanelInProject("Save new map", "NewMap", "asset", "Bla bla bla", "Assets/Workspace/Custom");
+                if (path.Length != 0)
+                {
+                    var asset = CreateInstance<Data>();
+
+                    AssetDatabase.CreateAsset(asset, path);
+                    AssetDatabase.SaveAssets();
+                    AssetDatabase.Refresh();
+
+                    data = asset;
+                }
+            }
         }
 
         private void OnInspectorUpdate()
@@ -616,23 +757,20 @@ namespace V4F.MapEditor
 
         private void OnGUI()
         {
-            EditorGUI.DrawTextureTransparent(__rect[1], __background);
-            /*
-            if (_editable != null)
+            EditorGUI.DrawTextureTransparent(__rect[1], __background);            
+            
+            if (_data != null)
             {
                 EventsHandler();
-                MapEditorHandler();
+                DataHandler();
                 ToolbarHandler();
             }
             else
             {
-                CreateOrOpenPresetHandler();
+                CreateDataHandler();
             }
-            */
 
-            EventsHandler();
-            MapEditorHandler();
-            ToolbarHandler();
+            data = EditorGUI.ObjectField(__rect[6], _data, typeof(Data), false) as Data;
         }
         #endregion
     }
