@@ -27,7 +27,7 @@ namespace V4F.MapEditor
         private static readonly Tools[]         __tools = null;
         private static readonly GUIStyle[]      __styles = null;
         private static readonly GUIContent[]    __content = null;
-        private static readonly GUIContent[]    __toolbar = null;
+        private static readonly GUIContent[][]  __toolbar = null;
         private static readonly Color[]         __colour = null;
         private static readonly Rect[]          __rect = null;
         private static readonly Texture         __background = null;
@@ -231,12 +231,22 @@ namespace V4F.MapEditor
                 new GUIContent(" Create New Map", AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/Icons/toolbar_button_add.png")),
             };
 
-            __toolbar = new GUIContent[]
+            var tool_1 = new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/MapEditor/Icons/tool_move.png"));
+            var tool_10 = new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/MapEditor/Icons/tool_move_w.png"));
+            var tool_2 = new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/MapEditor/Icons/tool_select.png"));
+            var tool_20 = new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/MapEditor/Icons/tool_select_w.png"));
+            var tool_3 = new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/MapEditor/Icons/tool_brush.png"));
+            var tool_30 = new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/MapEditor/Icons/tool_brush_w.png"));
+            var tool_4 = new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/MapEditor/Icons/tool_erase.png"));
+            var tool_40 = new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/MapEditor/Icons/tool_erase_w.png"));
+
+            __toolbar = new GUIContent[][]
             {
-                new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/MapEditor/Icons/tool_move.png")),
-                new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/MapEditor/Icons/tool_select.png")),
-                new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/MapEditor/Icons/tool_brush.png")),
-                new GUIContent(AssetDatabase.LoadAssetAtPath<Texture>("Assets/Workspace/EditorExtensions/MapEditor/Icons/tool_erase.png")),
+                new GUIContent[] { tool_1, tool_2, tool_3, tool_4 },
+                new GUIContent[] { tool_10, tool_2, tool_3, tool_4 },
+                new GUIContent[] { tool_1, tool_20, tool_3, tool_4 },
+                new GUIContent[] { tool_1, tool_2, tool_30, tool_4 },
+                new GUIContent[] { tool_1, tool_2, tool_3, tool_40 },
             };
 
             __rect = new Rect[]
@@ -715,7 +725,8 @@ namespace V4F.MapEditor
         {
             EditorGUI.DrawRect(__rect[2], __colour[1]);
 
-            var selected = GUI.SelectionGrid(__rect[3], _toolSelected, __toolbar, __toolbar.Length, toolbarStyle);
+            var toolbar = __toolbar[_toolSelected + 1];
+            var selected = GUI.SelectionGrid(__rect[3], _toolSelected, toolbar, toolbar.Length, toolbarStyle);
             if (selected != _toolSelected)
             {
                 OnChangeToolCallback(__tools[_toolSelected + 1], __tools[selected + 1]);
