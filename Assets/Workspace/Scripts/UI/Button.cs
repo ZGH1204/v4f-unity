@@ -48,7 +48,7 @@ namespace V4F.UI
             set { _locked = value; }
         }
 
-        protected RectTransform rect
+        public RectTransform rect
         {
             get { return _rect; }
         }
