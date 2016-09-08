@@ -10,6 +10,8 @@ namespace V4F.Prototype.Dungeon
 
     public class Follow : MonoBehaviour
     {
+        public float desiredHorizontalFOV = 50f;
+
         private Transform _transform;
         private IEnumerator _tweaking;
         private Vector3 _targetPosition;
@@ -35,16 +37,18 @@ namespace V4F.Prototype.Dungeon
         {
             _transform = GetComponent<Transform>();
             _targetPosition = _transform.position;
-        }
+        }        
 	
         private void OnEnable()
         {
             Locomotion.OnMove += OnMove;
+            Manager.OnChangeScreenSize += OnChangeScreenSize;
         }
 
         private void OnDisable()
         {
             Locomotion.OnMove -= OnMove;
+            Manager.OnChangeScreenSize -= OnChangeScreenSize;
         }
 
         private void PlayTweaking()
@@ -77,6 +81,12 @@ namespace V4F.Prototype.Dungeon
 
             _transform.position = _targetPosition;
             _tweaking = null;
+        }
+
+        private void OnChangeScreenSize()
+        {
+            var camera = GetComponent<Camera>();
+            camera.fieldOfView = desiredHorizontalFOV * (16f / 9f) / ((float)camera.pixelWidth / camera.pixelHeight);
         }
     }
 	
