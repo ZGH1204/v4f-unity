@@ -52,7 +52,7 @@ namespace V4F
         private float[] _timers = new float[MaxNumFingers];
         private int[] _states = new int[MaxNumFingers];
         private Camera _camera = null;
-        public bool _first = false;
+        private bool _top = false;
         #endregion
 
         #region Properties
@@ -71,21 +71,10 @@ namespace V4F
             get { return(_countFingers > 1); }
         }
 
-        private bool first
+        private bool top
         {
-            get { return _first; }
-            set
-            {
-                _first = value;
-                if (_first)
-                {
-                    __active = this;
-                }
-                else
-                {
-                    __active = null;
-                }                
-            }
+            get { return _top; }
+            set { _top = value; }
         }
         #endregion
 
@@ -106,23 +95,24 @@ namespace V4F
         private static void Push(TouchAdapter adapter)
         {
             if (__active != null)
-            {                                
+            {
                 __stack.Push(__active);
+                __active.top = false;
                 __active.enabled = false;
-                __active.first = false;
             }
             
             Input.multiTouchEnabled = adapter.multiTouch;
             Input.simulateMouseWithTouches = false;
 
-            adapter.first = true;
+            __active = adapter;
+            __active.top = true;
         }
 
         private static void Pop(TouchAdapter adapter)
         {
-            if (adapter.first)
+            if (adapter.top)
             {
-                adapter.first = false;
+                adapter.top = false;
 
                 if (__stack.Count > 0)
                 {
