@@ -640,8 +640,7 @@ namespace V4F.MapEditor
                         {
                             if (_data.AddRoom(x1, y1, out room))
                             {                                
-                                _activeRooms.Add(room, __rectMarker[room.index]);
-                                EditorUtility.SetDirty(_data);
+                                _activeRooms.Add(room, __rectMarker[room.index]);                                
                             }
                             closest = true;
                         }
@@ -654,8 +653,7 @@ namespace V4F.MapEditor
                         {
                             if (_data.AddTransition(x1, y1, x2, y2, out room))
                             {
-                                _activeTransitions.Add(room, __rectMarker[room.index]);
-                                EditorUtility.SetDirty(_data);
+                                _activeTransitions.Add(room, __rectMarker[room.index]);                                
                             }
                         }
                         
@@ -693,8 +691,6 @@ namespace V4F.MapEditor
                         {
                             _activeTransitions.Remove(room);
                         }
-
-                        EditorUtility.SetDirty(_data);
                     }
 
                     if (_indexSelected == hoverRoom)
@@ -713,8 +709,7 @@ namespace V4F.MapEditor
                         Node room = null;
                         if (_data.RemoveTransition(x1, y1, x2, y2, out room))
                         {
-                            _activeTransitions.Remove(room);
-                            EditorUtility.SetDirty(_data);
+                            _activeTransitions.Remove(room);                            
                         }
                     }
 
@@ -755,7 +750,7 @@ namespace V4F.MapEditor
                 var path = EditorUtility.SaveFilePanelInProject("Save new map", "NewMap", "asset", "Bla bla bla", "Assets/Workspace/Custom");
                 if (path.Length != 0)
                 {
-                    var asset = CreateInstance<Data>().Initializer();
+                    var asset = CreateInstance<Data>();
 
                     AssetDatabase.CreateAsset(asset, path);
                     AssetDatabase.SaveAssets();

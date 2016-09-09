@@ -52,21 +52,16 @@ namespace V4F.Prototype.Map
         #endregion
 
         #region Methods
-        public Data Initializer()
+        private void OnEnable()
         {
-            _length = RowCount * RowCount;
-            _nodes = new Node[length];
-            for (var i = 0; i < length; ++i)
+            if (_nodes.Initializer(RowCount, out _nodes))
             {
-                _nodes[i] = new Node(NodeType.None, i);
+                _length = _nodes.Length;
+                _width = RowCount;
+                _entry = (RowCount + 1) * (RowCount / 2);
+
+                _nodes[_entry] = new Node(NodeType.Room, _entry);
             }            
-
-            _entry = (RowCount + 1) * (RowCount / 2);
-            _nodes[_entry] = new Node(NodeType.Room, _entry);
-
-            _width = RowCount;
-
-            return this;
         }        
         #endregion
     }

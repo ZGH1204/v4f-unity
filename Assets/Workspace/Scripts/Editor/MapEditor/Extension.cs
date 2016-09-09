@@ -90,6 +90,8 @@ namespace V4F.MapEditor
                 {
                     node = new Node(NodeType.Room, index);
                     self[index] = node;
+
+                    EditorUtility.SetDirty(self);
                     return true;
                 }
             }
@@ -108,6 +110,8 @@ namespace V4F.MapEditor
                 {
                     node = prev;
                     self[index] = new Node(NodeType.None, index);
+
+                    EditorUtility.SetDirty(self);
                     return true;
                 }
             }
@@ -142,6 +146,8 @@ namespace V4F.MapEditor
                                 {
                                     node = new Node(((dx < dy) ? NodeType.TransitionVer : NodeType.TransitionHor), index);
                                     self[index] = node;
+
+                                    EditorUtility.SetDirty(self);
                                     return true;
                                 }
                             }
@@ -180,6 +186,8 @@ namespace V4F.MapEditor
                                 {
                                     node = prev;
                                     self[index] = new Node(NodeType.None, index);
+
+                                    EditorUtility.SetDirty(self);
                                     return true;
                                 }
                             }
