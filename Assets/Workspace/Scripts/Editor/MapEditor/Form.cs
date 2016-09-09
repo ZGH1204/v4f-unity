@@ -639,8 +639,8 @@ namespace V4F.MapEditor
                         if (room.type == NodeType.None)
                         {
                             if (_data.AddRoom(x1, y1, out room))
-                            {
-                                _activeRooms.Add(room, __rectMarker[room.index]);
+                            {                                
+                                _activeRooms.Add(room, __rectMarker[room.index]);                                
                             }
                             closest = true;
                         }
@@ -653,7 +653,7 @@ namespace V4F.MapEditor
                         {
                             if (_data.AddTransition(x1, y1, x2, y2, out room))
                             {
-                                _activeTransitions.Add(room, __rectMarker[room.index]);
+                                _activeTransitions.Add(room, __rectMarker[room.index]);                                
                             }
                         }
                         
@@ -709,7 +709,7 @@ namespace V4F.MapEditor
                         Node room = null;
                         if (_data.RemoveTransition(x1, y1, x2, y2, out room))
                         {
-                            _activeTransitions.Remove(room);
+                            _activeTransitions.Remove(room);                            
                         }
                     }
 

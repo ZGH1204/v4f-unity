@@ -61,7 +61,7 @@ namespace V4F.Prototype.Map
                 _entry = (RowCount + 1) * (RowCount / 2);
 
                 _nodes[_entry] = new Node(NodeType.Room, _entry);
-            }
+            }            
         }        
         #endregion
     }

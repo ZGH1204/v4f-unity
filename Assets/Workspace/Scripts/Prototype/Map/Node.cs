@@ -10,10 +10,10 @@ namespace V4F.Prototype.Map
     public class Node
     {        
         #region Fields
-        [SerializeField, HideInInspector]
+        [SerializeField]
         private NodeType _type;
 
-        [SerializeField, HideInInspector]
+        [SerializeField]
         private int _index;
         #endregion
 
