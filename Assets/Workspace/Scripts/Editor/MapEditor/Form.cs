@@ -639,8 +639,9 @@ namespace V4F.MapEditor
                         if (room.type == NodeType.None)
                         {
                             if (_data.AddRoom(x1, y1, out room))
-                            {
+                            {                                
                                 _activeRooms.Add(room, __rectMarker[room.index]);
+                                EditorUtility.SetDirty(_data);
                             }
                             closest = true;
                         }
@@ -654,6 +655,7 @@ namespace V4F.MapEditor
                             if (_data.AddTransition(x1, y1, x2, y2, out room))
                             {
                                 _activeTransitions.Add(room, __rectMarker[room.index]);
+                                EditorUtility.SetDirty(_data);
                             }
                         }
                         
@@ -691,6 +693,8 @@ namespace V4F.MapEditor
                         {
                             _activeTransitions.Remove(room);
                         }
+
+                        EditorUtility.SetDirty(_data);
                     }
 
                     if (_indexSelected == hoverRoom)
@@ -710,6 +714,7 @@ namespace V4F.MapEditor
                         if (_data.RemoveTransition(x1, y1, x2, y2, out room))
                         {
                             _activeTransitions.Remove(room);
+                            EditorUtility.SetDirty(_data);
                         }
                     }
 
@@ -750,7 +755,7 @@ namespace V4F.MapEditor
                 var path = EditorUtility.SaveFilePanelInProject("Save new map", "NewMap", "asset", "Bla bla bla", "Assets/Workspace/Custom");
                 if (path.Length != 0)
                 {
-                    var asset = CreateInstance<Data>();
+                    var asset = CreateInstance<Data>().Initializer();
 
                     AssetDatabase.CreateAsset(asset, path);
                     AssetDatabase.SaveAssets();
