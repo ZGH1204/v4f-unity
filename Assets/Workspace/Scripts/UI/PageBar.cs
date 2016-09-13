@@ -9,7 +9,7 @@ using UnityEngine.UI;
 namespace V4F.UI
 {
 
-    public class PageBar : MonoBehaviour
+    public class PageBar : Handler
     {
         public delegate void PageBarEventHandler(PageBar sender, PageBarEventArgs args);
 
@@ -68,12 +68,12 @@ namespace V4F.UI
 
         protected virtual void OnEnable()
         {
-            TouchAdapter.OnTouchTap += TouchTapHandler;
+            input.OnTouchTap += TouchTapHandler;
         }
 
         protected virtual void OnDisable()
         {
-            TouchAdapter.OnTouchTap -= TouchTapHandler;
+            input.OnTouchTap -= TouchTapHandler;
         }
 
         private void OnClickCallback(PageBarEventArgs args)

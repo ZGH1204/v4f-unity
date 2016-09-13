@@ -9,13 +9,17 @@ using V4F.Prototype.Map;
 
 namespace V4F.Prototype.Dungeon
 {
-
+    
     public class Manager : MonoBehaviour
     {
         public delegate void ChangeScreenSizeHandler();
         public static event ChangeScreenSizeHandler OnChangeScreenSize;
 
-        public Data map;
+        public Locomotion locomotion;
+        public GameObject background;
+        public GameObject foreground;
+        public Room hall;
+        public Room corridor;        
 
         private IEnumerator _detect = null;
         private bool _process = false;

@@ -85,14 +85,14 @@ namespace V4F.Prototype.Dungeon
 
         private void OnEnable()
         {
-            TouchAdapter.OnTouchPress += OnTouchPress;
-            TouchAdapter.OnTouchUp += OnTouchUp;
+            //TouchAdapter.OnTouchPress += OnTouchPress;
+            //TouchAdapter.OnTouchUp += OnTouchUp;
         }
 
         private void OnDisable()
         {
-            TouchAdapter.OnTouchPress -= OnTouchPress;
-            TouchAdapter.OnTouchUp -= OnTouchUp;
+            //TouchAdapter.OnTouchPress -= OnTouchPress;
+            //TouchAdapter.OnTouchUp -= OnTouchUp;
         }
 
         private void PlayMovement()

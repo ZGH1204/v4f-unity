@@ -14,6 +14,13 @@ namespace V4F.Prototype.Dungeon
         public Transform rightBoundCamera;
         public bool leftStartPosition;
 
+        public Renderer section1;
+        public Renderer section2;
+        public Renderer section3;
+        public Renderer section4;        
+
+        public Renderer[] outer;
+
         public override Vector3 boundPosition
         {
             get

@@ -36,6 +36,9 @@ namespace V4F.Prototype.Map
             _index = index;
         }
         #endregion
+
+        #region Methods        
+        #endregion
     }
 
 }

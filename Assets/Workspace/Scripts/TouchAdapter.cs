@@ -19,14 +19,14 @@ namespace V4F
         #endregion
 
         #region Events
-        public static event TouchEventHandler OnTouchDown;
-        public static event TouchEventHandler OnTouchUp;
-        public static event TouchEventHandler OnTouchPress;
-        public static event TouchEventHandler OnTouchMove;
-        public static event TouchEventHandler OnTouchLong;
-        public static event TouchEventHandler OnTouchTap;
+        public event TouchEventHandler OnTouchDown;
+        public event TouchEventHandler OnTouchUp;
+        public event TouchEventHandler OnTouchPress;
+        public event TouchEventHandler OnTouchMove;
+        public event TouchEventHandler OnTouchLong;
+        public event TouchEventHandler OnTouchTap;
 
-        public static event BackEventHandler OnBack;
+        public event BackEventHandler OnBack;
         #endregion
 
         #region Fields
@@ -112,7 +112,8 @@ namespace V4F
         {
             if (adapter.top)
             {
-                adapter.top = false;
+                __active.top = false;
+                __active = null;
 
                 if (__stack.Count > 0)
                 {

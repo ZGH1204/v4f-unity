@@ -3,24 +3,15 @@
 
 using UnityEngine;
 
+using V4F.Prototype.Map;
+
 namespace V4F.Prototype.Dungeon
 {
 
+    [RequireComponent(typeof(Manager))]
     public class Loader : MonoBehaviour
     {
-        public Locomotion locomotion;
-
-        public Room[] halls;
-        public Room[] corridors;
-        public GameObject background;
-        public GameObject foreground;
-
-        private void Start()
-        {
-            //var room = corridors[0];
-            var room = corridors[0];
-            locomotion.Initialize(room.boundPosition, room.boundCamera);
-        }
+        public Data map;
     }
 	
 }
