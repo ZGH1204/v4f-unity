@@ -22,6 +22,7 @@ namespace V4F.UI.Map
         public Location location;
         public RectTransform root;
         public RectTransform drag;
+        public RectTransform marker;
 
         private Dictionary<int, RectTransform> _map;
         private Vector2 _offsetHor;
@@ -257,6 +258,9 @@ namespace V4F.UI.Map
             {
                 PlayClosestPulsate();
             }
+
+            marker.anchoredPosition = _map[location.position].anchoredPosition;
+            marker.SetAsLastSibling();
         }
 
         private void OnDisable()

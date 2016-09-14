@@ -1,4 +1,4 @@
-﻿// <copyright file="Controller.cs" company="Maxim Mikulski">Copyright (c) 2016 All Rights Reserved</copyright>
+﻿// <copyright file="Gameplay.cs" company="Maxim Mikulski">Copyright (c) 2016 All Rights Reserved</copyright>
 // <author>Maxim Mikulski</author>
 
 using System.Collections;
@@ -24,6 +24,9 @@ namespace V4F.Prototype.Mission
 
         public GameObject corridorObject;
         public GameObject roomObject;
+        public GameObject UI;
+
+        public PartyController partyController;
 
         public StateTransition locationChangedTransition;
 
@@ -59,6 +62,10 @@ namespace V4F.Prototype.Mission
                 }
 
                 _currentObject.SetActive(true);
+
+                partyController.Entry(type);
+
+                UI.SetActive(true);
             }            
         }
 
@@ -71,6 +78,10 @@ namespace V4F.Prototype.Mission
         {
             if (_locationChanged)
             {
+                UI.SetActive(false);
+
+                partyController.Exit();
+
                 if (_currentObject != null)
                 {
                     _currentObject.SetActive(false);
@@ -98,8 +109,7 @@ namespace V4F.Prototype.Mission
 
                 yield return null;
             }
-        }
-
+        }        
 
     }
 	

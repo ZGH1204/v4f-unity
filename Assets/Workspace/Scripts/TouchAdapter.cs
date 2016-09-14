@@ -115,10 +115,14 @@ namespace V4F
                 __active.top = false;
                 __active = null;
 
-                if (__stack.Count > 0)
+                while (__stack.Count > 0)
                 {
                     var prev = __stack.Pop();
-                    prev.enabled = true;
+                    if (prev != null)
+                    {
+                        prev.enabled = true;
+                        break;
+                    }                    
                 }
             }
         }

@@ -25,6 +25,7 @@ namespace V4F.Prototype.Mission
 
         public GameObject textLoading;
         public GameObject textContinue;
+        public GameObject partyController;
 
         public StateTransition transition;
         public State next;
@@ -63,6 +64,7 @@ namespace V4F.Prototype.Mission
         public override void Exit()
         {
             gameObject.SetActive(false);
+            partyController.SetActive(true);
         }
 
         public override IEnumerable Execute()

@@ -5,7 +5,7 @@ using System.Collections;
 
 using UnityEngine;
 
-namespace V4F.Prototype.Dungeon
+namespace V4F.Prototype.Mission
 {
 
     public class Follow : MonoBehaviour
@@ -17,10 +17,10 @@ namespace V4F.Prototype.Dungeon
         private Vector3 _targetPosition;
         private float _speedFollow;
 
-        private void OnMove(Locomotion sender, Vector3 position)
+        private void MovementHandler(Vector3 data, bool immediately)
         {           
-            _targetPosition.x = position.x;            
-            if (position.z < 0f)
+            _targetPosition.x = data.y;
+            if (immediately)
             {
                 StopTweaking();
                 _speedFollow = 0f;
@@ -28,28 +28,10 @@ namespace V4F.Prototype.Dungeon
             }
             else
             {
-                _speedFollow = position.y;
+                _speedFollow = data.z;
                 PlayTweaking();
             }            
-        }
-
-        private void Awake()
-        {
-            _transform = GetComponent<Transform>();
-            _targetPosition = _transform.position;
         }        
-	
-        private void OnEnable()
-        {
-            Locomotion.OnMove += OnMove;
-            Manager.OnChangeScreenSize += OnChangeScreenSize;
-        }
-
-        private void OnDisable()
-        {
-            Locomotion.OnMove -= OnMove;
-            Manager.OnChangeScreenSize -= OnChangeScreenSize;
-        }
 
         private void PlayTweaking()
         {
@@ -83,7 +65,23 @@ namespace V4F.Prototype.Dungeon
             _tweaking = null;
         }
 
-        private void OnChangeScreenSize()
+        private void Awake()
+        {
+            _transform = GetComponent<Transform>();
+            _targetPosition = _transform.position;
+        }
+
+        private void OnEnable()
+        {
+            PartyController.OnMovement += MovementHandler;
+        }
+
+        private void OnDisable()
+        {
+            PartyController.OnMovement -= MovementHandler;
+        }
+
+        private void Start()
         {
             var camera = GetComponent<Camera>();
             camera.fieldOfView = desiredHorizontalFOV * (16f / 9f) / ((float)camera.pixelWidth / camera.pixelHeight);

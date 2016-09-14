@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using V4F.UI;
 using V4F.UI.Map;
 using V4F.Prototype.Map;
 
@@ -20,6 +21,8 @@ namespace V4F.Prototype.Mission
         public RectTransform prefabTransitionHor;
         public RectTransform prefabTransitionVer;
         public MapHandler mapHandler;
+        public Button enterButton;
+        public Button exitButton;
 
         private Dictionary<int, NodeContent> _content;
         private NodeMap[] _map;
@@ -246,6 +249,7 @@ namespace V4F.Prototype.Mission
         private void MapChooseRoomHandler(MapHandler sender, MapEventArgs args)
         {
             _nextPosition = args.chooseRoomIndex;
+            _lastPosition = _position;
 
             var x1 = _lastPosition % _width;
             var y1 = _lastPosition / _width;
@@ -259,6 +263,28 @@ namespace V4F.Prototype.Mission
             _changeRoomTrigger = true;
         }
 
+        private void EnterClickHandler(Button sender, ButtonEventArgs args)
+        {
+            var position = _lastPosition;
+
+            _lastPosition = position;
+            _nextPosition = position;
+
+            _position = position;
+            _changeRoomTrigger = true;
+        }
+
+        private void ExitClickHandler(Button sender, ButtonEventArgs args)
+        {
+            var position = _nextPosition;
+
+            _lastPosition = position;
+            _nextPosition = position;
+
+            _position = position;
+            _changeRoomTrigger = true;
+        }
+
         private void OnEnable()
         {
             Loading.OnBegin += LoadBeginHandler;
@@ -266,6 +292,8 @@ namespace V4F.Prototype.Mission
             Loading.OnEnd += LoadEndHandler;
 
             mapHandler.OnChooseRoom += MapChooseRoomHandler;
+            enterButton.OnClick += EnterClickHandler;
+            exitButton.OnClick += ExitClickHandler;
         }
 
         private void OnDisable()
@@ -275,6 +303,8 @@ namespace V4F.Prototype.Mission
             Loading.OnEnd -= LoadEndHandler;
 
             mapHandler.OnChooseRoom -= MapChooseRoomHandler;
+            enterButton.OnClick -= EnterClickHandler;
+            exitButton.OnClick -= ExitClickHandler;
         }
 
     }
