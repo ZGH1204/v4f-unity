@@ -9,7 +9,7 @@ using UnityEngine;
 namespace V4F.UI
 {
 
-    public abstract class ListBox<T> : MonoBehaviour where T : MonoBehaviour, IListItem
+    public abstract class ListBox<T> : Handler where T : MonoBehaviour, IListItem
     {
         #region Types
         public delegate void ListBoxEventHandler(ListBox<T> sender, ListBoxEventArgs args);
@@ -197,18 +197,18 @@ namespace V4F.UI
 
         protected virtual void OnEnable()
         {
-            TouchAdapter.OnTouchDown += TouchDownHandler;
-            TouchAdapter.OnTouchMove += TouchMoveHandler;
-            TouchAdapter.OnTouchTap += TouchTapHandler;
-            TouchAdapter.OnTouchUp += TouchUpHandler;
+            input.OnTouchDown += TouchDownHandler;
+            input.OnTouchMove += TouchMoveHandler;
+            input.OnTouchTap += TouchTapHandler;
+            input.OnTouchUp += TouchUpHandler;
         }
 
         protected virtual void OnDisable()
         {
-            TouchAdapter.OnTouchDown -= TouchDownHandler;
-            TouchAdapter.OnTouchMove -= TouchMoveHandler;
-            TouchAdapter.OnTouchTap -= TouchTapHandler;
-            TouchAdapter.OnTouchUp -= TouchUpHandler;            
+            input.OnTouchDown -= TouchDownHandler;
+            input.OnTouchMove -= TouchMoveHandler;
+            input.OnTouchTap -= TouchTapHandler;
+            input.OnTouchUp -= TouchUpHandler;
         }
 
         private GameObject GetFreeCell()

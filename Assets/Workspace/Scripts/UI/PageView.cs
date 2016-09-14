@@ -8,7 +8,7 @@ using UnityEngine;
 namespace V4F.UI
 {
 
-    public class PageView : MonoBehaviour
+    public class PageView : Handler
     {
         #region Types
         public delegate void PageViewEventHandler(PageView sender, PageViewEventArgs args);
@@ -96,18 +96,18 @@ namespace V4F.UI
 
         protected virtual void OnEnable()
         {
-            TouchAdapter.OnTouchDown += TouchDownHandler;
-            TouchAdapter.OnTouchMove += TouchMoveHandler;            
-            TouchAdapter.OnTouchUp += TouchUpHandler;
+            input.OnTouchDown += TouchDownHandler;
+            input.OnTouchMove += TouchMoveHandler;
+            input.OnTouchUp += TouchUpHandler;
 
             pageBar.OnClick += OnPageBarClick;            
         }
 
         protected virtual void OnDisable()
         {
-            TouchAdapter.OnTouchDown -= TouchDownHandler;
-            TouchAdapter.OnTouchMove -= TouchMoveHandler;
-            TouchAdapter.OnTouchUp -= TouchUpHandler;
+            input.OnTouchDown -= TouchDownHandler;
+            input.OnTouchMove -= TouchMoveHandler;
+            input.OnTouchUp -= TouchUpHandler;
 
             pageBar.OnClick -= OnPageBarClick;            
         }

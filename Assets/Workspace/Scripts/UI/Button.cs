@@ -7,7 +7,7 @@ using UnityEngine.UI;
 namespace V4F.UI
 {
 
-    public class Button : MonoBehaviour
+    public class Button : Handler
     {
         #region Types
         public delegate void ButtonEventHandler(Button sender, ButtonEventArgs args);
@@ -68,16 +68,16 @@ namespace V4F.UI
 
         protected virtual void OnEnable()
         {
-            TouchAdapter.OnTouchDown += TouchDownHandler;
-            TouchAdapter.OnTouchUp += TouchUpHandler;
-            TouchAdapter.OnTouchTap += TouchTapHandler;
+            input.OnTouchDown += TouchDownHandler;
+            input.OnTouchUp += TouchUpHandler;
+            input.OnTouchTap += TouchTapHandler;
         }
 
         protected virtual void OnDisable()
         {
-            TouchAdapter.OnTouchDown -= TouchDownHandler;
-            TouchAdapter.OnTouchUp -= TouchUpHandler;
-            TouchAdapter.OnTouchTap -= TouchTapHandler;
+            input.OnTouchDown -= TouchDownHandler;
+            input.OnTouchUp -= TouchUpHandler;
+            input.OnTouchTap -= TouchTapHandler;
         }
 
         protected virtual void Start()
