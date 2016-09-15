@@ -32,7 +32,7 @@ namespace V4F.FSM
             
         }
 
-        protected void OnTransitionCallback(StateEventArgs args)
+        public void OnTransitionCallback(StateEventArgs args)
         {
             if (OnTransition != null)
             {

@@ -7,6 +7,8 @@ using UnityEngine;
 
 using V4F.FSM;
 using V4F.Prototype.Map;
+using V4F.Character;
+using V4F.Game;
 
 namespace V4F.Prototype.Mission
 {
@@ -26,6 +28,8 @@ namespace V4F.Prototype.Mission
         public GameObject textLoading;
         public GameObject textContinue;
         public GameObject partyController;
+
+        public Transform[] slots = new Transform[4];
 
         public StateTransition transition;
         public State next;
@@ -96,7 +100,19 @@ namespace V4F.Prototype.Mission
                     yield return null;
                     counter = 0;
                 }
-            }             
+            }
+
+            var actors = Database.QueryHeroesByLocation(Game.Location.Reserve);
+            if (actors.Length > 0)
+            {
+                for (var i = 0; i < Mathf.Min(actors.Length, 4); ++i)
+                {
+                    var actor = actors[i];
+                    var avatar = Instantiate(actor.puppet.prefab, Vector3.zero, Quaternion.identity) as GameObject;
+                    avatar.transform.localScale = Vector3.one;
+                    avatar.transform.SetParent(slots[i], false);
+                }                
+            }
         }
 
     }
