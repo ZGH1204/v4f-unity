@@ -23,6 +23,11 @@ namespace V4F.Prototype.Mission
         public MapHandler mapHandler;
         public Button enterButton;
         public Button exitButton;
+        public Button mapButton;
+
+        public Section[] sections = new Section[5];
+
+        public Battle battleState;
 
         private Dictionary<int, NodeContent> _content;
         private NodeMap[] _map;
@@ -30,10 +35,13 @@ namespace V4F.Prototype.Mission
         private int _width;
         private int _half;
         private int _position;
+        private int _subPosition;
         private int _lastPosition;
         private int _nextPosition;
 
         private bool _changeRoomTrigger;
+        private bool _showMapTrigger;
+        private bool _combatTrigger;
 
         public int position
         {
@@ -63,6 +71,36 @@ namespace V4F.Prototype.Mission
             }
 
             private set { _changeRoomTrigger = value; }
+        }
+
+        public bool showMapTrigger
+        {
+            get
+            {
+                if (_showMapTrigger)
+                {
+                    _showMapTrigger = false;
+                    return true;
+                }
+                return false;
+            }
+
+            private set { _showMapTrigger = value; }
+        }
+
+        public bool combatTrigger
+        {
+            get
+            {
+                if (_combatTrigger)
+                {
+                    _combatTrigger = false;
+                    return true;
+                }
+                return false;
+            }
+
+            private set { _combatTrigger = value; }
         }
 
         public NodeMap this[int position]
@@ -191,9 +229,11 @@ namespace V4F.Prototype.Mission
 
         private void LoadEndHandler(int entry)
         {
+            _map[entry].SetCombat(0, false);
+
             _position = entry;
             _lastPosition = _position;
-            _nextPosition = _position;
+            _nextPosition = _position;            
         }
 
         private void LoadNodeHandler(Node node)
@@ -202,22 +242,30 @@ namespace V4F.Prototype.Mission
 
             if (node.type != NodeType.None)
             {
-                int materialIndices = 0;
+                var nodeMap = new NodeMap(node.type);                
+                int materialIndices = 0;                
 
                 if (node.type != NodeType.Room)
                 {
-                    materialIndices = NodeContent.SetMaterialIndex(materialIndices, 0, Random.Range(0, corridors.Count - 1));
+                    materialIndices = NodeContent.SetMaterialIndex(materialIndices, 0, Random.Range(0, corridors.Count - 1));                    
                     materialIndices = NodeContent.SetMaterialIndex(materialIndices, 1, Random.Range(0, corridors.Count - 1));
                     materialIndices = NodeContent.SetMaterialIndex(materialIndices, 2, Random.Range(0, corridors.Count - 1));
                     materialIndices = NodeContent.SetMaterialIndex(materialIndices, 3, Random.Range(0, corridors.Count - 1));
+
+                    nodeMap.SetCombat(0, (Random.Range(0, 100) < 25));
+                    nodeMap.SetCombat(1, (Random.Range(0, 100) < 25));
+                    nodeMap.SetCombat(2, (Random.Range(0, 100) < 25));
+                    nodeMap.SetCombat(3, (Random.Range(0, 100) < 25));
                 }
                 else
                 {
                     materialIndices = NodeContent.SetMaterialIndex(materialIndices, 0, Random.Range(0, rooms.Count - 1));
+
+                    nodeMap.SetCombat(0, (Random.Range(0, 100) < 65));
                 }
 
-                _content.Add(index, new NodeContent(materialIndices));
-                _map[index] = new NodeMap(node.type);
+                _content.Add(index, new NodeContent(materialIndices));                                
+                _map[index] = nodeMap;
 
                 // ---------------------------------------------------------------------
 
@@ -259,7 +307,8 @@ namespace V4F.Prototype.Mission
             var x = (x1 + x2) / 2;
             var y = (y1 + y2) / 2;
 
-            _position = y * _width + x;
+            _subPosition = 0;
+            _position = y * _width + x;            
             _changeRoomTrigger = true;
         }
 
@@ -270,6 +319,7 @@ namespace V4F.Prototype.Mission
             _lastPosition = position;
             _nextPosition = position;
 
+            _subPosition = 0;
             _position = position;
             _changeRoomTrigger = true;
         }
@@ -281,8 +331,33 @@ namespace V4F.Prototype.Mission
             _lastPosition = position;
             _nextPosition = position;
 
+            _subPosition = 0;
             _position = position;
             _changeRoomTrigger = true;
+        }
+
+        private void MapClickHandler(Button sender, ButtonEventArgs args)
+        {
+            _showMapTrigger = true;
+        }
+
+        private void SectionEnterHandler(Section sender, SectionEventArgs args)
+        {
+            _subPosition = args.index;
+            if (args.combatCheck)
+            {
+                _combatTrigger = current.IsCombat(_subPosition);
+            }            
+        }
+
+        private void WinBattleHandler()
+        {            
+            current.SetCombat(_subPosition, false);
+        }
+
+        private void LoseBattleHandler()
+        {
+            
         }
 
         private void OnEnable()
@@ -294,6 +369,15 @@ namespace V4F.Prototype.Mission
             mapHandler.OnChooseRoom += MapChooseRoomHandler;
             enterButton.OnClick += EnterClickHandler;
             exitButton.OnClick += ExitClickHandler;
+            mapButton.OnClick += MapClickHandler;
+
+            for (var i = 0; i < sections.Length; ++i)
+            {
+                sections[i].OnEnter += SectionEnterHandler;
+            }
+
+            battleState.OnWin += WinBattleHandler;
+            battleState.OnLose += LoseBattleHandler;
         }
 
         private void OnDisable()
@@ -305,6 +389,15 @@ namespace V4F.Prototype.Mission
             mapHandler.OnChooseRoom -= MapChooseRoomHandler;
             enterButton.OnClick -= EnterClickHandler;
             exitButton.OnClick -= ExitClickHandler;
+            mapButton.OnClick -= MapClickHandler;
+
+            for (var i = 0; i < sections.Length; ++i)
+            {
+                sections[i].OnEnter -= SectionEnterHandler;
+            }
+
+            battleState.OnWin -= WinBattleHandler;
+            battleState.OnLose -= LoseBattleHandler;
         }
 
     }

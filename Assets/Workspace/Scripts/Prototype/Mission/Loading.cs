@@ -23,6 +23,7 @@ namespace V4F.Prototype.Mission
         public static event EndHandler OnEnd;
         public static event NodeHandler OnNode;
 
+        public TouchAdapter input;
         public Data mapData;
 
         public GameObject textLoading;
@@ -33,6 +34,8 @@ namespace V4F.Prototype.Mission
 
         public StateTransition transition;
         public State next;
+
+        private bool _waitingTap;
 
         private static void OnBeginCallback(Data data)
         {
@@ -78,12 +81,17 @@ namespace V4F.Prototype.Mission
             OnEndCallback(mapData);
 
             textLoading.SetActive(false);
-            textContinue.SetActive(true);            
+            textContinue.SetActive(true);
+            
+            input.OnTouchTap += TouchTapHandler;
 
-            while (!Input.GetKey(KeyCode.Space))
+            _waitingTap = true;
+            while (_waitingTap)
             {                                
                 yield return null;
             }
+
+            input.OnTouchTap -= TouchTapHandler;
 
             var args = new StateEventArgs(next, transition);
             OnTransitionCallback(args);
@@ -113,6 +121,11 @@ namespace V4F.Prototype.Mission
                     avatar.transform.SetParent(slots[i], false);
                 }                
             }
+        }
+
+        private void TouchTapHandler(TouchAdapter sender, TouchEventArgs args)
+        {
+            _waitingTap = false;
         }
 
     }

@@ -1,4 +1,4 @@
-﻿// <copyright file="Gameplay.cs" company="Maxim Mikulski">Copyright (c) 2016 All Rights Reserved</copyright>
+﻿// <copyright file="Traveling.cs" company="Maxim Mikulski">Copyright (c) 2016 All Rights Reserved</copyright>
 // <author>Maxim Mikulski</author>
 
 using System.Collections;
@@ -6,12 +6,13 @@ using System.Collections;
 using UnityEngine;
 
 using V4F.FSM;
+using V4F.UI.Mission;
 using V4F.Prototype.Map;
 
 namespace V4F.Prototype.Mission
 {
 
-    public class Gameplay : State
+    public class Traveling : State
     {
         public Location location;
 
@@ -23,26 +24,30 @@ namespace V4F.Prototype.Mission
         public Renderer section4;
 
         public GameObject corridorObject;
-        public GameObject roomObject;
-        public GameObject UI;
+        public GameObject roomObject;        
 
         public PartyController partyController;
+        public PlayHandler playHandler;
 
         public StateTransition locationChangedTransition;
 
         public StateTransition showMapTransition;
         public State showMapState;
 
+        public StateTransition combatTransition;
+        public State combatState;
+
         private GameObject _currentObject = null;
         private bool _locationChanged = true;
+        private bool _battleBegin = false;
 
         public override void EntryStart()
         {
-            if (_locationChanged)
-            {
-                var node = location.current;
-                var type = node.type;
+            var node = location.current;
+            var type = node.type;
 
+            if (_locationChanged)
+            {                
                 if (type == NodeType.Room)
                 {
                     var content = location.currentContent;
@@ -61,27 +66,34 @@ namespace V4F.Prototype.Mission
                     _currentObject = corridorObject;
                 }
 
+                playHandler.Entry(type);
                 _currentObject.SetActive(true);
-
                 partyController.Entry(type);
+            }
 
-                UI.SetActive(true);
-            }            
+            if (_battleBegin)
+            {
+                playHandler.Entry(type);
+                partyController.Resume();
+            }
         }
 
         public override void EntryEnd()
         {
             _locationChanged = false;
+            _battleBegin = false;
         }
 
         public override void Exit()
-        {
-            if (_locationChanged)
+        {            
+            if (_locationChanged || _battleBegin)
             {
-                UI.SetActive(false);
-
+                playHandler.Exit();
                 partyController.Exit();
+            }
 
+            if (_locationChanged)
+            {             
                 if (_currentObject != null)
                 {
                     _currentObject.SetActive(false);
@@ -94,9 +106,16 @@ namespace V4F.Prototype.Mission
         {
             while (true)
             {
-                if (Input.GetKeyDown(KeyCode.M))
+                if (location.showMapTrigger)
                 {                    
                     var args = new StateEventArgs(showMapState, showMapTransition);
+                    OnTransitionCallback(args);
+                }
+
+                if (location.combatTrigger)
+                {
+                    _battleBegin = true;
+                    var args = new StateEventArgs(combatState, combatTransition);
                     OnTransitionCallback(args);
                 }
 
