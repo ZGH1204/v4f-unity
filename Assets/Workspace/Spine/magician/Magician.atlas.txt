@@ -1,0 +1,278 @@
+
+Magician.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+belt_blue
+  rotate: false
+  xy: 191, 65
+  size: 110, 55
+  orig: 112, 57
+  offset: 1, 1
+  index: -1
+boot_L
+  rotate: true
+  xy: 602, 126
+  size: 68, 38
+  orig: 70, 40
+  offset: 1, 1
+  index: -1
+boot_R
+  rotate: true
+  xy: 594, 196
+  size: 79, 42
+  orig: 81, 44
+  offset: 1, 1
+  index: -1
+chest_pendant
+  rotate: false
+  xy: 743, 342
+  size: 74, 93
+  orig: 76, 95
+  offset: 1, 1
+  index: -1
+chest_skin
+  rotate: false
+  xy: 104, 4
+  size: 101, 57
+  orig: 103, 59
+  offset: 1, 1
+  index: -1
+cloak
+  rotate: false
+  xy: 2, 123
+  size: 196, 334
+  orig: 198, 336
+  offset: 1, 1
+  index: -1
+dress_belt
+  rotate: true
+  xy: 977, 435
+  size: 75, 45
+  orig: 77, 47
+  offset: 1, 1
+  index: -1
+dress_body
+  rotate: false
+  xy: 505, 196
+  size: 87, 79
+  orig: 89, 81
+  offset: 1, 1
+  index: -1
+dress_fur_L
+  rotate: false
+  xy: 476, 146
+  size: 27, 138
+  orig: 29, 140
+  offset: 1, 1
+  index: -1
+dress_fur_R
+  rotate: true
+  xy: 2, 63
+  size: 58, 187
+  orig: 60, 189
+  offset: 1, 1
+  index: -1
+dress_skirt
+  rotate: false
+  xy: 200, 122
+  size: 130, 335
+  orig: 132, 337
+  offset: 1, 1
+  index: -1
+face
+  rotate: false
+  xy: 507, 308
+  size: 124, 133
+  orig: 126, 135
+  offset: 1, 1
+  index: -1
+forearm_L
+  rotate: true
+  xy: 303, 65
+  size: 24, 90
+  orig: 26, 92
+  offset: 1, 1
+  index: -1
+forearm_R
+  rotate: false
+  xy: 505, 147
+  size: 95, 47
+  orig: 97, 49
+  offset: 1, 1
+  index: -1
+hood_background
+  rotate: false
+  xy: 332, 132
+  size: 142, 152
+  orig: 144, 154
+  offset: 1, 1
+  index: -1
+hood_front
+  rotate: false
+  xy: 332, 286
+  size: 173, 171
+  orig: 175, 173
+  offset: 1, 1
+  index: -1
+knife
+  rotate: true
+  xy: 861, 327
+  size: 38, 54
+  orig: 40, 56
+  offset: 1, 1
+  index: -1
+neck
+  rotate: true
+  xy: 395, 60
+  size: 29, 45
+  orig: 31, 47
+  offset: 1, 1
+  index: -1
+neck_pendant
+  rotate: false
+  xy: 819, 299
+  size: 33, 31
+  orig: 35, 33
+  offset: 1, 1
+  index: -1
+plait_L
+  rotate: false
+  xy: 633, 309
+  size: 40, 132
+  orig: 42, 134
+  offset: 1, 1
+  index: -1
+plait_R
+  rotate: false
+  xy: 819, 332
+  size: 40, 103
+  orig: 42, 105
+  offset: 1, 1
+  index: -1
+shin_L
+  rotate: true
+  xy: 2, 2
+  size: 59, 100
+  orig: 61, 102
+  offset: 1, 1
+  index: -1
+shin_R
+  rotate: true
+  xy: 841, 447
+  size: 63, 134
+  orig: 65, 136
+  offset: 1, 1
+  index: -1
+shin_skin_L
+  rotate: false
+  xy: 917, 357
+  size: 43, 88
+  orig: 45, 90
+  offset: 1, 1
+  index: -1
+shin_skin_R
+  rotate: false
+  xy: 962, 349
+  size: 42, 84
+  orig: 44, 86
+  offset: 1, 1
+  index: -1
+shoulder_L
+  rotate: false
+  xy: 675, 323
+  size: 66, 112
+  orig: 68, 114
+  offset: 1, 1
+  index: -1
+shoulder_R
+  rotate: true
+  xy: 207, 8
+  size: 55, 104
+  orig: 57, 106
+  offset: 1, 1
+  index: -1
+shoulderstrap_L
+  rotate: false
+  xy: 917, 325
+  size: 36, 30
+  orig: 38, 32
+  offset: 1, 1
+  index: -1
+shoulderstrap_R
+  rotate: true
+  xy: 313, 2
+  size: 61, 33
+  orig: 63, 35
+  offset: 1, 1
+  index: -1
+staff_lens_flare_face
+  rotate: false
+  xy: 861, 367
+  size: 54, 78
+  orig: 56, 80
+  offset: 1, 1
+  index: -1
+staff_lens_flare_hood
+  rotate: true
+  xy: 743, 310
+  size: 30, 74
+  orig: 32, 76
+  offset: 1, 1
+  index: -1
+staff_lens_flare_plait_L
+  rotate: true
+  xy: 507, 277
+  size: 29, 120
+  orig: 31, 122
+  offset: 1, 1
+  index: -1
+staff_lens_flare_plait_R
+  rotate: false
+  xy: 442, 63
+  size: 19, 67
+  orig: 21, 69
+  offset: 1, 1
+  index: -1
+staff_stick
+  rotate: true
+  xy: 2, 459
+  size: 51, 510
+  orig: 53, 512
+  offset: 1, 1
+  index: -1
+staff_stone
+  rotate: true
+  xy: 332, 91
+  size: 39, 108
+  orig: 41, 110
+  offset: 1, 1
+  index: -1
+thigh_L
+  rotate: true
+  xy: 514, 443
+  size: 67, 165
+  orig: 69, 167
+  offset: 1, 1
+  index: -1
+thigh_R
+  rotate: true
+  xy: 681, 437
+  size: 73, 158
+  orig: 75, 160
+  offset: 1, 1
+  index: -1
+wrist_L
+  rotate: false
+  xy: 388, 29
+  size: 54, 29
+  orig: 56, 31
+  offset: 1, 1
+  index: -1
+wrist_R
+  rotate: true
+  xy: 348, 17
+  size: 46, 38
+  orig: 48, 40
+  offset: 1, 1
+  index: -1

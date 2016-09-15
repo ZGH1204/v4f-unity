@@ -51,11 +51,11 @@ namespace Spine {
 		public bool InheritRotation { get { return inheritRotation; } set { inheritRotation = value; } }
 
 		/// <param name="parent">May be null.</param>
-		public BoneData (String name, BoneData parent) {
+		public BoneData (String name, BoneData parent) {            
 			if (name == null) throw new ArgumentNullException("name cannot be null.");
 			this.name = name;
 			this.parent = parent;
-		}
+        }
 
 		override public String ToString () {
 			return name;

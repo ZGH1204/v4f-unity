@@ -15,7 +15,7 @@ namespace V4F.Puppets
     public class PuppetSkillInspector : Editor
     {
         #region Fields
-        private static readonly GUIContent[] __content = null;        
+        private static readonly GUIContent[] __content = null;
         private static readonly float __heightActive;
         private static readonly float __heightNormal;
         private static readonly Color __colourActive;

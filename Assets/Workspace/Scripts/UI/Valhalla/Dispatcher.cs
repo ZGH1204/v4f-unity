@@ -42,7 +42,7 @@ namespace V4F.UI.Valhalla
                     {
                         OnHeroSelected(_selectActor);
                     }                        
-                }
+                }                
             }
         }
 
@@ -104,7 +104,7 @@ namespace V4F.UI.Valhalla
         {
             valhalla.OnSelect -= OnValhallaSelect;
             barracks.OnSelect -= OnBarracksSelect;
-            payButton.OnClick -= OnPayClick;
+            payButton.OnClick -= OnPayClick;            
         }
 
     }
