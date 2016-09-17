@@ -1,0 +1,208 @@
+
+spearman_445h.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+arm_L
+  rotate: true
+  xy: 309, 442
+  size: 86, 77
+  orig: 88, 79
+  offset: 1, 1
+  index: -1
+arm_R
+  rotate: true
+  xy: 507, 750
+  size: 111, 76
+  orig: 113, 78
+  offset: 1, 1
+  index: -1
+beard
+  rotate: false
+  xy: 2, 327
+  size: 250, 167
+  orig: 252, 169
+  offset: 1, 1
+  index: -1
+belt
+  rotate: true
+  xy: 2, 37
+  size: 288, 95
+  orig: 290, 97
+  offset: 1, 1
+  index: -1
+body
+  rotate: false
+  xy: 2, 641
+  size: 350, 220
+  orig: 352, 222
+  offset: 1, 1
+  index: -1
+boot_L
+  rotate: true
+  xy: 976, 792
+  size: 69, 46
+  orig: 71, 48
+  offset: 1, 1
+  index: -1
+boot_R
+  rotate: false
+  xy: 499, 622
+  size: 70, 45
+  orig: 72, 47
+  offset: 1, 1
+  index: -1
+chain
+  rotate: false
+  xy: 569, 880
+  size: 313, 141
+  orig: 315, 143
+  offset: 1, 1
+  index: -1
+collar
+  rotate: false
+  xy: 2, 496
+  size: 297, 143
+  orig: 299, 145
+  offset: 1, 1
+  index: -1
+eyebrow
+  rotate: false
+  xy: 309, 384
+  size: 84, 56
+  orig: 86, 58
+  offset: 1, 1
+  index: -1
+fingers_L
+  rotate: false
+  xy: 254, 341
+  size: 50, 48
+  orig: 52, 50
+  offset: 1, 1
+  index: -1
+fur_L
+  rotate: true
+  xy: 782, 775
+  size: 103, 83
+  orig: 105, 85
+  offset: 1, 1
+  index: -1
+fur_R
+  rotate: true
+  xy: 187, 68
+  size: 112, 84
+  orig: 114, 86
+  offset: 1, 1
+  index: -1
+head
+  rotate: true
+  xy: 187, 182
+  size: 143, 68
+  orig: 145, 70
+  offset: 1, 1
+  index: -1
+hear
+  rotate: false
+  xy: 354, 625
+  size: 143, 80
+  orig: 145, 82
+  offset: 1, 1
+  index: -1
+helmet
+  rotate: true
+  xy: 254, 391
+  size: 103, 53
+  orig: 105, 55
+  offset: 1, 1
+  index: -1
+horns
+  rotate: true
+  xy: 99, 58
+  size: 267, 86
+  orig: 269, 88
+  offset: 1, 1
+  index: -1
+nose
+  rotate: false
+  xy: 2, 2
+  size: 35, 33
+  orig: 37, 35
+  offset: 1, 1
+  index: -1
+shield
+  rotate: false
+  xy: 354, 707
+  size: 151, 154
+  orig: 153, 156
+  offset: 1, 1
+  index: -1
+shin_L
+  rotate: false
+  xy: 507, 669
+  size: 81, 79
+  orig: 83, 81
+  offset: 1, 1
+  index: -1
+shin_R
+  rotate: false
+  xy: 475, 554
+  size: 63, 66
+  orig: 65, 68
+  offset: 1, 1
+  index: -1
+shoulder_L
+  rotate: false
+  xy: 585, 778
+  size: 102, 100
+  orig: 104, 102
+  offset: 1, 1
+  index: -1
+shoulder_R
+  rotate: false
+  xy: 884, 863
+  size: 138, 158
+  orig: 140, 160
+  offset: 1, 1
+  index: -1
+skull
+  rotate: false
+  xy: 867, 788
+  size: 107, 73
+  orig: 109, 75
+  offset: 1, 1
+  index: -1
+spear
+  rotate: false
+  xy: 2, 863
+  size: 565, 158
+  orig: 567, 160
+  offset: 1, 1
+  index: -1
+thigh_L
+  rotate: false
+  xy: 301, 530
+  size: 86, 93
+  orig: 88, 95
+  offset: 1, 1
+  index: -1
+thigh_R
+  rotate: false
+  xy: 689, 782
+  size: 91, 96
+  orig: 93, 98
+  offset: 1, 1
+  index: -1
+wrist_L
+  rotate: false
+  xy: 590, 704
+  size: 73, 72
+  orig: 75, 74
+  offset: 1, 1
+  index: -1
+wrist_R
+  rotate: false
+  xy: 389, 541
+  size: 84, 82
+  orig: 86, 84
+  offset: 1, 1
+  index: -1

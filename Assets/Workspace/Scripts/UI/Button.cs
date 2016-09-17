@@ -37,8 +37,11 @@ namespace V4F.UI
             get { return _disable; }
             set
             {
-                _image.sprite = ((value) ? disabled : normal);
                 _disable = value;
+                if (_image != null)
+                {
+                    _image.sprite = ((_disable) ? disabled : normal);
+                }                
             }
         }
 
@@ -60,6 +63,11 @@ namespace V4F.UI
         #endregion
 
         #region Methods
+        public void Refresh()
+        {
+            _image.sprite = (_disable ? disabled : normal);
+        }
+
         protected virtual void Awake()
         {
             _rect = GetComponent<RectTransform>();

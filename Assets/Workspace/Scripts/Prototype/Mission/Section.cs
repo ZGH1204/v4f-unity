@@ -3,6 +3,9 @@
 
 using UnityEngine;
 
+using V4F.Game;
+using V4F.Character;
+
 namespace V4F.Prototype.Mission
 {
 
@@ -15,7 +18,15 @@ namespace V4F.Prototype.Mission
 
         public SectionType type = SectionType.None;
 
-        public Transform[] slots = new Transform[4];
+        public Squad squad;
+
+        public void Spawn(int count)
+        {
+            var enemies = Database.QueryRandomEnemies(count);
+
+            squad.Prepare(count);
+            for (var i = 0; (i < count) && squad.Spawn(enemies[i]); ++i);
+        }
 
         private void OnEnterCallback(SectionEventArgs args)
         {
@@ -33,7 +44,7 @@ namespace V4F.Prototype.Mission
             }
         }
 
-        private int GetIndex(SectionType type)
+        private int GetSubPosition(SectionType type)
         {
             switch (type)
             {
@@ -59,11 +70,11 @@ namespace V4F.Prototype.Mission
         {
             if (type != SectionType.None)
             {
-                var index = GetIndex(type);
+                var sub = GetSubPosition(type);
 
                 var args = new SectionEventArgs(type);                
-                args.index = index;
-                args.combatCheck = (index == Mathf.Clamp(index, 0, 3));
+                args.subPosition = sub;
+                args.combatCheck = (sub == Mathf.Clamp(sub, 0, 3));
                 OnEnterCallback(args);
             }
         }
@@ -73,7 +84,7 @@ namespace V4F.Prototype.Mission
             if (type != SectionType.None)
             {
                 var args = new SectionEventArgs(type);
-                args.index = GetIndex(type);
+                args.subPosition = GetSubPosition(type);
                 args.combatCheck = false;
                 OnExitCallback(args);
             }

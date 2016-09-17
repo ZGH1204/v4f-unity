@@ -73,7 +73,7 @@ namespace V4F.Prototype.Mission
 
             if (_battleBegin)
             {
-                playHandler.Entry(type);
+                playHandler.ExitBattle();
                 partyController.Resume();
             }
         }
@@ -86,14 +86,17 @@ namespace V4F.Prototype.Mission
 
         public override void Exit()
         {            
-            if (_locationChanged || _battleBegin)
+            if (_battleBegin)
+            {
+                playHandler.EntryBattle();
+                partyController.Pause();
+            }            
+
+            if (_locationChanged)
             {
                 playHandler.Exit();
                 partyController.Exit();
-            }
 
-            if (_locationChanged)
-            {             
                 if (_currentObject != null)
                 {
                     _currentObject.SetActive(false);

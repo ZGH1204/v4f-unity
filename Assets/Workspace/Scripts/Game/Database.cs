@@ -16,6 +16,8 @@ namespace V4F.Game
         private static Database __instance = null;
         private Dictionary<string, Actor> _heroesTable = null;
         private List<Actor> _heroesList = null;
+        private Dictionary<string, Actor> _enemiesTable = null;
+        private List<Actor> _enemiesList = null;
         #endregion
 
         #region Properties
@@ -27,6 +29,8 @@ namespace V4F.Game
         {
             _heroesTable = new Dictionary<string, Actor>(256);
             _heroesList = new List<Actor>(256);
+            _enemiesTable = new Dictionary<string, Actor>(256);
+            _enemiesList = new List<Actor>(256);
         }
         #endregion
 
@@ -36,19 +40,39 @@ namespace V4F.Game
             return __instance._heroesList.FindAll(x => x.location == location).ToArray();
         }
 
+        public static Actor[] QueryRandomEnemies(int count)
+        {
+            var enemies = __instance._enemiesList;
+            var result = new Actor[count];
+            var all = enemies.Count;
+
+            for (var i = 0; i < count; ++i)
+            {
+                result[i] = enemies[Random.Range(0, all)];
+            }
+
+            return result;
+        }
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Initialize()
         {
             __instance = new Database("SaveFile.sav"); // пока просто образец
 
-            var storages = Resources.LoadAll<PuppetStorage>("");
+            var storages = Resources.LoadAll<PuppetStorage>("Heroes");
             for (var i = 0; i < storages.Length; ++i)
             {
-                __instance.Include(storages[i]);
-            }            
+                __instance.IncludeHeroes(storages[i]);
+            }
+
+            storages = Resources.LoadAll<PuppetStorage>("Enemies");
+            for (var i = 0; i < storages.Length; ++i)
+            {
+                __instance.IncludeEnemies(storages[i]);
+            }
         }
         
-        private void Include(PuppetStorage storage)
+        private void IncludeHeroes(PuppetStorage storage)
         {
             var count = storage.countPuppets;
             for (var i = 0; i < count; ++i)
@@ -60,11 +84,31 @@ namespace V4F.Game
                 // ...
                 // while
                 actor.location = Location.Valhalla;
+                actor.controlAI = false;
 
                 _heroesTable.Add(puppet.uniqueID, actor);
                 _heroesList.Add(actor);
             }            
-        }        
+        }
+
+        private void IncludeEnemies(PuppetStorage storage)
+        {
+            var count = storage.countPuppets;
+            for (var i = 0; i < count; ++i)
+            {
+                var puppet = storage[i];
+
+                var actor = new Actor(puppet);
+                // load data form save for actor
+                // ...
+                // while
+                actor.location = Location.None;
+                actor.controlAI = true;
+
+                _enemiesTable.Add(puppet.uniqueID, actor);
+                _enemiesList.Add(actor);
+            }
+        }
         #endregion
     }
 

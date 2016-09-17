@@ -9,7 +9,7 @@ namespace V4F.Prototype.Mission
     public class SectionEventArgs : EventArgs
     {
         public SectionType type { get; set; }
-        public int index { get; set; }
+        public int subPosition { get; set; }
         public bool combatCheck { get; set; }
 	
         public SectionEventArgs(SectionType type)

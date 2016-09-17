@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 using V4F.UI;
 using V4F.UI.Map;
@@ -27,7 +28,7 @@ namespace V4F.Prototype.Mission
 
         public Section[] sections = new Section[5];
 
-        public Battle battleState;
+        public Battle battleState;        
 
         private Dictionary<int, NodeContent> _content;
         private NodeMap[] _map;
@@ -343,21 +344,26 @@ namespace V4F.Prototype.Mission
 
         private void SectionEnterHandler(Section sender, SectionEventArgs args)
         {
-            _subPosition = args.index;
+            _subPosition = args.subPosition;
             if (args.combatCheck)
             {
                 _combatTrigger = current.IsCombat(_subPosition);
+                if (_combatTrigger)
+                {                    
+                    sender.Spawn(Random.Range(2,4));
+                    battleState.enemies = sender.squad;
+                }
             }            
         }
 
-        private void WinBattleHandler()
+        private void WinBattleHandler(Battle sender)
         {            
             current.SetCombat(_subPosition, false);
         }
 
-        private void LoseBattleHandler()
+        private void LoseBattleHandler(Battle sender)
         {
-            
+            SceneManager.LoadScene("Scene06.Town", LoadSceneMode.Single);
         }
 
         private void OnEnable()

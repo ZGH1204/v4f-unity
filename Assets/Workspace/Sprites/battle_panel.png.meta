@@ -1,0 +1,230 @@
+fileFormatVersion: 2
+guid: 3bde4ee9b87b5da4bb74198fdc3f7f24
+timeCreated: 1474065663
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: battle_panel
+    21300002: battle_panel_info
+    21300004: battle_panel_empty
+    21300006: battle_panel_0
+    21300008: battle_panel_1
+    21300010: battle_panel_2
+    21300012: battle_panel_3
+    21300014: battle_panel_4
+    21300016: battle_panel_5
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 32
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: battle_panel_0
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 1787
+        width: 1920
+        height: 190
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 960, y: 75}
+        - {x: 959, y: 78}
+        - {x: 957, y: 78}
+        - {x: 956, y: 79}
+        - {x: 955, y: 83}
+        - {x: 951, y: 87}
+        - {x: 949, y: 87}
+        - {x: 949, y: 89}
+        - {x: 946, y: 90}
+        - {x: 945, y: 89}
+        - {x: 938, y: 93}
+        - {x: 937, y: 95}
+        - {x: 932, y: 95}
+        - {x: 929, y: 91}
+        - {x: 928, y: 92}
+        - {x: 926, y: 92}
+        - {x: 924, y: 90}
+        - {x: 922, y: 90}
+        - {x: 923, y: 94}
+        - {x: 922, y: 95}
+        - {x: 416, y: 95}
+        - {x: 416, y: 94}
+        - {x: 413, y: 90}
+        - {x: 413, y: 87}
+        - {x: 406, y: 94}
+        - {x: 406, y: 95}
+        - {x: -960, y: 95}
+        - {x: -960, y: -95}
+        - {x: 960, y: -95}
+        - {x: 960, y: 74}
+        - {x: 959, y: 74}
+      - - {x: 957, y: 87}
+        - {x: 955, y: 85}
+        - {x: 955, y: 84}
+        - {x: 959, y: 80}
+        - {x: 960, y: 80}
+        - {x: 960, y: 86}
+        - {x: 959, y: 87}
+    - name: battle_panel_1
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 1586
+        width: 716
+        height: 182
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 352, y: -89}
+        - {x: 352, y: -88}
+        - {x: 358, y: -84}
+        - {x: 358, y: 88}
+        - {x: 356, y: 91}
+        - {x: -107, y: 91}
+        - {x: -108, y: 90}
+        - {x: -110, y: 90}
+        - {x: -111, y: 91}
+        - {x: -178, y: 91}
+        - {x: -180, y: 90}
+        - {x: -181, y: 91}
+        - {x: -254, y: 91}
+        - {x: -255, y: 90}
+        - {x: -257, y: 91}
+        - {x: -326, y: 91}
+        - {x: -327, y: 90}
+        - {x: -328, y: 91}
+        - {x: -349, y: 91}
+        - {x: -350, y: 90}
+        - {x: -351, y: 91}
+        - {x: -353, y: 91}
+        - {x: -355, y: 89}
+        - {x: -355, y: 87}
+        - {x: -356, y: 86}
+        - {x: -358, y: 86}
+        - {x: -358, y: -90}
+        - {x: -357, y: -91}
+        - {x: 350, y: -91}
+    - name: battle_panel_2
+      rect:
+        serializedVersion: 2
+        x: 836
+        y: 1589
+        width: 180
+        height: 180
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 90, y: 88}
+        - {x: 88, y: 90}
+        - {x: -85, y: 90}
+        - {x: -88, y: 89}
+        - {x: -90, y: 86}
+        - {x: -90, y: -90}
+        - {x: 88, y: -90}
+        - {x: 90, y: -88}
+    - name: battle_panel_3
+      rect:
+        serializedVersion: 2
+        x: 1044
+        y: 1589
+        width: 184
+        height: 180
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 91, y: 88}
+        - {x: 88, y: 90}
+        - {x: -85, y: 90}
+        - {x: -88, y: 89}
+        - {x: -92, y: 84}
+        - {x: -92, y: -89}
+        - {x: -89, y: -90}
+        - {x: 88, y: -90}
+        - {x: 92, y: -86}
+        - {x: 92, y: 80}
+    - name: battle_panel_4
+      rect:
+        serializedVersion: 2
+        x: 1248
+        y: 1584
+        width: 180
+        height: 182
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 90, y: 89}
+        - {x: 88, y: 91}
+        - {x: -85, y: 91}
+        - {x: -88, y: 90}
+        - {x: -90, y: 87}
+        - {x: -90, y: -89}
+        - {x: -86, y: -91}
+        - {x: 85, y: -91}
+        - {x: 90, y: -87}
+    - name: battle_panel_5
+      rect:
+        serializedVersion: 2
+        x: 1452
+        y: 1563
+        width: 206
+        height: 203
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -103, y: 101.5}
+        - {x: -103, y: -101.5}
+        - {x: 103, y: -101.5}
+        - {x: 103, y: 101.5}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

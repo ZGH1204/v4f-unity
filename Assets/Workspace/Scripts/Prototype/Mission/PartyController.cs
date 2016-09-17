@@ -80,10 +80,15 @@ namespace V4F.Prototype.Mission
         }
 
         public void Resume()
-        {
-            _location.SetActive(true);
-
+        {            
             enabled = true;
+        }
+
+        public void Pause()
+        {
+            _loopMovement = false;
+
+            enabled = false;
         }
 
         public void Exit()

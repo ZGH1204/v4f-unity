@@ -30,7 +30,7 @@ namespace V4F.Prototype.Mission
         public GameObject textContinue;
         public GameObject partyController;
 
-        public Transform[] slots = new Transform[4];
+        public Party party;        
 
         public StateTransition transition;
         public State next;
@@ -110,17 +110,11 @@ namespace V4F.Prototype.Mission
                 }
             }
 
-            var actors = Database.QueryHeroesByLocation(Game.Location.Reserve);
-            if (actors.Length > 0)
-            {
-                for (var i = 0; i < Mathf.Min(actors.Length, 4); ++i)
-                {
-                    var actor = actors[i];
-                    var avatar = Instantiate(actor.puppet.prefab, Vector3.zero, Quaternion.identity) as GameObject;
-                    avatar.transform.localScale = Vector3.one;
-                    avatar.transform.SetParent(slots[i], false);
-                }                
-            }
+            var heroes = Database.QueryHeroesByLocation(Game.Location.Reserve);
+            var count = Mathf.Min(heroes.Length, 4);
+
+            party.Prepare(count);
+            for (var i = 0; (i < count) && party.Enter(heroes[i]); ++i);
         }
 
         private void TouchTapHandler(TouchAdapter sender, TouchEventArgs args)
