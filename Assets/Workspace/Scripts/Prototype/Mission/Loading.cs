@@ -23,16 +23,19 @@ namespace V4F.Prototype.Mission
         public static event EndHandler OnEnd;
         public static event NodeHandler OnNode;
 
+        public TouchAdapter input;
         public Data mapData;
 
         public GameObject textLoading;
         public GameObject textContinue;
         public GameObject partyController;
 
-        public Transform[] slots = new Transform[4];
+        public Party party;        
 
         public StateTransition transition;
         public State next;
+
+        private bool _waitingTap;
 
         private static void OnBeginCallback(Data data)
         {
@@ -78,12 +81,17 @@ namespace V4F.Prototype.Mission
             OnEndCallback(mapData);
 
             textLoading.SetActive(false);
-            textContinue.SetActive(true);            
+            textContinue.SetActive(true);
+            
+            input.OnTouchTap += TouchTapHandler;
 
-            while (!Input.GetKey(KeyCode.Space))
+            _waitingTap = true;
+            while (_waitingTap)
             {                                
                 yield return null;
             }
+
+            input.OnTouchTap -= TouchTapHandler;
 
             var args = new StateEventArgs(next, transition);
             OnTransitionCallback(args);
@@ -102,17 +110,16 @@ namespace V4F.Prototype.Mission
                 }
             }
 
-            var actors = Database.QueryHeroesByLocation(Game.Location.Reserve);
-            if (actors.Length > 0)
-            {
-                for (var i = 0; i < Mathf.Min(actors.Length, 4); ++i)
-                {
-                    var actor = actors[i];
-                    var avatar = Instantiate(actor.puppet.prefab, Vector3.zero, Quaternion.identity) as GameObject;
-                    avatar.transform.localScale = Vector3.one;
-                    avatar.transform.SetParent(slots[i], false);
-                }                
-            }
+            var heroes = Database.QueryHeroesByLocation(Game.Location.Reserve);
+            var count = Mathf.Min(heroes.Length, 4);
+
+            party.Prepare(count);
+            for (var i = 0; (i < count) && party.Enter(heroes[i]); ++i);
+        }
+
+        private void TouchTapHandler(TouchAdapter sender, TouchEventArgs args)
+        {
+            _waitingTap = false;
         }
 
     }

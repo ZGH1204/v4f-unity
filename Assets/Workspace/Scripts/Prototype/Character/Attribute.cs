@@ -15,7 +15,7 @@ namespace V4F.Character
         private int _extra;
         private int _m_add;
         private float _m_mul;
-        private AttributeModifier[] _modifiers = null;        
+        private AttributeModifier[] _modifiers = null;
         private List<int> _freeIndices = null;
         #endregion
 

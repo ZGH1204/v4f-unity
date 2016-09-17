@@ -53,7 +53,7 @@ namespace V4F.Prototype.Mission
             {
                 OnMovement(position, immediately);
             }
-        }
+        }        
 
         public void Entry(NodeType type)
         {
@@ -79,9 +79,22 @@ namespace V4F.Prototype.Mission
             enabled = true;
         }
 
+        public void Resume()
+        {            
+            enabled = true;
+        }
+
+        public void Pause()
+        {
+            _loopMovement = false;
+
+            enabled = false;
+        }
+
         public void Exit()
         {
             _location.SetActive(false);
+            _loopMovement = false;
 
             enabled = false;
         }

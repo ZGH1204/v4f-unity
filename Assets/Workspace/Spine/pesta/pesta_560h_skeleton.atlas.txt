@@ -1,0 +1,292 @@
+
+pesta_560h_skeleton.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+arm_L
+  rotate: false
+  xy: 529, 183
+  size: 118, 33
+  orig: 120, 35
+  offset: 1, 1
+  index: -1
+arm_R
+  rotate: true
+  xy: 355, 3
+  size: 26, 82
+  orig: 28, 84
+  offset: 1, 1
+  index: -1
+beads_rope
+  rotate: false
+  xy: 535, 123
+  size: 46, 58
+  orig: 48, 60
+  offset: 1, 1
+  index: -1
+beads_skulls
+  rotate: false
+  xy: 908, 144
+  size: 52, 41
+  orig: 54, 43
+  offset: 1, 1
+  index: -1
+body
+  rotate: false
+  xy: 293, 177
+  size: 234, 333
+  orig: 236, 335
+  offset: 1, 1
+  index: -1
+chest
+  rotate: false
+  xy: 920, 379
+  size: 81, 131
+  orig: 83, 133
+  offset: 1, 1
+  index: -1
+eye_L
+  rotate: false
+  xy: 530, 61
+  size: 31, 28
+  orig: 33, 30
+  offset: 1, 1
+  index: -1
+eye_R
+  rotate: true
+  xy: 225, 11
+  size: 31, 29
+  orig: 33, 31
+  offset: 1, 1
+  index: -1
+eye_corney_L
+  rotate: false
+  xy: 235, 2
+  size: 6, 7
+  orig: 8, 9
+  offset: 1, 1
+  index: -1
+eye_corney_R
+  rotate: true
+  xy: 225, 2
+  size: 7, 8
+  orig: 9, 10
+  offset: 1, 1
+  index: -1
+eyebrow_L
+  rotate: false
+  xy: 845, 126
+  size: 32, 14
+  orig: 34, 16
+  offset: 1, 1
+  index: -1
+eyebrow_R
+  rotate: true
+  xy: 1003, 430
+  size: 23, 17
+  orig: 25, 19
+  offset: 1, 1
+  index: -1
+eyelid_L
+  rotate: false
+  xy: 583, 128
+  size: 28, 10
+  orig: 30, 12
+  offset: 1, 1
+  index: -1
+eyelid_R
+  rotate: false
+  xy: 439, 2
+  size: 30, 12
+  orig: 32, 14
+  offset: 1, 1
+  index: -1
+finger_R
+  rotate: false
+  xy: 1003, 455
+  size: 19, 55
+  orig: 21, 57
+  offset: 1, 1
+  index: -1
+fingers__R
+  rotate: true
+  xy: 535, 91
+  size: 30, 39
+  orig: 32, 41
+  offset: 1, 1
+  index: -1
+fist_R
+  rotate: false
+  xy: 962, 144
+  size: 36, 41
+  orig: 38, 43
+  offset: 1, 1
+  index: -1
+hair
+  rotate: false
+  xy: 139, 44
+  size: 115, 46
+  orig: 117, 48
+  offset: 1, 1
+  index: -1
+hair_01
+  rotate: true
+  xy: 52, 4
+  size: 20, 28
+  orig: 22, 30
+  offset: 1, 1
+  index: -1
+hair_02
+  rotate: false
+  xy: 508, 60
+  size: 20, 32
+  orig: 22, 34
+  offset: 1, 1
+  index: -1
+hair_03
+  rotate: true
+  xy: 293, 2
+  size: 27, 60
+  orig: 29, 62
+  offset: 1, 1
+  index: -1
+haircut
+  rotate: true
+  xy: 920, 187
+  size: 80, 73
+  orig: 82, 75
+  offset: 1, 1
+  index: -1
+head
+  rotate: true
+  xy: 293, 31
+  size: 144, 146
+  orig: 146, 148
+  offset: 1, 1
+  index: -1
+light_arm_L
+  rotate: true
+  xy: 256, 12
+  size: 78, 35
+  orig: 80, 37
+  offset: 1, 1
+  index: -1
+light_arm_R
+  rotate: true
+  xy: 2, 8
+  size: 16, 48
+  orig: 18, 50
+  offset: 1, 1
+  index: -1
+light_beads
+  rotate: false
+  xy: 845, 142
+  size: 61, 48
+  orig: 63, 50
+  offset: 1, 1
+  index: -1
+light_body
+  rotate: false
+  xy: 529, 218
+  size: 234, 292
+  orig: 236, 294
+  offset: 1, 1
+  index: -1
+light_chest
+  rotate: true
+  xy: 729, 142
+  size: 74, 34
+  orig: 76, 36
+  offset: 1, 1
+  index: -1
+light_head
+  rotate: true
+  xy: 508, 94
+  size: 81, 25
+  orig: 83, 27
+  offset: 1, 1
+  index: -1
+light_shoulder_L
+  rotate: false
+  xy: 441, 54
+  size: 65, 121
+  orig: 67, 123
+  offset: 1, 1
+  index: -1
+light_shoulder_R
+  rotate: true
+  xy: 984, 276
+  size: 23, 38
+  orig: 25, 40
+  offset: 1, 1
+  index: -1
+light_sleeve_L
+  rotate: true
+  xy: 649, 159
+  size: 57, 78
+  orig: 59, 80
+  offset: 1, 1
+  index: -1
+neck
+  rotate: true
+  xy: 139, 2
+  size: 40, 84
+  orig: 42, 86
+  offset: 1, 1
+  index: -1
+rake
+  rotate: false
+  xy: 765, 192
+  size: 153, 318
+  orig: 155, 320
+  offset: 1, 1
+  index: -1
+shadow_beads
+  rotate: false
+  xy: 583, 140
+  size: 54, 41
+  orig: 56, 43
+  offset: 1, 1
+  index: -1
+shadow_pesta
+  rotate: false
+  xy: 2, 92
+  size: 289, 418
+  orig: 291, 420
+  offset: 1, 1
+  index: -1
+shoulder_L
+  rotate: true
+  xy: 2, 26
+  size: 64, 135
+  orig: 66, 137
+  offset: 1, 1
+  index: -1
+shoulder_R
+  rotate: true
+  xy: 765, 124
+  size: 66, 78
+  orig: 68, 80
+  offset: 1, 1
+  index: -1
+sleeve_L
+  rotate: false
+  xy: 920, 269
+  size: 62, 108
+  orig: 64, 110
+  offset: 1, 1
+  index: -1
+wrist_L
+  rotate: false
+  xy: 441, 16
+  size: 56, 36
+  orig: 58, 38
+  offset: 1, 1
+  index: -1
+wrist_R
+  rotate: false
+  xy: 984, 301
+  size: 23, 76
+  orig: 25, 78
+  offset: 1, 1
+  index: -1

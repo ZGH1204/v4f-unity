@@ -13,9 +13,15 @@ namespace V4F.Character
     public class Actor
     {
         #region Fields
-        private Dictionary<AttributeType, Attribute> _attributes;
+        private Dictionary<AttributeType, Attribute> _attributes;        
         private Puppet _puppet;
+        private GameObject _gameObject;
+        private Transform _transform;
+        private Animator _animator;
         private Location _location;
+        private bool _controlAI;
+        private int _healthPoint;
+        private int _initiative;
         #endregion
 
         #region Properties
@@ -29,10 +35,47 @@ namespace V4F.Character
             get { return _puppet; }
         }
 
+        public GameObject gameObject
+        {
+            get { return _gameObject; }
+            set
+            {
+                _gameObject = value;
+                _transform = ((_gameObject != null) ? _gameObject.GetComponent<Transform>() : null);
+                _animator = ((_gameObject != null) ? _gameObject.GetComponent<Animator>() : null);
+            }
+        }
+
+        public Transform transform
+        {
+            get { return _transform; }
+        }
+
+        public Animator animator
+        {
+            get { return _animator; }
+        }
+
         public Location location
         {
             get { return _location; }
             set { _location = value; }
+        }
+
+        public bool controlAI
+        {
+            get { return _controlAI; }
+            set { _controlAI = value; }
+        }
+
+        public int healthPoint
+        {
+            get { return _healthPoint; }
+        }
+
+        public int initiative
+        {
+            get { return _initiative; }
         }
         #endregion
 
@@ -40,10 +83,28 @@ namespace V4F.Character
         public Actor(Puppet puppet)
         {            
             _puppet = InitializeAttributes(puppet);
+            _healthPoint = _attributes[AttributeType.HealthPoints].value;
+            _initiative = Random.Range(1, 20);
         }
         #endregion
         
         #region Methods
+        public virtual bool TakeDamage(int value)
+        {
+            var HP = _attributes[AttributeType.HealthPoints];
+            _healthPoint = Mathf.Clamp(_healthPoint - value, 0, HP.value);
+            return (_healthPoint == 0);
+        }
+
+        public virtual void Destroy()
+        {
+            _transform = null;
+
+            _gameObject.SetActive(false);
+            Object.DestroyObject(_gameObject);
+            _gameObject = null;
+        }
+
         private Puppet InitializeAttributes(Puppet puppet)
         {
             _attributes = new Dictionary<AttributeType, Attribute>(24);

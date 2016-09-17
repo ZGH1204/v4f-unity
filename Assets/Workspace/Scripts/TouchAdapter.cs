@@ -48,7 +48,7 @@ namespace V4F
         [SerializeField, HideInInspector]
         public bool _longTouch = false;
 
-        private Vector3[] _coords = new Vector3[MaxNumFingers];        
+        private Vector3[] _coords = new Vector3[MaxNumFingers];
         private float[] _timers = new float[MaxNumFingers];
         private int[] _states = new int[MaxNumFingers];
         private Camera _camera = null;
@@ -110,6 +110,7 @@ namespace V4F
 
         private static void Pop(TouchAdapter adapter)
         {
+            adapter.ResetData();
             if (adapter.top)
             {
                 __active.top = false;
@@ -373,6 +374,13 @@ namespace V4F
             }
 
 #endif
+        }
+
+        private void ResetData()
+        {
+            _coords = new Vector3[MaxNumFingers];
+            _timers = new float[MaxNumFingers];
+            _states = new int[MaxNumFingers];
         }
 
         private void Awake()
