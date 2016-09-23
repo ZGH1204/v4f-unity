@@ -1,0 +1,271 @@
+
+plaitman_640h.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+arm_L
+  rotate: true
+  xy: 524, 347
+  size: 162, 211
+  orig: 164, 213
+  offset: 1, 1
+  index: -1
+arm_R
+  rotate: false
+  xy: 129, 70
+  size: 100, 214
+  orig: 102, 216
+  offset: 1, 1
+  index: -1
+body
+  rotate: false
+  xy: 231, 269
+  size: 210, 108
+  orig: 212, 110
+  offset: 1, 1
+  index: -1
+boot_L
+  rotate: false
+  xy: 649, 171
+  size: 73, 37
+  orig: 75, 39
+  offset: 1, 1
+  index: -1
+boot_R
+  rotate: true
+  xy: 653, 27
+  size: 67, 40
+  orig: 69, 42
+  offset: 1, 1
+  index: -1
+caif_R
+  rotate: true
+  xy: 864, 213
+  size: 18, 33
+  orig: 20, 35
+  offset: 1, 1
+  index: -1
+calf_L
+  rotate: true
+  xy: 443, 269
+  size: 18, 45
+  orig: 20, 47
+  offset: 1, 1
+  index: -1
+chest
+  rotate: false
+  xy: 2, 286
+  size: 226, 223
+  orig: 228, 225
+  offset: 1, 1
+  index: -1
+fur_top
+  rotate: false
+  xy: 649, 210
+  size: 63, 135
+  orig: 65, 137
+  offset: 1, 1
+  index: -1
+hammer_handle
+  rotate: true
+  xy: 925, 344
+  size: 165, 60
+  orig: 167, 62
+  offset: 1, 1
+  index: -1
+hammer_sign
+  rotate: false
+  xy: 411, 27
+  size: 66, 61
+  orig: 68, 63
+  offset: 1, 1
+  index: -1
+hammer_stone
+  rotate: true
+  xy: 507, 28
+  size: 139, 144
+  orig: 141, 146
+  offset: 1, 1
+  index: -1
+head
+  rotate: false
+  xy: 507, 169
+  size: 140, 176
+  orig: 142, 178
+  offset: 1, 1
+  index: -1
+light_arm_R
+  rotate: true
+  xy: 759, 197
+  size: 20, 57
+  orig: 22, 59
+  offset: 1, 1
+  index: -1
+light_body
+  rotate: false
+  xy: 231, 8
+  size: 101, 80
+  orig: 103, 82
+  offset: 1, 1
+  index: -1
+light_hammer
+  rotate: true
+  xy: 737, 340
+  size: 169, 186
+  orig: 171, 188
+  offset: 1, 1
+  index: -1
+light_head
+  rotate: true
+  xy: 443, 289
+  size: 88, 40
+  orig: 90, 42
+  offset: 1, 1
+  index: -1
+light_moustache_R
+  rotate: false
+  xy: 479, 29
+  size: 26, 59
+  orig: 28, 61
+  offset: 1, 1
+  index: -1
+light_shoulder_R
+  rotate: true
+  xy: 129, 2
+  size: 66, 95
+  orig: 68, 97
+  offset: 1, 1
+  index: -1
+light_skull
+  rotate: false
+  xy: 653, 96
+  size: 45, 73
+  orig: 47, 75
+  offset: 1, 1
+  index: -1
+light_vest_R
+  rotate: false
+  xy: 987, 407
+  size: 25, 102
+  orig: 27, 104
+  offset: 1, 1
+  index: -1
+moustache_bottom_L
+  rotate: false
+  xy: 485, 308
+  size: 20, 69
+  orig: 22, 71
+  offset: 1, 1
+  index: -1
+moustache_bottom_R
+  rotate: false
+  xy: 700, 98
+  size: 22, 71
+  orig: 24, 73
+  offset: 1, 1
+  index: -1
+moustache_top_L
+  rotate: false
+  xy: 753, 95
+  size: 39, 32
+  orig: 41, 34
+  offset: 1, 1
+  index: -1
+moustache_top_R
+  rotate: false
+  xy: 818, 187
+  size: 42, 30
+  orig: 44, 32
+  offset: 1, 1
+  index: -1
+pelvis
+  rotate: false
+  xy: 714, 219
+  size: 148, 119
+  orig: 150, 121
+  offset: 1, 1
+  index: -1
+plait_01
+  rotate: true
+  xy: 724, 113
+  size: 53, 27
+  orig: 55, 29
+  offset: 1, 1
+  index: -1
+plait_02
+  rotate: true
+  xy: 759, 168
+  size: 27, 44
+  orig: 29, 46
+  offset: 1, 1
+  index: -1
+plait_03
+  rotate: false
+  xy: 753, 129
+  size: 40, 37
+  orig: 42, 39
+  offset: 1, 1
+  index: -1
+shoulder_L
+  rotate: false
+  xy: 374, 90
+  size: 131, 177
+  orig: 133, 179
+  offset: 1, 1
+  index: -1
+shoulder_R
+  rotate: false
+  xy: 231, 90
+  size: 141, 177
+  orig: 143, 179
+  offset: 1, 1
+  index: -1
+skull
+  rotate: false
+  xy: 334, 13
+  size: 75, 75
+  orig: 77, 77
+  offset: 1, 1
+  index: -1
+thigh_L
+  rotate: false
+  xy: 945, 245
+  size: 63, 97
+  orig: 65, 99
+  offset: 1, 1
+  index: -1
+thigh_R
+  rotate: false
+  xy: 864, 233
+  size: 79, 105
+  orig: 81, 107
+  offset: 1, 1
+  index: -1
+thigh_skin_L
+  rotate: false
+  xy: 724, 168
+  size: 33, 49
+  orig: 35, 51
+  offset: 1, 1
+  index: -1
+thigh_skin_R
+  rotate: false
+  xy: 987, 351
+  size: 34, 54
+  orig: 36, 56
+  offset: 1, 1
+  index: -1
+vest_L
+  rotate: false
+  xy: 2, 2
+  size: 125, 282
+  orig: 127, 284
+  offset: 1, 1
+  index: -1
+vest_R
+  rotate: true
+  xy: 230, 379
+  size: 130, 292
+  orig: 132, 294
+  offset: 1, 1
+  index: -1

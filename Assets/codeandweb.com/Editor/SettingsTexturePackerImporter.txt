@@ -1,0 +1,17 @@
+version: 2
+importPivots: 1
+tpsheetFileNames:
+- Assets/Workspace/Sprites/Atlases/PuppetIcons01.tpsheet
+- Assets/Workspace/Sprites/Atlases/SkillIcons01.tpsheet
+- Assets/Workspace/Sprites/Atlases/Valhalla.tpsheet
+- Assets/Workspace/Sprites/Atlases/ValhallaAdd.tpsheet
+textureFileNames:
+- Assets/Workspace/Sprites/Atlases/PuppetIcons01.png
+- Assets/Workspace/Sprites/Atlases/SkillIcons01.png
+- Assets/Workspace/Sprites/Atlases/Valhalla.png
+- Assets/Workspace/Sprites/Atlases/ValhallaAdd.png
+normalmapFileNames:
+- 
+- 
+- 
+- 

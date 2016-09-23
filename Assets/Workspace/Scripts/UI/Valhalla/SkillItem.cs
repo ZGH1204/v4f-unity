@@ -11,19 +11,22 @@ namespace V4F.UI.Valhalla
 
     public class SkillItem : MonoBehaviour, IListItem
     {
-        private RectTransform _rect;
-        private Image _rectImage;
-        private RectTransform _frame;
+        public RectTransform back;
+        public RectTransform icon;        
+        public RectTransform frame;        
+
+        [Range(0f, 64f)]
+        public float expFrame = 12f;
+        
+        private Image _iconImage;
         private Image _frameImage;
         private Skill _skill;
         private bool _selected;
 
         private void Awake()
-        {
-            _rect = GetComponent<RectTransform>();
-            _rectImage = _rect.GetComponent<Image>();
-            _frame = _rect.GetChild(0).GetComponent<RectTransform>();
-            _frameImage = _frame.GetComponent<Image>();
+        {            
+            _iconImage = icon.GetComponent<Image>();
+            _frameImage = frame.GetComponent<Image>();
             _frameImage.enabled = false;
 
             _skill = null;
@@ -32,16 +35,17 @@ namespace V4F.UI.Valhalla
 
         public RectTransform rect
         {
-            get { return _rect; }
+            get { return back; }
         }
 
         public Vector2 size
         {
-            get { return _rect.sizeDelta; }
+            get { return back.sizeDelta; }
             set
             {
-                _rect.sizeDelta = value;
-                _frame.sizeDelta = value;
+                back.sizeDelta = value;
+                icon.sizeDelta = value;
+                frame.sizeDelta = new Vector2(value.x + expFrame, value.y + expFrame);                
             }
         }
 
@@ -61,14 +65,14 @@ namespace V4F.UI.Valhalla
             set
             {
                 _skill = value;
-                _rectImage.sprite = _skill[0].icon;
+                _iconImage.sprite = _skill[0].icon;
             }
         }
 
         public void Clear()
         {
             _skill = null;
-            _rectImage.sprite = null;
+            _iconImage.sprite = null;
             _frameImage.enabled = false;
             _selected = false;
         }

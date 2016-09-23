@@ -1,0 +1,14 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# http://www.codeandweb.com/texturepacker/unity
+#
+# $TexturePacker:SmartUpdate:3f9a8e93a63a2276d4c7e1b893e2eba7:1c8bfee4fe03898503bc0e58a94be2df:1c718f0d2e92ebbd172e8a54aa07265a$
+#
+:format=40000
+:texture=ValhallaAdd.png
+:size=512x512
+:pivotpoints=enabled
+
+valhalla_lokki;1;129;320;382;0.5;0.5; 22;222;352;208;333;251;290;240;285;293;207;312;203;320;146;320;126;308;28;255;13;168;20;66;0;0;0;0;230;7;246;67;245;97;300;60;341;60;380;111;359;142;382;192;382; 20;1;20;21;17;18;19;1;19;20;16;17;19;16;1;3;13;14;15;11;13;15;3;4;15;11;12;13;10;11;15;10;7;9;7;8;9;4;6;7;4;5;6;10;4;7;4;10;15;1;2;3;3;15;16;1;16;19;0;1;21

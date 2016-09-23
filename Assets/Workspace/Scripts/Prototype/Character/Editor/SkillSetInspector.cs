@@ -193,10 +193,17 @@ namespace V4F.Character
                 var rcEdit = new Rect(rcTitle.x + rcTitle.width + 2f, rect.y + 4f, 24f, 24f);
                 var rcCross = new Rect(rcEdit.x + rcEdit.width + 2f, rect.y + 4f, 24f, 24f);
 
-                Sprite icon = skill[0].icon;
+                var icon = skill[0].icon;
                 if (icon != null)
                 {
-                    EditorGUI.DrawTextureTransparent(rcIcon, icon.texture, ScaleMode.StretchToFill);
+                    var iW = 1f / icon.texture.width;
+                    var iH = 1f / icon.texture.height;
+                    var texCoords = new Rect();
+                    texCoords.xMin = icon.textureRect.xMin * iW;
+                    texCoords.xMax = icon.textureRect.xMax * iW;
+                    texCoords.yMin = icon.textureRect.yMin * iH;
+                    texCoords.yMax = icon.textureRect.yMax * iH;
+                    GUI.DrawTextureWithTexCoords(rcIcon, icon.texture, texCoords);
                 }
                 else
                 {

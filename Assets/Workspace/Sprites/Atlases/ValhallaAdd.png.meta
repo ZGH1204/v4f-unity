@@ -1,0 +1,108 @@
+fileFormatVersion: 2
+guid: 9413975341409504d87bcf44038ada39
+timeCreated: 1474616749
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: valhalla_lokki
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 128
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: valhalla_lokki
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 129
+        width: 320
+        height: 382
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 154, y: -156}
+        - {x: 160, y: -106}
+        - {x: 160, y: 14}
+        - {x: 156, y: 20}
+        - {x: 119, y: 41}
+        - {x: 52, y: 120}
+        - {x: 61, y: 164}
+        - {x: 34, y: 191}
+        - {x: 9, y: 191}
+        - {x: 2, y: 188}
+        - {x: 4, y: 181}
+        - {x: 10, y: 176}
+        - {x: 23, y: 177}
+        - {x: 17, y: 174}
+        - {x: 10, y: 176}
+        - {x: -23, y: 190}
+        - {x: -65, y: 175}
+        - {x: -76, y: 183}
+        - {x: -106, y: 175}
+        - {x: -103, y: 151}
+        - {x: -81, y: 129}
+        - {x: -64, y: 129}
+        - {x: -75, y: 72}
+        - {x: -110, y: 41}
+        - {x: -126, y: 66}
+        - {x: -160, y: 52}
+        - {x: -160, y: -188}
+        - {x: -149, y: -191}
+        - {x: -79, y: -191}
+        - {x: 15, y: -169}
+        - {x: 74, y: -183}
+        - {x: 148, y: -168}
+      - - {x: 81, y: 98}
+        - {x: 87, y: 98}
+        - {x: 87, y: 104}
+        - {x: 86, y: 106}
+        - {x: 83, y: 106}
+        - {x: 80, y: 104}
+        - {x: 80, y: 100}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

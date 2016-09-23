@@ -225,7 +225,14 @@ namespace V4F.Character
                 Sprite icon = puppet.icon;
                 if (icon != null)
                 {
-                    EditorGUI.DrawTextureTransparent(rcIcon, icon.texture, ScaleMode.StretchToFill);
+                    var iW = 1f / icon.texture.width;
+                    var iH = 1f / icon.texture.height;
+                    var texCoords = new Rect();
+                    texCoords.xMin = icon.textureRect.xMin * iW;
+                    texCoords.xMax = icon.textureRect.xMax * iW;
+                    texCoords.yMin = icon.textureRect.yMin * iH;
+                    texCoords.yMax = icon.textureRect.yMax * iH;
+                    GUI.DrawTextureWithTexCoords(rcIcon, icon.texture, texCoords);                    
                 }
                 else
                 {

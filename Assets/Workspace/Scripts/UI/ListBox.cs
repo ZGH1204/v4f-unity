@@ -246,7 +246,7 @@ namespace V4F.UI
 
         private void TouchDownHandler(TouchAdapter sender, TouchEventArgs args)
         {
-            _captureScroll = (!scrollLock) && RectTransformUtility.RectangleContainsScreenPoint(_rect, args.position, sender.camera);
+            _captureScroll = (!scrollLock) && (_items.Count > 0) && RectTransformUtility.RectangleContainsScreenPoint(_rect, args.position, sender.camera);
             if (_captureScroll)
             {
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(_rect, args.position, sender.camera, out _beforPosition);

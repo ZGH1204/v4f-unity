@@ -72,7 +72,7 @@ namespace V4F.Character
                 var stage = CreateInstance<SkillStage>();
                 stage.name = string.Format("Stage{0}", i + 1);
                 AssetDatabase.AddObjectToAsset(stage, skill);
-                AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(stage));
+                AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(stage));                
 
                 stagesProp.InsertArrayElementAtIndex(i);
                 var stageProp = stagesProp.GetArrayElementAtIndex(i);
@@ -82,8 +82,11 @@ namespace V4F.Character
                 stageObject.FindProperty("_parent").objectReferenceValue = skill;
                 stageObject.ApplyModifiedProperties();
 
-                skillObject.ApplyModifiedProperties();
-            }            
+                skillObject.ApplyModifiedProperties();                
+            }
+            
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
 
         public override void OnInspectorGUI()
@@ -174,10 +177,17 @@ namespace V4F.Character
                 var rcCross = new Rect(rcEdit.x + rcEdit.width + 2f, rect.y + 4f, 24f, 24f);
                 var rcInner = new Rect(rcEdit.x + 1f, rcEdit.y +1f, rcEdit.width - 2f, rcEdit.height - 2f);
 
-                Sprite icon = stage.icon;
+                var icon = stage.icon;
                 if (icon != null)
                 {
-                    EditorGUI.DrawTextureTransparent(rcIcon, icon.texture, ScaleMode.StretchToFill);
+                    var iW = 1f / icon.texture.width;
+                    var iH = 1f / icon.texture.height;
+                    var texCoords = new Rect();
+                    texCoords.xMin = icon.textureRect.xMin * iW;
+                    texCoords.xMax = icon.textureRect.xMax * iW;
+                    texCoords.yMin = icon.textureRect.yMin * iH;
+                    texCoords.yMax = icon.textureRect.yMax * iH;
+                    GUI.DrawTextureWithTexCoords(rcIcon, icon.texture, texCoords);
                 }
                 else
                 {
