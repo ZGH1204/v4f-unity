@@ -11,10 +11,20 @@ namespace V4F.UI.Valhalla
 {
 
     public class ValhallaItem : MonoBehaviour, IListItem
-    {
+    {        
+        public RectTransform back;
+        public RectTransform icon;
+        public RectTransform front;        
+        public RectTransform frame;        
+
+        [Range(0f, 64f)]
+        public float expFront = 12f;
+
+        [Range(0f, 64f)]
+        public float expFrame = 12f;
+
         private RectTransform _rect;
-        private Image _rectImage;
-        private RectTransform _frame;
+        private Image _iconImage;
         private Image _frameImage;
         private Actor _actor;        
         private bool _selected;
@@ -22,9 +32,9 @@ namespace V4F.UI.Valhalla
         private void Awake()
         {
             _rect = GetComponent<RectTransform>();
-            _rectImage = _rect.GetComponent<Image>();
-            _frame = _rect.GetChild(0).GetComponent<RectTransform>();            
-            _frameImage = _frame.GetComponent<Image>();
+
+            _iconImage = icon.GetComponent<Image>();
+            _frameImage = frame.GetComponent<Image>();
             _frameImage.enabled = false;
 
             _actor = null;
@@ -41,8 +51,12 @@ namespace V4F.UI.Valhalla
             get { return _rect.sizeDelta; }
             set
             {
+                back.sizeDelta = value;
+                icon.sizeDelta = value;
+                front.sizeDelta = new Vector2(value.x + expFront, value.y + expFront);
+                frame.sizeDelta = new Vector2(value.x + expFrame, value.y + expFrame);
+
                 _rect.sizeDelta = value;
-                _frame.sizeDelta = value;                
             }
         }        
 
@@ -62,14 +76,14 @@ namespace V4F.UI.Valhalla
             set
             {
                 _actor = value;
-                _rectImage.sprite = _actor.puppet.icon;
+                _iconImage.sprite = _actor.puppet.icon;
             }
         }
 
         public void Clear()
         {
             _actor = null;
-            _rectImage.sprite = null;
+            _iconImage.sprite = null;
             _frameImage.enabled = false;
             _selected = false;
         }

@@ -12,8 +12,7 @@ namespace V4F.Game.Management
 
     public class ValhallaTransition : StateTransition
     {
-        public GameObject valhalla;
-        public GameObject shading;
+        public GameObject valhalla;        
 
         [Range(0f, 100f)]
         public float speedFading = 2f;
@@ -21,7 +20,6 @@ namespace V4F.Game.Management
         public override IEnumerable EnterNextState()
         {
             valhalla.SetActive(true);
-            shading.SetActive(false);
 
             var transform = valhalla.GetComponent<Transform>();
             var scale = 0f;
@@ -34,7 +32,6 @@ namespace V4F.Game.Management
             }
 
             transform.localScale = Vector3.one;
-            shading.SetActive(true);
         }
 
     }
