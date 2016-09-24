@@ -16,6 +16,10 @@ namespace V4F.Prototype.Mission
         private IEnumerator _tweaking;
         private Vector3 _targetPosition;
         private float _speedFollow;
+        private IEnumerator _rotateTweaking;
+        private Vector3 _startPosition;
+        private Vector3 _atPoint;
+        private Vector3 _tweakPosition;
 
         private void MovementHandler(Vector3 data, bool immediately)
         {           
@@ -31,7 +35,53 @@ namespace V4F.Prototype.Mission
                 _speedFollow = data.z;
                 PlayTweaking();
             }            
-        }        
+        }
+
+        private void BattleStartHandler(Battle sender)
+        {
+            _startPosition = _transform.localPosition;
+            _atPoint = _transform.position + _transform.forward * -_transform.localPosition.z;
+        }
+
+        private void FocusGroupHandler(Battle sender)
+        {
+            if (sender.actor.controlAI)
+            {
+                _tweakPosition = _startPosition + new Vector3(0.8f, 0f, 0.02f);
+            }
+            else
+            {
+                _tweakPosition = _startPosition + new Vector3(-0.8f, 0f, 0.02f);
+            }
+
+            StopTweaking();
+
+            if (_rotateTweaking == null)
+            {
+                _rotateTweaking = RotateTweaking();
+                StartCoroutine(_rotateTweaking);
+            }
+        }
+
+        private void UnfocusGroupHandler(Battle sender)
+        {
+            _tweakPosition = _startPosition;
+            if (_rotateTweaking == null)
+            {
+                _rotateTweaking = RotateTweaking();
+                StartCoroutine(_rotateTweaking);
+            }
+        }
+
+        private void BattleEndHandler(Battle sender)
+        {
+            _tweakPosition = _startPosition;
+            if (_rotateTweaking == null)
+            {
+                _rotateTweaking = RotateTweaking();
+                StartCoroutine(_rotateTweaking);
+            }
+        }
 
         private void PlayTweaking()
         {
@@ -65,6 +115,22 @@ namespace V4F.Prototype.Mission
             _tweaking = null;
         }
 
+        private IEnumerator RotateTweaking()
+        {
+            while (Vector3.Distance(_transform.localPosition, _tweakPosition) > 0.01f)
+            {
+                _transform.localPosition = Vector3.Lerp(_transform.localPosition, _tweakPosition, Time.deltaTime * 2f);
+                _transform.LookAt(_atPoint);
+
+                yield return null;
+            }
+
+            _transform.localPosition = _tweakPosition;
+            _transform.LookAt(_atPoint);
+            
+            _rotateTweaking = null;
+        }
+
         private void Awake()
         {
             _transform = GetComponent<Transform>();
@@ -74,16 +140,24 @@ namespace V4F.Prototype.Mission
         private void OnEnable()
         {
             PartyController.OnMovement += MovementHandler;
+            Battle.OnStart += BattleStartHandler;
+            Battle.OnFocusGroup += FocusGroupHandler;
+            Battle.OnUnfocusGroup += UnfocusGroupHandler;
+            Battle.OnEnd += BattleEndHandler;
         }
 
         private void OnDisable()
         {
             PartyController.OnMovement -= MovementHandler;
+            Battle.OnStart -= BattleStartHandler;
+            Battle.OnFocusGroup -= FocusGroupHandler;
+            Battle.OnUnfocusGroup -= UnfocusGroupHandler;
+            Battle.OnEnd -= BattleEndHandler;
         }
 
         private void Start()
         {
-            var camera = GetComponent<Camera>();
+            var camera = GetComponent<Camera>();            
             camera.fieldOfView = desiredHorizontalFOV * (16f / 9f) / ((float)camera.pixelWidth / camera.pixelHeight);
         }
     }

@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using Spine.Unity;
+
 using V4F.Game;
 
 namespace V4F.Character
@@ -18,6 +20,7 @@ namespace V4F.Character
         private GameObject _gameObject;
         private Transform _transform;
         private Animator _animator;
+        private Renderer _renderer;        
         private Location _location;
         private bool _controlAI;
         private int _healthPoint;
@@ -43,6 +46,7 @@ namespace V4F.Character
                 _gameObject = value;
                 _transform = ((_gameObject != null) ? _gameObject.GetComponent<Transform>() : null);
                 _animator = ((_gameObject != null) ? _gameObject.GetComponent<Animator>() : null);
+                _renderer = ((_gameObject != null) ? _gameObject.GetComponent<Renderer>() : null);
             }
         }
 
@@ -60,6 +64,17 @@ namespace V4F.Character
         {
             get { return _location; }
             set { _location = value; }
+        }
+
+        public int orderIndex
+        {
+            set
+            {
+                if (_renderer != null)
+                {
+                    _renderer.sortingOrder = Mathf.Max(0, value);
+                }
+            }
         }
 
         public bool controlAI

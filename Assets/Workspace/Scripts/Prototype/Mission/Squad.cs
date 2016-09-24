@@ -58,7 +58,8 @@ namespace V4F.Prototype.Mission
 
                 monster.gameObject = Instantiate(monster.puppet.prefab, Vector3.zero, Quaternion.identity) as GameObject;
                 monster.transform.localScale = Vector3.one;
-                monster.transform.SetParent(point, false);                
+                monster.transform.SetParent(point, false);
+                monster.orderIndex = index - 1;
 
                 _monsters.Add(monster);
 
@@ -85,9 +86,10 @@ namespace V4F.Prototype.Mission
                 var point = transform.GetChild(i);
 
                 var diff = monster.transform.position.x - point.position.x;
-                if (diff > Mathf.Epsilon)
+                if (Mathf.Abs(diff) > Mathf.Epsilon)
                 {
                     monster.transform.SetParent(point, true);
+                    monster.orderIndex = i;
                     list.Add(monster.transform);
                 }
             }

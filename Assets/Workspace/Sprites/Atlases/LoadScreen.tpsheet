@@ -1,0 +1,14 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# http://www.codeandweb.com/texturepacker/unity
+#
+# $TexturePacker:SmartUpdate:fa095bbbe1850827f38649e4833c7699:2a308b76f014036ef6a697c42a0420e4:ceb6592e2cb65557d2caa201db62bc50$
+#
+:format=40000
+:texture=LoadScreen.png
+:size=2048x2048
+:pivotpoints=enabled
+
+loadscreen_background;1;967;1920;1080;0.5;0.5; 4;1920;0;0;0;0;1080;1920;1080; 2;1;2;3;0;1;3

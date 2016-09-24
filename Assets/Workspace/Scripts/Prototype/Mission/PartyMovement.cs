@@ -39,7 +39,7 @@ namespace V4F.Prototype.Mission
         }
 
         private IEnumerator Movement()
-        {
+        {            
             var wait = new WaitForFixedUpdate();
 
             var position = transform.position;
@@ -54,7 +54,7 @@ namespace V4F.Prototype.Mission
             position.x = _position.x;
             _rigidbody.position = position;
 
-            _move = null;
+            _move = null;            
         }
 
         private void Awake()
