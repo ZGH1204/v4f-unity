@@ -21,13 +21,17 @@ namespace V4F.Game
 
         public override IEnumerable EnterNextState()
         {
+            /*
             while (_wait)
             {
                 yield return null;
             }
-
             logo.AnimationState.End -= AnimationEndHandler;
-            yield return new WaitForSeconds(0.5f);
+            */
+
+            logo.AnimationState.SetAnimation(0, "animation", false);
+
+            yield return new WaitForSeconds(1.3f);
 
             var alpha = 1f;
             while (alpha > 0f)
@@ -42,13 +46,14 @@ namespace V4F.Game
 
         public override IEnumerable ExitPrevState()
         {
-            logo.AnimationState.End += AnimationEndHandler;
-            logo.AnimationState.SetAnimation(0, "animation", false);
-
-            _wait = true;
-
             group.alpha = 1f;
-            gameObject.SetActive(true);
+            gameObject.SetActive(true);            
+
+            /*
+            logo.AnimationState.SetAnimation(0, "animation", false);
+            logo.AnimationState.End += AnimationEndHandler;            
+            _wait = true;
+            */
 
             yield return null;
         }
@@ -56,7 +61,7 @@ namespace V4F.Game
         private void AnimationEndHandler(Spine.AnimationState state, int trackIndex)
         {
             _wait = false;
-        }        
+        }                
     }
 
 }    
