@@ -1,0 +1,40 @@
+
+icon_fight_to_Spine_512.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+axe
+  rotate: false
+  xy: 2, 549
+  size: 419, 287
+  orig: 421, 298
+  offset: 1, 3
+  index: -1
+hammer
+  rotate: false
+  xy: 2, 255
+  size: 391, 292
+  orig: 393, 294
+  offset: 1, 1
+  index: -1
+opacity
+  rotate: false
+  xy: 2, 2
+  size: 290, 251
+  orig: 292, 253
+  offset: 1, 1
+  index: -1
+outline
+  rotate: false
+  xy: 423, 553
+  size: 329, 283
+  orig: 331, 285
+  offset: 1, 1
+  index: -1
+shield
+  rotate: false
+  xy: 754, 668
+  size: 163, 168
+  orig: 165, 170
+  offset: 1, 1
+  index: -1

@@ -12,17 +12,14 @@ namespace V4F.Game.Management
 
     public class ValhallaBackTransition : StateTransition
     {
-        public GameObject valhalla;
-        public GameObject shading;
+        public GameObject valhalla;        
         public GameObject GUI;
 
         [Range(0f, 100f)]
         public float speedFading = 2f;
 
         public override IEnumerable ExitPrevState()
-        {            
-            shading.SetActive(false);
-
+        {
             var transform = valhalla.GetComponent<Transform>();
             var scale = 1f;
 

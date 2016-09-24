@@ -70,9 +70,9 @@ namespace V4F.UI.Mission
             exitButton.disable = true;
             _mapButtonState = mapButton.disable;
             mapButton.disable = true;
-
-            selection.gameObject.SetActive(true);
+            
             battleState.OnStage += OnBattleStage;
+            battleState.OnStageFinish += OnBattleStageFinish;
             battlePanel.locked = false;
             battlePanel.OnSelectSkill += SelectSkillHandler;
 
@@ -84,9 +84,10 @@ namespace V4F.UI.Mission
             input.OnTouchTap -= TouchTapHandler;
 
             _selected = null;
-
+            
             battlePanel.OnSelectSkill -= SelectSkillHandler;
             battlePanel.locked = true;
+            battleState.OnStageFinish -= OnBattleStageFinish;
             battleState.OnStage -= OnBattleStage;
             selection.gameObject.SetActive(false);
 
@@ -155,11 +156,28 @@ namespace V4F.UI.Mission
             _selected = sender.actor;
             battlePanel.SetActor(_selected);
             _choose = !_selected.controlAI;
+
+            if (_selected != null)
+            {
+                var screenPoint = cameraActors.WorldToScreenPoint(_selected.transform.position);
+                Vector2 position;
+                if (RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas, screenPoint, cameraUI, out position))
+                {
+                    selection.anchoredPosition = position + new Vector2(0f, -40f);
+                }
+                selection.gameObject.SetActive(true);
+            }            
+        }
+
+        private void OnBattleStageFinish(Battle sender)
+        {            
+            selection.gameObject.SetActive(false);
         }
 
         private IEnumerator HealthBar()
         {
-            var offset = new Vector2(0f, -15f);
+            var offset = new Vector2(0f, -80f);
+            var offset2 = new Vector2(0f, -40f);
 
             while (true)
             {
@@ -193,7 +211,7 @@ namespace V4F.UI.Mission
                     Vector2 position;
                     if (RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas, screenPoint, cameraUI, out position))
                     {
-                        selection.anchoredPosition = position;
+                        selection.anchoredPosition = position + offset2;
                     }
                 }                
 
@@ -203,7 +221,7 @@ namespace V4F.UI.Mission
 
         private IEnumerator HealthBar2()
         {
-            var offset = new Vector2(0f, -15f);            
+            var offset = new Vector2(0f, -80f);
 
             while (true)
             {

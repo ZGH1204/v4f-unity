@@ -15,15 +15,29 @@ namespace V4F.Prototype.Mission
 
     public class Battle : State
     {
+        private static readonly int __anim_param_attack = Animator.StringToHash("attack");
+        private static readonly int __anim_param_damage = Animator.StringToHash("damage");
+
         public delegate void BattleEventHandler(Battle sender);
+
+        public static event BattleEventHandler OnStart;
+        public static event BattleEventHandler OnFocusGroup;
+        public static event BattleEventHandler OnUnfocusGroup;
+        public static event BattleEventHandler OnEnd;
 
         public event BattleEventHandler OnWin;
         public event BattleEventHandler OnLose;
         public event BattleEventHandler OnRound;
         public event BattleEventHandler OnStage;
+        public event BattleEventHandler OnStageFinish;
 
         public Party heroes;
         public Camera zoom;
+        public CanvasGroup zoomFade;
+        public GameObject healthUIRoot;
+
+        public Transform leftSide;
+        public Transform rightSide;
 
         public StateTransition transition;
         public State state;
@@ -34,6 +48,7 @@ namespace V4F.Prototype.Mission
         private List<Actor> _queueEnemies;
         private Group _group;
         private Actor _actor;
+        private bool _lastAI;
         private int _roundNumber;
 
         private IEnumerator _watchProcces;
@@ -63,6 +78,38 @@ namespace V4F.Prototype.Mission
             get { return _actor; }
         }
 
+        private static void OnStartCallback(Battle sender)
+        {
+            if (OnStart != null)
+            {
+                OnStart(sender);
+            }
+        }
+
+        private static void OnFocusGroupCallback(Battle sender)
+        {
+            if (OnFocusGroup != null)
+            {
+                OnFocusGroup(sender);
+            }
+        }
+
+        private static void OnUnfocusGroupCallback(Battle sender)
+        {
+            if (OnUnfocusGroup != null)
+            {
+                OnUnfocusGroup(sender);
+            }
+        }
+
+        private static void OnEndCallback(Battle sender)
+        {
+            if (OnEnd != null)
+            {
+                OnEnd(sender);
+            }
+        }
+
         public override void EntryStart()
         {
             _queueHeroes = new List<Actor>(heroes.count);
@@ -84,7 +131,9 @@ namespace V4F.Prototype.Mission
         }
 
         public override IEnumerable Execute()
-        {            
+        {
+            OnStartCallback(this);
+
             while (heroes.isAlive && enemies.isAlive)
             {
                 FillQueues();
@@ -132,13 +181,23 @@ namespace V4F.Prototype.Mission
 
                     if (_actor.healthPoint > 0)
                     {
-                        OnStageCallback();
+                        OnFocusGroupCallback(this);
 
+                        var timer = (_lastAI != _actor.controlAI) ? 1.5f : 0.5f;
+                        _lastAI = _actor.controlAI;
+                        while (timer > 0f)
+                        {
+                            timer -= Time.deltaTime;
+                            yield return null;
+                        }
+
+                        OnStageCallback();
                         while (!(_actionStack.Count > 0))
                         {
                             yield return null;
                         }
 
+                        OnStageFinishCallback();
                         while (_actionStack.Count > 0)
                         {
                             var action = _actionStack[0];
@@ -202,6 +261,8 @@ namespace V4F.Prototype.Mission
             }
 
             enemies = null;
+
+            OnEndCallback(this);
 
             if (heroes.isAlive)
             {
@@ -332,85 +393,89 @@ namespace V4F.Prototype.Mission
 
         private IEnumerable Watch()
         {
+            Vector3 defFinish = Vector3.zero;
+            Vector3 defStart = Vector3.zero;
+
             var layer = LayerMask.NameToLayer("Zoom");
             foreach (var pair in _onDamage)
             {
                 var actor = pair.Key;
                 actor.gameObject.layer = layer;
+                if (pair.Value != -1)
+                {
+                    actor.animator.SetBool(__anim_param_damage, true);
+                    defFinish = (actor.controlAI ? rightSide : leftSide).position;
+                    defStart = actor.transform.position;
+                }
             }
 
             _actor.gameObject.layer = layer;
+            _actor.animator.SetBool(__anim_param_attack, true);
 
+            healthUIRoot.SetActive(false);
+
+            OnUnfocusGroupCallback(this);
+
+            zoomFade.alpha = 0f;
             zoom.gameObject.SetActive(true);
 
-            var offsetLeft = new Vector3(-1f, 0f, 0f);
-            var offsetLeft2 = new Vector3(-1.8f, 0f, 0f);
-            var offsetRight = new Vector3(1f, 0f, 0f);
-            var offsetRight2 = new Vector3(1.8f, 0f, 0f);
+            var attackFinish = (_actor.controlAI ? rightSide : leftSide).position;
+            var attackStart = _actor.transform.position;
 
-            while (zoom.fieldOfView > 20f)
+            while (zoom.fieldOfView > 40f)
             {                
                 zoom.fieldOfView -= Time.deltaTime * 75f;
-                var step = Mathf.Clamp01((50f - zoom.fieldOfView) * 0.0333f);
+                var step = Mathf.Clamp01((50f - zoom.fieldOfView) * 0.1f);
+
+                zoomFade.alpha = 0.8f * step;
 
                 foreach (var pair in _onDamage)
                 {
                     var actor = pair.Key;
-                    if (actor.controlAI)
-                    {
-                        actor.transform.localPosition = (offsetLeft + offsetLeft2 * actor.transform.parent.GetSiblingIndex()) * step;
-                    }
-                    else
-                    {
-                        actor.transform.localPosition = (offsetRight + offsetRight2  * actor.transform.parent.GetSiblingIndex()) * step;
-                    }
-                    
-                }
+                    actor.transform.position = Vector3.Lerp(defStart, defFinish, step);
+                }                
 
-                if (_actor.controlAI)
-                {
-                    _actor.transform.localPosition = (offsetLeft + offsetLeft2 * actor.transform.parent.GetSiblingIndex()) * step;
-                }
-                else
-                {
-                    _actor.transform.localPosition = (offsetRight + offsetRight2 * actor.transform.parent.GetSiblingIndex()) * step;
-                }
+                _actor.transform.position = Vector3.Lerp(attackStart, attackFinish, step);
 
                 yield return null;
             }
 
-            zoom.fieldOfView = 20f;
+            zoom.fieldOfView = 40f;
+
+            yield return new WaitForSeconds(1.2f);
+            
+            foreach (var pair in _onDamage)
+            {
+                var actor = pair.Key;
+                actor.animator.SetBool(__anim_param_damage, false);                
+            }
+
+            _actor.animator.SetBool(__anim_param_attack, false);
+            var temp = attackStart;
+            attackStart = attackFinish;
+            attackFinish = temp;
+
+            temp = defStart;
+            defStart = defFinish;
+            defFinish = temp;
 
             while (zoom.fieldOfView < 50f)
             {
                 zoom.fieldOfView += Time.deltaTime * 75f;
-                var step = Mathf.Clamp01((50f - zoom.fieldOfView) * 0.0333f);
+                var step = Mathf.Clamp01((50f - zoom.fieldOfView) * 0.1f);
+
+                zoomFade.alpha = 0.8f * step;
 
                 foreach (var pair in _onDamage)
                 {
                     var actor = pair.Key;
-                    if (actor.controlAI)
-                    {
-                        actor.transform.localPosition = (offsetLeft + offsetLeft2 * actor.transform.parent.GetSiblingIndex()) * step;
-                    }
-                    else
-                    {
-                        actor.transform.localPosition = (offsetRight + offsetRight2 * actor.transform.parent.GetSiblingIndex()) * step;
-                    }
+                    actor.transform.position = Vector3.Lerp(defStart, defFinish, step);
+                }                
 
-                }
-
-                if (_actor.controlAI)
-                {
-                    _actor.transform.localPosition = (offsetLeft + offsetLeft2 * actor.transform.parent.GetSiblingIndex()) * step;
-                }
-                else
-                {
-                    _actor.transform.localPosition = (offsetRight + offsetRight2 * actor.transform.parent.GetSiblingIndex()) * step;
-                }
+                _actor.transform.position = Vector3.Lerp(attackStart, attackFinish, step);
 
                 yield return null;
-            }
+            }            
 
             layer = LayerMask.NameToLayer("Characters");
             foreach (var pair in _onDamage)
@@ -422,6 +487,11 @@ namespace V4F.Prototype.Mission
 
             _actor.gameObject.layer = layer;
             _actor.transform.localPosition = Vector3.zero;
+
+            zoom.fieldOfView = 50f;
+            zoom.gameObject.SetActive(false);
+
+            healthUIRoot.SetActive(true);
         }
 
         private void GroupCallback(Group sender)
@@ -466,6 +536,14 @@ namespace V4F.Prototype.Mission
                 OnStage(this);
             }
         }
+
+        private void OnStageFinishCallback()
+        {            
+            if (OnStageFinish != null)
+            {
+                OnStageFinish(this);
+            }
+        }        
 
         private void StageHandler(Battle sender)
         {

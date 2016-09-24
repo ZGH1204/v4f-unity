@@ -14,8 +14,12 @@ namespace V4F.Prototype.Mission
     public class PartyController : MonoBehaviour
     {
         public delegate void MovementEventHandler(Vector3 position, bool immediately);
-        public static event MovementEventHandler OnMovement;
 
+        public static event MovementEventHandler OnMovement;
+        public static event MovementEventHandler OnMovementStart;
+        public static event MovementEventHandler OnMovementEnd;
+
+        public Camera cameraCharacters;
         public TouchAdapter input;
 
         public GameObject corridor;
@@ -37,7 +41,7 @@ namespace V4F.Prototype.Mission
         private BorderMovement _corridor;
         private BorderMovement _room;        
         private Transform _transform;
-
+        
         private GameObject _location;
         private Vector2 _movement;
         private Vector2 _anchors;
@@ -53,7 +57,23 @@ namespace V4F.Prototype.Mission
             {
                 OnMovement(position, immediately);
             }
-        }        
+        }
+
+        private static void OnMovementStartCallback(Vector3 position)
+        {
+            if (OnMovementStart != null)
+            {
+                OnMovementStart(position, false);
+            }
+        }
+
+        private static void OnMovementEndCallback(Vector3 position)
+        {
+            if (OnMovementEnd != null)
+            {
+                OnMovementEnd(position, false);
+            }
+        }
 
         public void Entry(NodeType type)
         {
@@ -68,7 +88,7 @@ namespace V4F.Prototype.Mission
             {
                 _location = room;
                 border = _room;
-            }
+            }            
 
             _location.SetActive(true);
             _movement = border.movement;
@@ -101,13 +121,15 @@ namespace V4F.Prototype.Mission
 
         private void OnTouchPress(TouchAdapter sender, TouchEventArgs args)
         {
-            var half = Screen.width * 0.5f;
-            if (args.position.x < half)
+            var half = cameraCharacters.WorldToScreenPoint(_transform.position).x;
+            var diff = args.position.x - half;
+
+            if (diff < 0f)
             {
                 _direction = Vector3.left;
                 _speed = speedBackward;
             }
-            else
+            else if (diff > 0f)
             {
                 _direction = Vector3.right;
                 _speed = speedForward;
@@ -131,8 +153,11 @@ namespace V4F.Prototype.Mission
         }
 
         private IEnumerator Movement()
-        {
+        {            
             _loopMovement = true;
+
+            OnMovementStartCallback(_transform.localPosition);
+
             while (_loopMovement)
             {
                 var point = _transform.localPosition + _direction * (_speed * Time.fixedDeltaTime);
@@ -144,7 +169,9 @@ namespace V4F.Prototype.Mission
                 yield return null;
             }
 
-            _move = null;
+            OnMovementEndCallback(_transform.localPosition);
+
+            _move = null;            
         }
 
         private void Awake()
